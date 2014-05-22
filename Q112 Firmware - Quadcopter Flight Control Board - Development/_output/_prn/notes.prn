@@ -1,0 +1,30 @@
+RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1 
+ Source File: _output\_obj\notes.asm
+ Object File: _output\_obj\notes.obj
+ Date  : 2013/05/16 Thu.[ 0:10]
+ Title : 
+## Loc. Object                   Line   Source Statements
+
+                                    1   ;; Compile Options : /TML610112 /MS /near /Icommon /Imain /Iirq /Itimer /Iclock /Itbc /Ipwm /Iuart /SS 256 /SD /Oa /Ot /W 3 /Wc /Fa_output\_obj\ 
+                                    2   ;; Version Number  : Ver.3.31.4
+                                    3   ;; File Name       : notes.c
+                                    4   
+                                    5   	type (ML610112) 
+                                    6   	model small, near
+                                    7   CVERSION 3.31.4
+                                    8   CFILE 0000H 00000078H "notes\\notes.c"
+                                    9   	extrn code near : _main
+                                   10   
+                                   11   	end
+
+
+
+  Target       : ML610112 (nX-U8/100)
+  Memory Model : SMALL
+  Data   Model : NEAR
+  ROM WINDOW   : (not specified)
+  Internal RAM : E000H to EFFFH
+
+  Errors   : 0
+  Warnings : 0  (/Wrpeast)
+  Lines    : 11

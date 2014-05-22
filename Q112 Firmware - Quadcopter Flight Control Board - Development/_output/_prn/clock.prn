@@ -1,0 +1,872 @@
+RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1 
+ Source File: _output\_obj\clock.asm
+ Object File: _output\_obj\clock.obj
+ Date  : 2014/02/24 Mon.[10:53]
+ Title : 
+## Loc. Object                   Line   Source Statements
+
+                                    1   ;; Compile Options : /TML610112 /MS /near /Icommon /Imain /Iirq /Itimer /Iclock /Itbc /Iuart /Ii2c /SS 256 /SD /Oa /Ot /W 3 /Wc /Fa_output\_obj\ 
+                                    2   ;; Version Number  : Ver.3.41.8
+                                    3   ;; File Name       : clock.c
+                                    4   
+                                    5   	type (ML610112) 
+                                    6   	model small, near
+                                    7   	$$NINITVAR segment data 2h #0h
+                                    8   	$$NINITTAB segment table 2h any
+                                    9   	$$clk_disHsclk$clock segment code 2h #0h
+                                   10   	$$clk_enaHsclk$clock segment code 2h #0h
+                                   11   	$$clk_getHsclk$clock segment code 2h #0h
+                                   12   	$$clk_getSysclk$clock segment code 2h #0h
+                                   13   	$$clk_setHsclk$clock segment code 2h #0h
+                                   14   	$$clk_setSysclk$clock segment code 2h #0h
+                                   15   CVERSION 3.41.8
+                                   16   CGLOBAL 01H 03H 0000H "clk_disHsclk" 08H 02H 04H 00H 80H 00H 00H 00H 07H
+                                   17   CGLOBAL 01H 03H 0000H "clk_enaHsclk" 08H 02H 03H 00H 80H 00H 00H 00H 07H
+                                   18   CGLOBAL 01H 03H 0000H "clk_getSysclk" 08H 02H 01H 00H 80H 06H 00H 00H 07H
+                                   19   CGLOBAL 01H 03H 0000H "clk_setSysclk" 08H 02H 00H 00H 83H 0aH 00H 00H 01H
+                                   20   CGLOBAL 01H 03H 0000H "clk_setHsclk" 08H 02H 02H 00H 80H 04H 00H 00H 01H
+                                   21   CGLOBAL 01H 02H 0000H "clk_getHsclk" 08H 02H 05H 00H 80H 02H 00H 00H 02H
+                                   22   CSTRUCTTAG 0000H 0000H 0000H 0008H 00000001H "_Notag"
+                                   23   CSTRUCTMEM 52H 00000001H 00000000H "b0" 02H 00H 00H
+                                   24   CSTRUCTMEM 52H 00000001H 00000001H "b1" 02H 00H 00H
+                                   25   CSTRUCTMEM 52H 00000001H 00000002H "b2" 02H 00H 00H
+                                   26   CSTRUCTMEM 52H 00000001H 00000003H "b3" 02H 00H 00H
+                                   27   CSTRUCTMEM 52H 00000001H 00000004H "b4" 02H 00H 00H
+                                   28   CSTRUCTMEM 52H 00000001H 00000005H "b5" 02H 00H 00H
+                                   29   CSTRUCTMEM 52H 00000001H 00000006H "b6" 02H 00H 00H
+                                   30   CSTRUCTMEM 52H 00000001H 00000007H "b7" 02H 00H 00H
+                                   31   CTYPEDEF 0000H 0000H 43H "_BYTE_FIELD" 04H 00H 05H 00H 00H
+                                   32   CSGLOBAL 42H 0002H "_gsHsclk" 02H 00H 08H
+                                   33   CFILE 0001H 00000023H "main\\mcu.h"
+                                   34   CFILE 0002H 0000085AH "main\\ML610112.H"
+                                   35   CFILE 0003H 00000043H "clock\\clock.h"
+                                   36   CFILE 0000H 00000173H "clock\\clock.c"
+                                   37   
+  --------------------------       38   	rseg $$clk_setSysclk$clock
+                                   39   CFUNCTION 0
+                                   40   
+00:0000                            41   _clk_setSysclk	:
+                                   42   CBLOCK 0 1 90
+                                   43   
+                                   44   ;;{
+                                   45   CLINEA 0000H 0001H 005AH 0001H 0001H
+00:0000 CE-F8                      46   	push	lr
+00:0002 5E-FE                      47   	push	fp
+00:0004 1A-AE                      48   	mov	fp,	sp
+00:0006 6E-F8                      49   	push	xr8
+00:0008 5E-F4                      50   	push	er4
+00:000A 05-F8                      51   	mov	er8,	er0
+00:000C 20-8A                      52   	mov	r10,	r2
+                                   53   CBLOCK 0 2 90
+                                   54   CRET 0008H
+                                   55   CARGUMENT 46H 0001H 001CH "sysclk" 02H 00H 00H
+                                   56   CARGUMENT 46H 0001H 001DH "sysc" 02H 00H 00H
+                                   57   CARGUMENT 46H 0001H 001EH "oscm" 02H 00H 00H
+                                   58   CARGUMENT 42H 0002H 0004H "kHz" 02H 00H 01H
+                                   59   CLOCAL 46H 0001H 0016H 0002H "reg" 02H 00H 00H
+                                   60   CLOCAL 46H 0001H 0018H 0002H "loop" 02H 00H 00H
+                                   61   CLOCAL 46H 0001H 0019H 0002H "loopCnt" 02H 00H 00H
+                                   62   
+                                   63   ;;	if( sysclk > (unsigned char)1 ){
+                                   64   CLINEA 0000H 0001H 005FH 0002H 0021H
+00:000E 01 70                      65   	cmp	r0,	#01h
+00:0010 06 C3                      66   	ble	_$L1
+                                   67   CBLOCK 0 3 95
+                                   68   
+                                   69   ;;		return ( CLK_R_ERR_SCLK );
+                                   70   CLINEA 0000H 0001H 0060H 0003H 001CH
+00:0012 7F E0                      71   	mov	er0,	#-1
+                                   72   CBLOCKEND 0 3 97
+                                   73   CBLOCKEND 0 2 150
+                                   74   
+                                   75   ;;}
+                                   76   CLINEA 0000H 0001H 0096H 0001H 0001H
+00:0014                            77   _$L0 :
+00:0014 1E-F4                      78   	pop	er4
+00:0016 2E-F8                      79   	pop	xr8
+00:0018 EA-A1                      80   	mov	sp,	fp
+00:001A 1E-FE                      81   	pop	fp
+00:001C 8E-F2                      82   	pop	pc
+                                   83   
+                                   84   ;;	}
+                                   85   CLINEA 0000H 0000H 0061H 0002H 0002H
+00:001E                            86   _$L1 :
+                                   87   
+                                   88   ;;	if( sysclk == (unsigned char)CLK_SYSCLK_HSCLK ){
+                                   89   CLINEA 0000H 0001H 0064H 0002H 0031H
+00:001E 01 70                      90   	cmp	r0,	#01h
+00:0020 08 C8                      91   	bne	_$L7
+                                   92   CBLOCK 0 4 100
+                                   93   
+                                   94   ;;		if( sysc > (unsigned char)3 ){
+                                   95   CLINEA 0000H 0001H 0065H 0003H 0020H
+00:0022 03 79                      96   	cmp	r9,	#03h
+00:0024 02 C3                      97   	ble	_$L5
+                                   98   CBLOCK 0 5 101
+                                   99   
+                                  100   ;;			return ( CLK_R_ERR_SYSC );
+                                  101   CLINEA 0000H 0001H 0066H 0004H 001DH
+00:0026 7E E0                     102   	mov	er0,	#-2
+00:0028 F5 CE                     103   	bal	_$L0
+                                  104   CBLOCKEND 0 5 103
+                                  105   
+                                  106   ;;		}
+                                  107   CLINEA 0000H 0000H 0067H 0003H 0003H
+00:002A                           108   _$L5 :
+                                  109   
+                                  110   ;;		if( oscm > (unsigned char)3 ){
+                                  111   CLINEA 0000H 0001H 0068H 0003H 0020H
+00:002A 03 7A                     112   	cmp	r10,	#03h
+00:002C 02 C3                     113   	ble	_$L7
+                                  114   CBLOCK 0 6 104
+                                  115   
+                                  116   ;;			return ( CLK_R_ERR_OSCM );
+                                  117   CLINEA 0000H 0001H 0069H 0004H 001DH
+00:002E 7D E0                     118   	mov	er0,	#-3
+00:0030 F1 CE                     119   	bal	_$L0
+                                  120   CBLOCKEND 0 6 106
+                                  121   
+                                  122   ;;		}
+                                  123   CLINEA 0000H 0000H 006AH 0003H 0003H
+00:0032                           124   _$L7 :
+                                  125   CBLOCKEND 0 4 107
+                                  126   
+                                  127   ;;	if( sysclk == (unsigned char)CLK_SYSCLK_LSCLK ){
+                                  128   CLINEA 0000H 0001H 006EH 0002H 0031H
+00:0032 00 78                     129   	cmp	r8,	#00h
+00:0034 03 C8                     130   	bne	_$L9
+                                  131   CBLOCK 0 7 110
+                                  132   
+                                  133   ;;		SYSCLK = 0;
+                                  134   CLINEA 0000H 0001H 0070H 0003H 000DH
+00:0036 82-A0 03-F0               135   	rb	0f003h.0
+                                  136   CBLOCKEND 0 7 113
+                                  137   
+                                  138   ;;	}else{
+                                  139   CLINEA 0000H 0000H 0071H 0002H 0007H
+00:003A 23 CE                     140   	bal	_$L11
+00:003C                           141   _$L9 :
+                                  142   CBLOCK 0 8 113
+                                  143   
+                                  144   ;;		SYSCLK = 0;
+                                  145   CLINEA 0000H 0001H 0073H 0003H 000DH
+00:003C 82-A0 03-F0               146   	rb	0f003h.0
+                                  147   
+                                  148   ;;		ENOSC = 0;
+                                  149   CLINEA 0000H 0001H 0074H 0003H 000CH
+00:0040 92-A0 03-F0               150   	rb	0f003h.1
+                                  151   
+                                  152   ;;		reg  = FCON0;
+                                  153   CLINEA 0000H 0001H 0075H 0003H 000FH
+00:0044 10-90 02-F0               154   	l	r0,	0f002h
+00:0048 00-82                     155   	mov	r2,	r0
+                                  156   
+                                  157   ;;		reg &= (unsigned char)( ~( FCON0_OSCM1 | FCON0_OSCM0 | FCON0_SYSC1 | FCON0_SYSC0 ) );
+                                  158   CLINEA 0000H 0001H 0076H 0003H 0057H
+00:004A F0 20                     159   	and	r0,	#0f0h
+00:004C 00-82                     160   	mov	r2,	r0
+                                  161   
+                                  162   ;;		reg |= ( sysc | (unsigned char)( oscm << 2 ) ) ;
+                                  163   CLINEA 0000H 0001H 0077H 0003H 0032H
+00:004E A0-80                     164   	mov	r0,	r10
+00:0050 2A-90                     165   	sll	r0,	#02h
+00:0052 93-80                     166   	or	r0,	r9
+00:0054 20-81                     167   	mov	r1,	r2
+00:0056 03-81                     168   	or	r1,	r0
+                                  169   
+                                  170   ;;		FCON0 = reg;
+                                  171   CLINEA 0000H 0001H 0078H 0003H 000EH
+00:0058 11-91 02-F0               172   	st	r1,	0f002h
+                                  173   
+                                  174   ;;		ENOSC = 1;
+                                  175   CLINEA 0000H 0001H 0079H 0003H 000CH
+00:005C 90-A0 03-F0               176   	sb	0f003h.1
+                                  177   
+                                  178   ;;		switch( (int)oscm ){
+                                  179   CLINEA 0000H 0001H 007BH 0003H 0016H
+                                  180   CBLOCK 0 9 123
+00:0060 01 7A                     181   	cmp	r10,	#01h
+00:0062 18 C9                     182   	beq	_$L19
+                                  183   
+                                  184   ;;		switch( (int)oscm ){
+                                  185   CLINEA 0000H 0000H 007BH 0003H 0016H
+00:0064 02 7A                     186   	cmp	r10,	#02h
+00:0066 14 C9                     187   	beq	_$L18
+                                  188   
+                                  189   ;;		switch( (int)oscm ){
+                                  190   CLINEA 0000H 0000H 007BH 0003H 0016H
+00:0068 03 7A                     191   	cmp	r10,	#03h
+00:006A 0D C9                     192   	beq	_$L17
+                                  193   
+                                  194   ;;				loopCnt = 1;
+                                  195   CLINEA 0000H 0001H 008CH 0005H 0010H
+00:006C 01 00                     196   	mov	r0,	#01h
+                                  197   CBLOCKEND 0 9 142
+                                  198   
+                                  199   ;;		}
+                                  200   CLINEA 0000H 0000H 008EH 0003H 0003H
+00:006E                           201   _$L15 :
+00:006E 00-85                     202   	mov	r5,	r0
+                                  203   
+                                  204   ;;		for( loop=0; loop<loopCnt; loop++ ){
+                                  205   CLINEA 0000H 0001H 008FH 0008H 000EH
+00:0070 00 04                     206   	mov	r4,	#00h
+                                  207   
+                                  208   ;;		for( loop=0; loop<loopCnt; loop++ ){
+                                  209   CLINEA 0000H 0000H 008FH 0010H 001CH
+00:0072 03 CE                     210   	bal	_$L25
+                                  211   
+                                  212   ;;		for( loop=0; loop<loopCnt; loop++ ){
+                                  213   CLINEA 0000H 0000H 008FH 001EH 0024H
+00:0074                           214   _$L22 :
+                                  215   CBLOCK 0 10 143
+                                  216   
+                                  217   ;;			clk_wait500us();
+                                  218   CLINEA 0000H 0001H 0090H 0004H 0013H
+00:0074 01-F0'00-00'              219   	bl	_clk_wait500us
+                                  220   CBLOCKEND 0 10 145
+                                  221   
+                                  222   ;;		for( loop=0; loop<loopCnt; loop++ ){
+                                  223   CLINEA 0000H 0000H 008FH 001EH 0024H
+00:0078 01 14                     224   	add	r4,	#01h
+                                  225   
+                                  226   ;;		for( loop=0; loop<loopCnt; loop++ ){
+                                  227   CLINEA 0000H 0000H 008FH 0010H 001CH
+00:007A                           228   _$L25 :
+00:007A 57-84                     229   	cmp	r4,	r5
+00:007C FB C1                     230   	blt	_$L22
+                                  231   
+                                  232   ;;		SYSCLK = 1;
+                                  233   CLINEA 0000H 0001H 0092H 0003H 000DH
+00:007E 80-A0 03-F0               234   	sb	0f003h.0
+                                  235   CBLOCKEND 0 8 147
+                                  236   
+                                  237   ;;	}
+                                  238   CLINEA 0000H 0000H 0093H 0002H 0002H
+00:0082                           239   _$L11 :
+                                  240   
+                                  241   ;;	return ( CLK_R_OK );
+                                  242   CLINEA 0000H 0001H 0095H 0002H 0015H
+00:0082 00 E0                     243   	mov	er0,	#0 
+00:0084 C7 CE                     244   	bal	_$L0
+                                  245   
+                                  246   ;;			case CLK_OSCM_EXTCLK:
+                                  247   CLINEA 0000H 0001H 007DH 0004H 0018H
+00:0086                           248   _$L17 :
+                                  249   
+                                  250   ;;				_gsHsclk = kHz;
+                                  251   CLINEA 0000H 0001H 007EH 0005H 0013H
+00:0086 44 B0                     252   	l	er0,	4[fp]
+00:0088 13-90 00-00'              253   	st	er0,	NEAR __gsHsclk
+                                  254   
+                                  255   ;;				loopCnt = 2;
+                                  256   CLINEA 0000H 0001H 007FH 0005H 0010H
+00:008C 02 00                     257   	mov	r0,	#02h
+                                  258   
+                                  259   ;;				break;
+                                  260   CLINEA 0000H 0001H 0080H 0005H 000AH
+00:008E EF CE                     261   	bal	_$L15
+                                  262   
+                                  263   ;;			case CLK_OSCM_PLL:
+                                  264   CLINEA 0000H 0001H 0082H 0004H 0015H
+00:0090                           265   _$L18 :
+                                  266   
+                                  267   ;;				loopCnt = 20;
+                                  268   CLINEA 0000H 0001H 0083H 0005H 0011H
+00:0090 14 00                     269   	mov	r0,	#014h
+                                  270   
+                                  271   ;;				break;
+                                  272   CLINEA 0000H 0001H 0084H 0005H 000AH
+00:0092 ED CE                     273   	bal	_$L15
+                                  274   
+                                  275   ;;			case CLK_OSCM_CRYSTAL:
+                                  276   CLINEA 0000H 0001H 0086H 0004H 0019H
+00:0094                           277   _$L19 :
+                                  278   
+                                  279   ;;				loopCnt = 40;
+                                  280   CLINEA 0000H 0001H 0087H 0005H 0011H
+00:0094 28 00                     281   	mov	r0,	#028h
+                                  282   
+                                  283   ;;				break;
+                                  284   CLINEA 0000H 0001H 0088H 0005H 000AH
+00:0096 EB CE                     285   	bal	_$L15
+                                  286   CBLOCKEND 0 1 150
+                                  287   CFUNCTIONEND 0
+                                  288   
+                                  289   
+  --------------------------      290   	rseg $$clk_getSysclk$clock
+                                  291   CFUNCTION 1
+                                  292   
+00:0000                           293   _clk_getSysclk	:
+                                  294   CBLOCK 1 1 168
+                                  295   
+                                  296   ;;{
+                                  297   CLINEA 0000H 0001H 00A8H 0001H 0001H
+00:0000 6E-F8                     298   	push	xr8
+00:0002 5E-F4                     299   	push	er4
+00:0004 05-F8                     300   	mov	er8,	er0
+00:0006 25-FA                     301   	mov	er10,	er2
+                                  302   CBLOCK 1 2 168
+                                  303   CARGUMENT 46H 0002H 0028H "mode" 04H 03H 00H 00H 00H
+                                  304   CARGUMENT 46H 0002H 0029H "kHz" 04H 03H 00H 00H 01H
+                                  305   CLOCAL 46H 0001H 0016H 0002H "sysclk" 02H 00H 00H
+                                  306   CLOCAL 46H 0001H 0018H 0002H "sysc" 02H 00H 00H
+                                  307   CLOCAL 46H 0001H 0014H 0002H "oscm" 02H 00H 00H
+                                  308   
+                                  309   ;;	sysclk = (unsigned char)( FCON1 & (unsigned char)FCON1_SYSCLK );
+                                  310   CLINEA 0000H 0001H 00ADH 0002H 0041H
+00:0008 10-90 03-F0               311   	l	r0,	0f003h
+00:000C 01 20                     312   	and	r0,	#01h
+                                  313   
+                                  314   ;;	*mode = sysclk;
+                                  315   CLINEA 0000H 0001H 00AEH 0002H 0010H
+00:000E 81-90                     316   	st	r0,	[er8]
+                                  317   
+                                  318   ;;	if( sysclk == (unsigned char)CLK_SYSCLK_LSCLK ){
+                                  319   CLINEA 0000H 0001H 00B0H 0002H 0031H
+00:0010 00 70                     320   	cmp	r0,	#00h
+00:0012 05 C8                     321   	bne	_$L27
+                                  322   CBLOCK 1 3 176
+                                  323   
+                                  324   ;;		*mode = (unsigned char)CLK_SYSCLK_LSCLK;
+                                  325   CLINEA 0000H 0001H 00B1H 0003H 002AH
+00:0014 00 02                     326   	mov	r2,	#00h
+00:0016 81-92                     327   	st	r2,	[er8]
+                                  328   
+                                  329   ;;		*kHz  = (unsigned short)32;
+                                  330   CLINEA 0000H 0001H 00B2H 0003H 001DH
+00:0018 20 E2                     331   	mov	er2,	#32
+00:001A A3-92                     332   	st	er2,	[er10]
+                                  333   CBLOCKEND 1 3 179
+                                  334   
+                                  335   ;;	else{
+                                  336   CLINEA 0000H 0001H 00B4H 0002H 0006H
+00:001C 24 CE                     337   	bal	_$L29
+00:001E                           338   _$L27 :
+                                  339   CBLOCK 1 4 180
+                                  340   
+                                  341   ;;		*mode = (unsigned char)CLK_SYSCLK_HSCLK;
+                                  342   CLINEA 0000H 0001H 00B5H 0003H 002AH
+00:001E 01 02                     343   	mov	r2,	#01h
+00:0020 81-92                     344   	st	r2,	[er8]
+                                  345   
+                                  346   ;;		sysc  = (unsigned char)( FCON0 & (FCON0_SYSC0|FCON0_SYSC1) );
+                                  347   CLINEA 0000H 0001H 00B6H 0003H 003FH
+00:0022 10-90 02-F0               348   	l	r0,	0f002h
+00:0026 03 20                     349   	and	r0,	#03h
+00:0028 00-84                     350   	mov	r4,	r0
+                                  351   
+                                  352   ;;		oscm  = (unsigned char)( FCON0 & (FCON0_OSCM0|FCON0_OSCM1) );
+                                  353   CLINEA 0000H 0001H 00B7H 0003H 003FH
+00:002A 10-90 02-F0               354   	l	r0,	0f002h
+00:002E 0C 20                     355   	and	r0,	#0ch
+                                  356   
+                                  357   ;;		switch( oscm >> 2 ){
+                                  358   CLINEA 0000H 0001H 00BAH 0003H 0016H
+00:0030 00 01                     359   	mov	r1,	#00h
+00:0032 2D-90                     360   	srlc	r0,	#02h
+00:0034 2E-91                     361   	sra	r1,	#02h
+00:0036 05-F2                     362   	mov	er2,	er0
+                                  363   CBLOCK 1 5 186
+00:0038 00 71                     364   	cmp	r1,	#00h
+00:003A 08 C8                     365   	bne	_$L34
+00:003C 20-80                     366   	mov	r0,	r2
+00:003E 16 C9                     367   	beq	_$L35
+                                  368   
+                                  369   ;;		switch( oscm >> 2 ){
+                                  370   CLINEA 0000H 0000H 00BAH 0003H 0016H
+00:0040 01 72                     371   	cmp	r2,	#01h
+00:0042 1F C9                     372   	beq	_$L39
+                                  373   
+                                  374   ;;		switch( oscm >> 2 ){
+                                  375   CLINEA 0000H 0000H 00BAH 0003H 0016H
+00:0044 02 72                     376   	cmp	r2,	#02h
+00:0046 16 C9                     377   	beq	_$L36
+                                  378   
+                                  379   ;;		switch( oscm >> 2 ){
+                                  380   CLINEA 0000H 0000H 00BAH 0003H 0016H
+00:0048 03 72                     381   	cmp	r2,	#03h
+00:004A 1F C9                     382   	beq	_$L40
+                                  383   
+                                  384   ;;			default:
+                                  385   CLINEA 0000H 0001H 00CFH 0004H 000BH
+00:004C                           386   _$L34 :
+                                  387   
+                                  388   ;;				*kHz  = (unsigned short)0;
+                                  389   CLINEA 0000H 0001H 00D0H 0005H 001EH
+00:004C 00 E2                     390   	mov	er2,	#0 
+00:004E A3-92                     391   	st	er2,	[er10]
+                                  392   CBLOCKEND 1 5 210
+                                  393   
+                                  394   ;;		}
+                                  395   CLINEA 0000H 0000H 00D2H 0003H 0003H
+00:0050                           396   _$L33 :
+                                  397   
+                                  398   ;;		*kHz >>= sysc;
+                                  399   CLINEA 0000H 0001H 00D3H 0003H 0010H
+00:0050 A2-90                     400   	l	er0,	[er10]
+00:0052 40-82                     401   	mov	r2,	r4
+00:0054                           402   _$M3 :
+00:0054 07 72                     403   	cmp	r2,	#07h
+00:0056 04 C3                     404   	ble	_$M2
+00:0058 7D-90                     405   	srlc	r0,	#07h
+00:005A 7C-91                     406   	srl	r1,	#07h
+00:005C F9 12                     407   	add	r2,	#0f9h
+00:005E FA C8                     408   	bne	_$M3
+00:0060                           409   _$M2 :
+00:0060 2D-80                     410   	srlc	r0,	r2
+00:0062 2C-81                     411   	srl	r1,	r2
+00:0064 A3-90                     412   	st	er0,	[er10]
+                                  413   CBLOCKEND 1 4 212
+                                  414   
+                                  415   ;;	}
+                                  416   CLINEA 0000H 0000H 00D4H 0002H 0002H
+00:0066                           417   _$L29 :
+                                  418   CBLOCKEND 1 2 213
+                                  419   
+                                  420   ;;}
+                                  421   CLINEA 0000H 0001H 00D5H 0001H 0001H
+00:0066 1E-F4                     422   	pop	er4
+00:0068 2E-F8                     423   	pop	xr8
+00:006A 1F-FE                     424   	rt
+                                  425   
+                                  426   ;;			case CLK_OSCM_RC:
+                                  427   CLINEA 0000H 0001H 00BCH 0004H 0014H
+00:006C                           428   _$L35 :
+                                  429   
+                                  430   ;;				*kHz  = (unsigned short)500;
+                                  431   CLINEA 0000H 0001H 00BDH 0005H 0020H
+00:006C F4 02                     432   	mov	r2,	#0f4h
+00:006E 01 03                     433   	mov	r3,	#01h
+00:0070 A3-92                     434   	st	er2,	[er10]
+                                  435   
+                                  436   ;;				break;
+                                  437   CLINEA 0000H 0001H 00BEH 0005H 000AH
+00:0072 EE CE                     438   	bal	_$L33
+                                  439   
+                                  440   ;;			case CLK_OSCM_PLL:
+                                  441   CLINEA 0000H 0001H 00C0H 0004H 0015H
+00:0074                           442   _$L36 :
+                                  443   
+                                  444   ;;				*kHz  = (unsigned short)8192;
+                                  445   CLINEA 0000H 0001H 00C1H 0005H 0021H
+00:0074 00 02                     446   	mov	r2,	#00h
+00:0076 20 03                     447   	mov	r3,	#020h
+00:0078 A3-92                     448   	st	er2,	[er10]
+                                  449   
+                                  450   ;;				if( sysc == CLK_SYSC_OSCLK ){
+                                  451   CLINEA 0000H 0001H 00C2H 0005H 0021H
+00:007A 00 74                     452   	cmp	r4,	#00h
+00:007C E9 C8                     453   	bne	_$L33
+                                  454   CBLOCK 1 6 194
+                                  455   
+                                  456   ;;					sysc = (unsigned char)CLK_SYSC_OSCLK_DIV2;
+                                  457   CLINEA 0000H 0001H 00C3H 0006H 002FH
+00:007E 01 04                     458   	mov	r4,	#01h
+                                  459   CBLOCKEND 1 6 196
+                                  460   
+                                  461   ;;				break;
+                                  462   CLINEA 0000H 0001H 00C5H 0005H 000AH
+00:0080 E7 CE                     463   	bal	_$L33
+                                  464   
+                                  465   ;;			case CLK_OSCM_CRYSTAL:
+                                  466   CLINEA 0000H 0001H 00C7H 0004H 0019H
+00:0082                           467   _$L39 :
+                                  468   
+                                  469   ;;				*kHz = (unsigned short)4096;
+                                  470   CLINEA 0000H 0001H 00C8H 0005H 0020H
+00:0082 00 02                     471   	mov	r2,	#00h
+00:0084 10 03                     472   	mov	r3,	#010h
+00:0086 A3-92                     473   	st	er2,	[er10]
+                                  474   
+                                  475   ;;				break;
+                                  476   CLINEA 0000H 0001H 00C9H 0005H 000AH
+00:0088 E3 CE                     477   	bal	_$L33
+                                  478   
+                                  479   ;;			case CLK_OSCM_EXTCLK:
+                                  480   CLINEA 0000H 0001H 00CBH 0004H 0018H
+00:008A                           481   _$L40 :
+                                  482   
+                                  483   ;;				*kHz  = _gsHsclk;
+                                  484   CLINEA 0000H 0001H 00CCH 0005H 0015H
+00:008A 12-92 00-00'              485   	l	er2,	NEAR __gsHsclk
+00:008E A3-92                     486   	st	er2,	[er10]
+                                  487   
+                                  488   ;;				break;
+                                  489   CLINEA 0000H 0001H 00CDH 0005H 000AH
+00:0090 DF CE                     490   	bal	_$L33
+                                  491   CBLOCKEND 1 1 213
+                                  492   CFUNCTIONEND 1
+                                  493   
+                                  494   
+  --------------------------      495   	rseg $$clk_setHsclk$clock
+                                  496   CFUNCTION 2
+                                  497   
+00:0000                           498   _clk_setHsclk	:
+                                  499   CBLOCK 2 1 238
+                                  500   
+                                  501   ;;{
+                                  502   CLINEA 0000H 0001H 00EEH 0001H 0001H
+00:0000 6E-F8                     503   	push	xr8
+00:0002 05-F8                     504   	mov	er8,	er0
+00:0004 25-FA                     505   	mov	er10,	er2
+                                  506   CBLOCK 2 2 238
+                                  507   CARGUMENT 46H 0001H 001CH "sysc" 02H 00H 00H
+                                  508   CARGUMENT 46H 0001H 001DH "oscm" 02H 00H 00H
+                                  509   CARGUMENT 46H 0002H 0029H "kHz" 02H 00H 01H
+                                  510   CLOCAL 46H 0001H 0014H 0002H "enosc" 02H 00H 00H
+                                  511   CLOCAL 46H 0001H 0016H 0002H "reg" 02H 00H 00H
+                                  512   
+                                  513   ;;	enosc = (unsigned char)( FCON1 & FCON1_ENOSC );
+                                  514   CLINEA 0000H 0001H 00F3H 0002H 0030H
+00:0006 10-90 03-F0               515   	l	r0,	0f003h
+00:000A 02 20                     516   	and	r0,	#02h
+                                  517   
+                                  518   ;;	if( enosc != (unsigned char)0 ){
+                                  519   CLINEA 0000H 0001H 00F4H 0002H 0021H
+00:000C 00 70                     520   	cmp	r0,	#00h
+00:000E 03 C9                     521   	beq	_$L42
+                                  522   CBLOCK 2 3 244
+                                  523   
+                                  524   ;;		return ( CLK_R_ERR_ENOSC );
+                                  525   CLINEA 0000H 0001H 00F5H 0003H 001DH
+00:0010 7C E0                     526   	mov	er0,	#-4
+                                  527   CBLOCKEND 2 3 246
+                                  528   CBLOCKEND 2 2 264
+                                  529   
+                                  530   ;;}
+                                  531   CLINEA 0000H 0001H 0108H 0001H 0001H
+00:0012                           532   _$L41 :
+00:0012 2E-F8                     533   	pop	xr8
+00:0014 1F-FE                     534   	rt
+                                  535   
+                                  536   ;;	}
+                                  537   CLINEA 0000H 0000H 00F6H 0002H 0002H
+00:0016                           538   _$L42 :
+                                  539   
+                                  540   ;;	if( sysc > (unsigned char)3 ){
+                                  541   CLINEA 0000H 0001H 00F8H 0002H 001FH
+00:0016 03 78                     542   	cmp	r8,	#03h
+00:0018 02 C3                     543   	ble	_$L44
+                                  544   CBLOCK 2 4 248
+                                  545   
+                                  546   ;;		return ( CLK_R_ERR_SYSC );
+                                  547   CLINEA 0000H 0001H 00F9H 0003H 001CH
+00:001A 7E E0                     548   	mov	er0,	#-2
+00:001C FA CE                     549   	bal	_$L41
+                                  550   CBLOCKEND 2 4 250
+                                  551   
+                                  552   ;;	}
+                                  553   CLINEA 0000H 0000H 00FAH 0002H 0002H
+00:001E                           554   _$L44 :
+                                  555   
+                                  556   ;;	if( oscm > (unsigned char)3 ){
+                                  557   CLINEA 0000H 0001H 00FBH 0002H 001FH
+00:001E 03 79                     558   	cmp	r9,	#03h
+00:0020 02 C3                     559   	ble	_$L46
+                                  560   CBLOCK 2 5 251
+                                  561   
+                                  562   ;;		return ( CLK_R_ERR_OSCM );
+                                  563   CLINEA 0000H 0001H 00FCH 0003H 001CH
+00:0022 7D E0                     564   	mov	er0,	#-3
+00:0024 F6 CE                     565   	bal	_$L41
+                                  566   CBLOCKEND 2 5 253
+                                  567   
+                                  568   ;;	}
+                                  569   CLINEA 0000H 0000H 00FDH 0002H 0002H
+00:0026                           570   _$L46 :
+                                  571   
+                                  572   ;;	reg  = FCON0;
+                                  573   CLINEA 0000H 0001H 00FFH 0002H 000EH
+00:0026 10-90 02-F0               574   	l	r0,	0f002h
+00:002A 00-82                     575   	mov	r2,	r0
+                                  576   
+                                  577   ;;	reg &= (unsigned char)( ~( FCON0_OSCM1 | FCON0_OSCM0 | FCON0_SYSC1 | FCON0_SYSC0 ) );
+                                  578   CLINEA 0000H 0001H 0100H 0002H 0056H
+00:002C F0 20                     579   	and	r0,	#0f0h
+00:002E 00-82                     580   	mov	r2,	r0
+                                  581   
+                                  582   ;;	reg |= ( sysc | (unsigned char)( oscm << 2 ) );
+                                  583   CLINEA 0000H 0001H 0101H 0002H 0030H
+00:0030 90-80                     584   	mov	r0,	r9
+00:0032 2A-90                     585   	sll	r0,	#02h
+00:0034 83-80                     586   	or	r0,	r8
+00:0036 20-81                     587   	mov	r1,	r2
+00:0038 03-81                     588   	or	r1,	r0
+                                  589   
+                                  590   ;;	FCON0 = reg;
+                                  591   CLINEA 0000H 0001H 0102H 0002H 000DH
+00:003A 11-91 02-F0               592   	st	r1,	0f002h
+                                  593   
+                                  594   ;;	if( oscm == CLK_OSCM_EXTCLK ) {
+                                  595   CLINEA 0000H 0001H 0103H 0002H 0020H
+00:003E 03 79                     596   	cmp	r9,	#03h
+00:0040 02 C8                     597   	bne	_$L48
+                                  598   CBLOCK 2 6 259
+                                  599   
+                                  600   ;;		_gsHsclk = kHz;
+                                  601   CLINEA 0000H 0001H 0104H 0003H 0011H
+00:0042 13-9A 00-00'              602   	st	er10,	NEAR __gsHsclk
+                                  603   CBLOCKEND 2 6 261
+                                  604   
+                                  605   ;;	}
+                                  606   CLINEA 0000H 0000H 0105H 0002H 0002H
+00:0046                           607   _$L48 :
+                                  608   
+                                  609   ;;	return CLK_R_OK;
+                                  610   CLINEA 0000H 0001H 0107H 0002H 0011H
+00:0046 00 E0                     611   	mov	er0,	#0 
+00:0048 E4 CE                     612   	bal	_$L41
+                                  613   CBLOCKEND 2 1 264
+                                  614   CFUNCTIONEND 2
+                                  615   
+                                  616   
+  --------------------------      617   	rseg $$clk_enaHsclk$clock
+                                  618   CFUNCTION 3
+                                  619   
+00:0000                           620   _clk_enaHsclk	:
+                                  621   CBLOCK 3 1 275
+                                  622   
+                                  623   ;;{
+                                  624   CLINEA 0000H 0001H 0113H 0001H 0001H
+                                  625   CBLOCK 3 2 275
+                                  626   
+                                  627   ;;	ENOSC = 1;
+                                  628   CLINEA 0000H 0001H 0114H 0002H 000BH
+00:0000 90-A0 03-F0               629   	sb	0f003h.1
+                                  630   CBLOCKEND 3 2 277
+                                  631   
+                                  632   ;;}
+                                  633   CLINEA 0000H 0001H 0115H 0001H 0001H
+00:0004 1F-FE                     634   	rt
+                                  635   CBLOCKEND 3 1 277
+                                  636   CFUNCTIONEND 3
+                                  637   
+                                  638   
+  --------------------------      639   	rseg $$clk_disHsclk$clock
+                                  640   CFUNCTION 4
+                                  641   
+00:0000                           642   _clk_disHsclk	:
+                                  643   CBLOCK 4 1 287
+                                  644   
+                                  645   ;;{
+                                  646   CLINEA 0000H 0001H 011FH 0001H 0001H
+                                  647   CBLOCK 4 2 287
+                                  648   
+                                  649   ;;	ENOSC = 0;
+                                  650   CLINEA 0000H 0001H 0120H 0002H 000BH
+00:0000 92-A0 03-F0               651   	rb	0f003h.1
+                                  652   CBLOCKEND 4 2 289
+                                  653   
+                                  654   ;;}
+                                  655   CLINEA 0000H 0001H 0121H 0001H 0001H
+00:0004 1F-FE                     656   	rt
+                                  657   CBLOCKEND 4 1 289
+                                  658   CFUNCTIONEND 4
+                                  659   
+                                  660   
+  --------------------------      661   	rseg $$clk_getHsclk$clock
+                                  662   CFUNCTION 5
+                                  663   
+00:0000                           664   _clk_getHsclk	:
+                                  665   CBLOCK 5 1 301
+                                  666   
+                                  667   ;;{
+                                  668   CLINEA 0000H 0001H 012DH 0001H 0001H
+00:0000 5E-F4                     669   	push	er4
+                                  670   CBLOCK 5 2 301
+                                  671   CLOCAL 46H 0001H 0016H 0002H "sysc" 02H 00H 00H
+                                  672   CLOCAL 46H 0001H 0014H 0002H "oscm" 02H 00H 00H
+                                  673   CLOCAL 46H 0002H 0026H 0002H "kHz" 02H 00H 08H
+                                  674   
+                                  675   ;;	if( ENOSC == 1 ){
+                                  676   CLINEA 0000H 0001H 0132H 0002H 0012H
+00:0002 91-A0 03-F0               677   	tb	0f003h.1
+00:0006 20 C9                     678   	beq	_$L53
+                                  679   CBLOCK 5 3 306
+                                  680   
+                                  681   ;;		sysc = (unsigned char)( FCON0 & (unsigned char)(FCON0_SYSC0|FCON0_SYSC1) );
+                                  682   CLINEA 0000H 0001H 0133H 0003H 004DH
+00:0008 10-90 02-F0               683   	l	r0,	0f002h
+00:000C 03 20                     684   	and	r0,	#03h
+00:000E 00-82                     685   	mov	r2,	r0
+                                  686   
+                                  687   ;;		oscm = (unsigned char)( FCON0 & (unsigned char)(FCON0_OSCM0|FCON0_OSCM1) );
+                                  688   CLINEA 0000H 0001H 0134H 0003H 004DH
+00:0010 10-90 02-F0               689   	l	r0,	0f002h
+00:0014 0C 20                     690   	and	r0,	#0ch
+                                  691   
+                                  692   ;;		switch( oscm >> 2 ){
+                                  693   CLINEA 0000H 0001H 0135H 0003H 0016H
+00:0016 00 01                     694   	mov	r1,	#00h
+00:0018 2D-90                     695   	srlc	r0,	#02h
+00:001A 2E-91                     696   	sra	r1,	#02h
+00:001C 05-F4                     697   	mov	er4,	er0
+                                  698   CBLOCK 5 4 309
+00:001E 00 71                     699   	cmp	r1,	#00h
+00:0020 08 C8                     700   	bne	_$L59
+00:0022 40-80                     701   	mov	r0,	r4
+00:0024 15 C9                     702   	beq	_$L60
+                                  703   
+                                  704   ;;		switch( oscm >> 2 ){
+                                  705   CLINEA 0000H 0000H 0135H 0003H 0016H
+00:0026 01 74                     706   	cmp	r4,	#01h
+00:0028 1C C9                     707   	beq	_$L64
+                                  708   
+                                  709   ;;		switch( oscm >> 2 ){
+                                  710   CLINEA 0000H 0000H 0135H 0003H 0016H
+00:002A 02 74                     711   	cmp	r4,	#02h
+00:002C 14 C9                     712   	beq	_$L61
+                                  713   
+                                  714   ;;		switch( oscm >> 2 ){
+                                  715   CLINEA 0000H 0000H 0135H 0003H 0016H
+00:002E 03 74                     716   	cmp	r4,	#03h
+00:0030 1B C9                     717   	beq	_$L65
+                                  718   
+                                  719   ;;			default:
+                                  720   CLINEA 0000H 0001H 014AH 0004H 000BH
+00:0032                           721   _$L59 :
+                                  722   
+                                  723   ;;				kHz = (unsigned short)0;
+                                  724   CLINEA 0000H 0001H 014BH 0005H 001CH
+00:0032 00 E4                     725   	mov	er4,	#0 
+                                  726   CBLOCKEND 5 4 333
+                                  727   
+                                  728   ;;		}
+                                  729   CLINEA 0000H 0000H 014DH 0003H 0003H
+00:0034                           730   _$L58 :
+                                  731   
+                                  732   ;;		kHz >>= sysc;
+                                  733   CLINEA 0000H 0001H 014EH 0003H 000FH
+00:0034 45-F0                     734   	mov	er0,	er4
+00:0036                           735   _$M9 :
+00:0036 07 72                     736   	cmp	r2,	#07h
+00:0038 04 C3                     737   	ble	_$M8
+00:003A 7D-90                     738   	srlc	r0,	#07h
+00:003C 7C-91                     739   	srl	r1,	#07h
+00:003E F9 12                     740   	add	r2,	#0f9h
+00:0040 FA C8                     741   	bne	_$M9
+00:0042                           742   _$M8 :
+00:0042 2D-80                     743   	srlc	r0,	r2
+00:0044 2C-81                     744   	srl	r1,	r2
+                                  745   CBLOCKEND 5 3 335
+                                  746   
+                                  747   ;;	else{
+                                  748   CLINEA 0000H 0001H 0150H 0002H 0006H
+00:0046 01 CE                     749   	bal	_$L66
+00:0048                           750   _$L53 :
+                                  751   CBLOCK 5 6 336
+                                  752   
+                                  753   ;;		kHz = (unsigned short)0;
+                                  754   CLINEA 0000H 0001H 0151H 0003H 001AH
+00:0048 00 E0                     755   	mov	er0,	#0 
+                                  756   CBLOCKEND 5 6 338
+                                  757   
+                                  758   ;;	}
+                                  759   CLINEA 0000H 0000H 0152H 0002H 0002H
+00:004A                           760   _$L66 :
+                                  761   
+                                  762   ;;	return kHz;
+                                  763   CLINEA 0000H 0001H 0154H 0002H 000CH
+00:004A 00 E2                     764   	mov	er2,	#0 
+                                  765   CBLOCKEND 5 2 341
+                                  766   
+                                  767   ;;}
+                                  768   CLINEA 0000H 0000H 0155H 0001H 0001H
+00:004C 1E-F4                     769   	pop	er4
+00:004E 1F-FE                     770   	rt
+                                  771   
+                                  772   ;;			case CLK_OSCM_RC:
+                                  773   CLINEA 0000H 0001H 0137H 0004H 0014H
+00:0050                           774   _$L60 :
+                                  775   
+                                  776   ;;				kHz = (unsigned short)500;
+                                  777   CLINEA 0000H 0001H 0138H 0005H 001EH
+00:0050 F4 04                     778   	mov	r4,	#0f4h
+00:0052 01 05                     779   	mov	r5,	#01h
+                                  780   
+                                  781   ;;				break;
+                                  782   CLINEA 0000H 0001H 0139H 0005H 000AH
+00:0054 EF CE                     783   	bal	_$L58
+                                  784   
+                                  785   ;;			case CLK_OSCM_PLL:
+                                  786   CLINEA 0000H 0001H 013BH 0004H 0015H
+00:0056                           787   _$L61 :
+                                  788   
+                                  789   ;;				kHz = (unsigned short)8192;
+                                  790   CLINEA 0000H 0001H 013CH 0005H 001FH
+00:0056 00 04                     791   	mov	r4,	#00h
+00:0058 20 05                     792   	mov	r5,	#020h
+                                  793   
+                                  794   ;;				if( sysc == (unsigned char)CLK_SYSC_OSCLK ){
+                                  795   CLINEA 0000H 0001H 013DH 0005H 0030H
+00:005A 00 72                     796   	cmp	r2,	#00h
+00:005C EB C8                     797   	bne	_$L58
+                                  798   CBLOCK 5 5 317
+                                  799   
+                                  800   ;;					sysc = (unsigned char)CLK_SYSC_OSCLK_DIV2;
+                                  801   CLINEA 0000H 0001H 013EH 0006H 002FH
+00:005E 01 02                     802   	mov	r2,	#01h
+                                  803   CBLOCKEND 5 5 319
+                                  804   
+                                  805   ;;				break;
+                                  806   CLINEA 0000H 0001H 0140H 0005H 000AH
+00:0060 E9 CE                     807   	bal	_$L58
+                                  808   
+                                  809   ;;			case CLK_OSCM_CRYSTAL:
+                                  810   CLINEA 0000H 0001H 0142H 0004H 0019H
+00:0062                           811   _$L64 :
+                                  812   
+                                  813   ;;				kHz = (unsigned short)4096;
+                                  814   CLINEA 0000H 0001H 0143H 0005H 001FH
+00:0062 00 04                     815   	mov	r4,	#00h
+00:0064 10 05                     816   	mov	r5,	#010h
+                                  817   
+                                  818   ;;				break;
+                                  819   CLINEA 0000H 0001H 0144H 0005H 000AH
+00:0066 E6 CE                     820   	bal	_$L58
+                                  821   
+                                  822   ;;			case CLK_OSCM_EXTCLK:
+                                  823   CLINEA 0000H 0001H 0146H 0004H 0018H
+00:0068                           824   _$L65 :
+                                  825   
+                                  826   ;;				kHz = _gsHsclk;
+                                  827   CLINEA 0000H 0001H 0147H 0005H 0013H
+00:0068 12-90 00-00'              828   	l	er0,	NEAR __gsHsclk
+00:006C 05-F4                     829   	mov	er4,	er0
+                                  830   
+                                  831   ;;				break;
+                                  832   CLINEA 0000H 0001H 0148H 0005H 000AH
+00:006E E2 CE                     833   	bal	_$L58
+                                  834   CBLOCKEND 5 1 341
+                                  835   CFUNCTIONEND 5
+                                  836   
+                                  837   	public _clk_disHsclk
+                                  838   	public _clk_enaHsclk
+                                  839   	public _clk_getSysclk
+                                  840   	public _clk_setSysclk
+                                  841   	public _clk_setHsclk
+                                  842   	public _clk_getHsclk
+                                  843   	extrn code near : _clk_wait500us
+                                  844   	extrn code near : _main
+                                  845   
+  --------------------------      846   	rseg $$NINITTAB
+??:0000 00-10                     847   	dw	01000h
+                                  848   
+  --------------------------      849   	rseg $$NINITVAR
+00:0000                           850   __gsHsclk :
+00:0000                           851   	ds	02h
+                                  852   
+                                  853   	end
+
+
+
+  Target       : ML610112 (nX-U8/100)
+  Memory Model : SMALL
+  Data   Model : NEAR
+  ROM WINDOW   : (not specified)
+  Internal RAM : E000H to EFFFH
+
+  Errors   : 0
+  Warnings : 0  (/Wrpeast)
+  Lines    : 853

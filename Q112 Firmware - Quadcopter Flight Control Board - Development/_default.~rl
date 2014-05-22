@@ -1,0 +1,1 @@
+ /STACK(256) /D /SD /NS /CC _output\_obj\i2c.obj _output\_obj\irq.obj _output\_obj\main.obj _output\_obj\ml610112.obj _output\_obj\tbc.obj _output\_obj\timer.obj _output\_obj\uart.obj ,q112-defaultfirmware.abs,,LU8100SW.lib;

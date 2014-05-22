@@ -1,0 +1,310 @@
+RASU8(ML610178A)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1 
+ Source File: main\ml610178a.asm
+ Object File: _output\_obj\ml610178a.obj
+ Date  : 2012/12/17 Mon.[16:11]
+ Title : 
+## Loc. Object                   Line   Source Statements
+
+                                    1   ;***************************************************************
+                                    2   ;       ML610178A start up assembly source file
+                                    3   ;       for CCU8 version 1.xx/2.xx/3.xx
+                                    4   ;       LARGE CODE MODEL
+                                    5   ;       ROMWINDOW  00000H-0DFFFH
+                                    6   ;       Version 2.00
+                                    7   ;       Last Edition  Oct 05, 2011
+                                    8   ;       Copyright (C) 2010 LAPIS Semiconductor Co., Ltd.
+                                    9   ;***************************************************************
+                                   10   
+                                   11           type(ML610178A)
+                                   12   
+                                   13           model   large
+                                   14           romwindow       0, 0dfffh
+                                   15   
+                                   16           extrn   code: _main
+                                   17           extrn   data near: _$$SP
+                                   18           public  $$start_up
+                                   19   
+  --------------------------       20           cseg    at 0:0h
+00:0000 00-00'                     21           dw      offset _$$SP
+                                   22   
+  --------------------------       23           cseg    at 0:4h
+00:0004 00-00'                     24           dw      $$brk_reset
+                                   25   
+                                   26   $$NCODml610178alw segment code #0
+  --------------------------       27           rseg    $$NCODml610178alw
+                                   28   
+00:0000                            29   $$start_up:
+                                   30   
+00:0000 01 CE                      31           bal     $begin
+                                   32   
+00:0002                            33   $$brk_reset:
+00:0002 FF CE                      34           bal     $               ;endless loop
+                                   35   
+00:0004                            36   $begin:
+                                   37   
+                                   38   ;---------------------------------------------------------------
+                                   39   ;       setting Memory Model
+                                   40   ;---------------------------------------------------------------
+                                   41   ; nothing (fixed as Large model)
+                                   42   
+                                   43   ;---------------------------------------------------------------
+                                   44   ;       setting Rom Window range
+                                   45   ;---------------------------------------------------------------
+                                   46   ; nothing (fixed as range 0-0dfffh)
+                                   47   
+                                   48   ;---------------------------------------------------------------
+                                   49   ;       user SFR definition
+                                   50   ;---------------------------------------------------------------
+                                   51   ; nothing
+                                   52   
+                                   53   ;---------------------------------------------------------------
+                                   54   ;       Data memory zero clear
+                                   55   ;---------------------------------------------------------------
+    = 0000E000H                    56   NEAR_RAM_START  equ     0e000h
+    = 0000EFFFH                    57   NEAR_RAM_END    equ     0efffh
+                                   58   
+00:0004 00 E0                      59           mov     er0,    #0
+00:0006 00 E2                      60           mov     er2,    #0
+00:0008 00 E4                      61           mov     er4,    #0
+00:000A 00 E6                      62           mov     er6,    #0
+                                   63   
+00:000C 00 08                      64           mov     r8,     #BYTE1 NEAR_RAM_START
+00:000E E0 09                      65           mov     r9,     #BYTE2 NEAR_RAM_START
+00:0010 8A-F0                      66           lea     [er8]
+00:0012                            67   __near_ram_loop:
+00:0012 57-90                      68           st      qr0,    [ea+]
+00:0014 88 E8                      69           add     er8,    #8              ;er8 += 8
+00:0016 F0 79                      70           cmp     r9,     #BYTE2 (NEAR_RAM_END+1)
+00:0018 FC C1                      71           blt     __near_ram_loop
+00:001A 00 78                      72           cmp     r8,     #BYTE1 (NEAR_RAM_END+1)
+00:001C FA C1                      73           blt     __near_ram_loop
+                                   74   
+                                   75   ;---------------------------------------------------------------
+                                   76   ;       WDT counter clear
+                                   77   ;
+                                   78   ;       !!NOTICE!!
+                                   79   ;       After this process, you have to clear WDT counter within 
+                                   80   ;       the time described in user's manual of LSI.
+                                   81   ;
+                                   82   ;       !!NOTICE!!
+                                   83   ;       Please remove this routine when you use DTU8 simulation 
+                                   84   ;       mode.
+                                   85   ;---------------------------------------------------------------
+00:001E 5A 0C                      86           mov     r12,     #05ah
+00:0020 A5 0D                      87           mov     r13,     #0a5h
+00:0022                            88   __wdtcounter_clear:
+00:0022 11-9C 0E-F0                89           st      r12,     WDTCON
+00:0026 81-A0 0E-F0                90           tb      WDP
+00:002A FB C9                      91           bz      __wdtcounter_clear
+00:002C 11-9D 0E-F0                92           st      r13,     WDTCON
+                                   93   
+                                   94   ;---------------------------------------------------------------
+                                   95   ;       data variable initialization
+                                   96   ;---------------------------------------------------------------
+00:0030 00'0A                      97           mov     r10,    #SEG $$init_info
+00:0032 0C-F0 00-00'               98           lea     OFFSET $$init_info
+00:0036                            99   __init_loop:
+                                  100           ;---------------------------------------------
+                                  101           ; get source offset address and set in ER0
+                                  102           ;---------------------------------------------
+00:0036 AF-90 52-90               103           l       er0,    r10:[ea+]
+00:003A FF 70                     104           cmp     r0,     #0ffh
+00:003C 02 C8                     105           bne     __skip
+00:003E FF 71                     106           cmp     r1,     #0ffh
+00:0040 20 C9                     107           beq     __init_end              ;if er0==0ffffh then exit
+00:0042                           108   __skip:
+                                  109           ;---------------------------------------------
+                                  110           ; get destination offset address and set in ER2
+                                  111           ;---------------------------------------------
+00:0042 AF-90 52-92               112           l       er2,    r10:[ea+]
+                                  113   
+                                  114           ;---------------------------------------------
+                                  115           ; get size of objects and set in ER4
+                                  116           ;---------------------------------------------
+00:0046 AF-90 52-94               117           l       er4,    r10:[ea+]
+                                  118   
+                                  119           ;---------------------------------------------
+                                  120           ; get source phy_seg address and set in R6
+                                  121           ;---------------------------------------------
+00:004A AF-90 50-96               122           l       r6,     r10:[ea+]
+                                  123   
+                                  124           ;---------------------------------------------
+                                  125           ; get destination phy_seg address and set in R7
+                                  126           ;---------------------------------------------
+00:004E AF-90 50-97               127           l       r7,     r10:[ea+]
+                                  128   
+                                  129           ;---------------------------------------------
+                                  130           ; copy
+                                  131           ;---------------------------------------------
+00:0052 80 E4                     132           add     er4,    #0
+00:0054 F0 C9                     133           bz      __init_loop             ;if er4==0000 then next
+                                  134   
+00:0056 01-A2                     135           tb      r2.0
+00:0058 0B C8                     136           bnz     __loop_by_byte
+00:005A 01-A4                     137           tb      r4.0
+00:005C 09 C8                     138           bnz     __loop_by_byte
+                                  139   
+00:005E                           140   __init_loop2:
+00:005E 6F-90 02-98               141           l       er8,    r6:[er0]
+00:0062 82 E0                     142           add     er0,    #2              ;er0 += 2
+00:0064 7F-90 23-98               143           st      er8,    r7:[er2]
+00:0068 82 E2                     144           add     er2,    #2              ;er2 += 2
+                                  145   
+00:006A FE E4                     146           add     er4,    #-2             ;er4 -= 2
+00:006C F8 C8                     147           bnz     __init_loop2
+00:006E E3 CE                     148           bal     __init_loop
+                                  149   
+00:0070                           150   __loop_by_byte:
+00:0070 6F-90 00-98               151           l       r8,     r6:[er0]
+00:0074 81 E0                     152           add     er0,    #1              ;er0 += 1
+00:0076 7F-90 21-98               153           st      r8,     r7:[er2]
+00:007A 81 E2                     154           add     er2,    #1              ;er2 += 1
+                                  155   
+00:007C FF E4                     156           add     er4,    #-1             ;er4 -= 1
+00:007E F8 C8                     157           bnz     __loop_by_byte
+00:0080 DA CE                     158           bal     __init_loop
+                                  159   
+00:0082                           160   __init_end:
+                                  161   
+                                  162   ;---------------------------------------------------------------
+                                  163   ;       call initializing routine
+                                  164   ;---------------------------------------------------------------
+00:0082 01-F0'00-00'              165           bl      $$content_of_init
+                                  166   
+                                  167   ;---------------------------------------------------------------
+                                  168   ;       initialize DSR zero
+                                  169   ;---------------------------------------------------------------
+00:0086 00 00                     170           mov     r0,     #0
+00:0088 11-90 00-F0               171           st      r0,     DSR
+                                  172   
+                                  173   ;---------------------------------------------------------------
+                                  174   ;       far jump to main routine
+                                  175   ;---------------------------------------------------------------
+00:008C 00-F0'00-00'              176           b       _main
+                                  177   
+                                  178   ;---------------------------------------------------------------
+                                  179   ;       segment definition for initializing routine
+                                  180   ;---------------------------------------------------------------
+                                  181   $$content_of_init segment code
+  --------------------------      182           rseg    $$content_of_init
+                                  183   
+                                  184   $$end_of_init segment code
+  --------------------------      185           rseg    $$end_of_init
+??:0000 1F-FE                     186           rt
+                                  187   
+                                  188   ;---------------------------------------------------------------
+                                  189   ;       segment definition for data variable initialization
+                                  190   ;---------------------------------------------------------------
+                                  191   $$init_info segment table 2 any
+  --------------------------      192           rseg    $$init_info
+??:0000 00-00'                    193           dw      $$NINITTAB
+??:0002 00-00'                    194           dw      $$NINITVAR
+??:0004 00-00'                    195           dw      size $$NINITTAB
+??:0006 00'                       196           db      seg $$NINITTAB
+??:0007 00                        197           db      seg $$NINITVAR
+                                  198   
+                                  199   $$init_info_end segment table any
+  --------------------------      200           rseg    $$init_info_end
+??:0000 FF-FF                     201           dw      0ffffh
+                                  202   
+                                  203   $$NINITVAR segment data 2 #0
+                                  204   $$NINITTAB segment table 2 any
+                                  205   
+                                  206   ;---------------------------------------------------------------
+                                  207   ;       Filling the Test area at code memory (for ML610178A)
+                                  208   ;---------------------------------------------------------------
+  --------------------------      209           cseg #0 at 0fc00h
+00:FC00 FF-FF FF-FF FF-FF FF-FF   210           dw  100h    DUP 0ffffh
+00:FC08 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC10 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC18 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC20 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC28 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC30 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC38 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC40 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC48 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC50 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC58 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC60 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC68 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC70 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC78 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC80 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC88 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC90 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FC98 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FCA0 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FCA8 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FCB0 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FCB8 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FCC0 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FCC8 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FCD0 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FCD8 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FCE0 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FCE8 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FCF0 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FCF8 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD00 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD08 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD10 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD18 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD20 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD28 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD30 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD38 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD40 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD48 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD50 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD58 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD60 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD68 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD70 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD78 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD80 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD88 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD90 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FD98 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FDA0 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FDA8 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FDB0 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FDB8 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FDC0 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FDC8 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FDD0 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FDD8 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FDE0 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FDE8 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FDF0 FF-FF FF-FF FF-FF FF-FF   >>>   
+00:FDF8 FF-FF FF-FF FF-FF FF-FF   >>>   
+                                  211   
+                                  212   ; -------------------------------------------------------------
+                                  213   ;       Setting the code-option data (add 20120919)
+                                  214   ; -------------------------------------------------------------
+  --------------------------      215           cseg at 0:0fde0h
+00:FDE0 00-00                     216           dw 0000h
+                                  217   ;
+                                  218   ;---------------------------------------------------------------
+                                  219   ;       Keeping the Mirror area (for ML610178A)
+                                  220   ;---------------------------------------------------------------
+  --------------------------      221           tseg #08h at 00000h
+08:0000                           222           ds      0fe00h
+                                  223   
+  --------------------------      224           tseg #09h at 00000h
+09:0000                           225           ds      10000h
+                                  226   
+                                  227   
+                                  228           end
+
+
+
+  Target       : ML610178A (nX-U8/100)
+  Memory Model : LARGE
+  Data   Model : NEAR
+  ROM WINDOW   :    0H to DFFFH
+  Internal RAM : E000H to EFFFH
+
+  Errors   : 0
+  Warnings : 0  (/Wrpeast)
+  Lines    : 228

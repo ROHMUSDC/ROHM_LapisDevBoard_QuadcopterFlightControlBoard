@@ -1,0 +1,1311 @@
+RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1 
+ Source File: _output\_obj\irq.asm
+ Object File: _output\_obj\irq.obj
+ Date  : 2014/05/20 Tue.[14:48]
+ Title : 
+## Loc. Object                   Line   Source Statements
+
+                                    1   ;; Compile Options : /TML610112 /MS /near /Icommon /Imain /Iirq /Itimer /Iclock /Itbc /Iuart /Ii2c /SS 256 /SD /Oa /Ot /W 3 /Wc /Fa_output\_obj\ 
+                                    2   ;; Version Number  : Ver.3.41.8
+                                    3   ;; File Name       : irq.c
+                                    4   
+                                    5   	type (ML610112) 
+                                    6   	model small, near
+                                    7   	$$NVARirq segment data 2h #0h
+                                    8   	$$_branchHdr$irq segment code 2h #0h
+                                    9   	$$_intCMP0INT$irq segment code 2h #0h
+                                   10   	$$_intCMP1INT$irq segment code 2h #0h
+                                   11   	$$_intI2CMINT$irq segment code 2h #0h
+                                   12   	$$_intI2CSINT$irq segment code 2h #0h
+                                   13   	$$_intNullHdr$irq segment code 2h #0h
+                                   14   	$$_intPA0INT$irq segment code 2h #0h
+                                   15   	$$_intPA1INT$irq segment code 2h #0h
+                                   16   	$$_intPA2INT$irq segment code 2h #0h
+                                   17   	$$_intPB0INT$irq segment code 2h #0h
+                                   18   	$$_intPB1INT$irq segment code 2h #0h
+                                   19   	$$_intPB2INT$irq segment code 2h #0h
+                                   20   	$$_intPB3INT$irq segment code 2h #0h
+                                   21   	$$_intPWCINT$irq segment code 2h #0h
+                                   22   	$$_intPWDINT$irq segment code 2h #0h
+                                   23   	$$_intPWEINT$irq segment code 2h #0h
+                                   24   	$$_intPWFINT$irq segment code 2h #0h
+                                   25   	$$_intSADINT$irq segment code 2h #0h
+                                   26   	$$_intSIO0INT$irq segment code 2h #0h
+                                   27   	$$_intT128HINT$irq segment code 2h #0h
+                                   28   	$$_intT16HINT$irq segment code 2h #0h
+                                   29   	$$_intT2HINT$irq segment code 2h #0h
+                                   30   	$$_intT32HINT$irq segment code 2h #0h
+                                   31   	$$_intTM8INT$irq segment code 2h #0h
+                                   32   	$$_intTM9INT$irq segment code 2h #0h
+                                   33   	$$_intTMAINT$irq segment code 2h #0h
+                                   34   	$$_intTMBINT$irq segment code 2h #0h
+                                   35   	$$_intTMEINT$irq segment code 2h #0h
+                                   36   	$$_intTMFINT$irq segment code 2h #0h
+                                   37   	$$_intUA0INT$irq segment code 2h #0h
+                                   38   	$$_intUA1INT$irq segment code 2h #0h
+                                   39   	$$_intUndefHdr$irq segment code 2h #0h
+                                   40   	$$_intVLSINT$irq segment code 2h #0h
+                                   41   	$$_intWDTINT$irq segment code 2h #0h
+                                   42   	$$irq_di$irq segment code 2h #0h
+                                   43   	$$irq_ei$irq segment code 2h #0h
+                                   44   	$$irq_init$irq segment code 2h #0h
+                                   45   	$$irq_setHdr$irq segment code 2h #0h
+                                   46   CVERSION 3.41.8
+                                   47   CSGLOBAL 03H 0000H "_intCMP1INT" 08H 02H 1AH 00H 91H 0aH 00H 00H 07H
+                                   48   CSGLOBAL 03H 0000H "_intT32HINT" 08H 02H 24H 00H 91H 0aH 00H 00H 07H
+                                   49   CGLOBAL 01H 03H 0000H "irq_init" 08H 02H 00H 00H 80H 02H 00H 00H 07H
+                                   50   CSGLOBAL 03H 0000H "_intCMP0INT" 08H 02H 19H 00H 91H 0aH 00H 00H 07H
+                                   51   CSGLOBAL 03H 0000H "_intTM8INT" 08H 02H 15H 00H 91H 0aH 00H 00H 07H
+                                   52   CSGLOBAL 03H 0000H "_intTM9INT" 08H 02H 16H 00H 91H 0aH 00H 00H 07H
+                                   53   CSGLOBAL 03H 0000H "_intT128HINT" 08H 02H 23H 00H 91H 0aH 00H 00H 07H
+                                   54   CSGLOBAL 03H 0000H "_intT2HINT" 08H 02H 26H 00H 91H 0aH 00H 00H 07H
+                                   55   CSGLOBAL 03H 0000H "_intI2CMINT" 08H 02H 14H 00H 91H 0aH 00H 00H 07H
+                                   56   CGLOBAL 01H 03H 0000H "irq_di" 08H 02H 02H 00H 80H 00H 00H 00H 07H
+                                   57   CGLOBAL 01H 03H 0000H "irq_ei" 08H 02H 01H 00H 80H 00H 00H 00H 07H
+                                   58   CSGLOBAL 03H 0000H "_intWDTINT" 08H 02H 08H 00H 91H 0eH 00H 00H 07H
+                                   59   CSGLOBAL 03H 0000H "_intPA0INT" 08H 02H 0AH 00H 91H 0aH 00H 00H 07H
+                                   60   CSGLOBAL 03H 0000H "_intTMAINT" 08H 02H 1DH 00H 91H 0aH 00H 00H 07H
+                                   61   CSGLOBAL 03H 0000H "_intPA1INT" 08H 02H 0BH 00H 91H 0aH 00H 00H 07H
+                                   62   CGLOBAL 01H 03H 0000H "irq_setHdr" 08H 02H 04H 00H 80H 04H 00H 00H 01H
+                                   63   CSGLOBAL 03H 0000H "_intSIO0INT" 08H 02H 11H 00H 91H 0aH 00H 00H 07H
+                                   64   CSGLOBAL 03H 0000H "_intI2CSINT" 08H 02H 13H 00H 91H 0aH 00H 00H 07H
+                                   65   CSGLOBAL 03H 0000H "_intSADINT" 08H 02H 12H 00H 91H 0aH 00H 00H 07H
+                                   66   CSGLOBAL 03H 0000H "_intPB0INT" 08H 02H 0DH 00H 91H 0aH 00H 00H 07H
+                                   67   CSGLOBAL 03H 0000H "_branchHdr" 08H 02H 30H 00H 80H 00H 00H 00H 07H
+                                   68   CSGLOBAL 03H 0000H "_intTMEINT" 08H 02H 1BH 00H 91H 0aH 00H 00H 07H
+                                   69   CSGLOBAL 03H 0000H "_intPB1INT" 08H 02H 0EH 00H 91H 0aH 00H 00H 07H
+                                   70   CSGLOBAL 03H 0000H "_intTMBINT" 08H 02H 1EH 00H 91H 0aH 00H 00H 07H
+                                   71   CSGLOBAL 03H 0000H "_intPA2INT" 08H 02H 0CH 00H 91H 0aH 00H 00H 07H
+                                   72   CSGLOBAL 03H 0000H "_intT16HINT" 08H 02H 25H 00H 91H 0aH 00H 00H 07H
+                                   73   CSGLOBAL 03H 0000H "_intTMFINT" 08H 02H 1CH 00H 91H 0aH 00H 00H 07H
+                                   74   CSGLOBAL 03H 0000H "_intPB2INT" 08H 02H 0FH 00H 91H 0aH 00H 00H 07H
+                                   75   CSGLOBAL 03H 0000H "_intPB3INT" 08H 02H 10H 00H 91H 0aH 00H 00H 07H
+                                   76   CSGLOBAL 03H 0000H "_intPWDINT" 08H 02H 20H 00H 91H 0aH 00H 00H 07H
+                                   77   CSGLOBAL 03H 0000H "_intPWEINT" 08H 02H 21H 00H 91H 0aH 00H 00H 07H
+                                   78   CSGLOBAL 03H 0000H "_intPWCINT" 08H 02H 1FH 00H 91H 0aH 00H 00H 07H
+                                   79   CSGLOBAL 03H 0000H "_intUA0INT" 08H 02H 17H 00H 91H 0aH 00H 00H 07H
+                                   80   CSGLOBAL 03H 0000H "_intUndefHdr" 08H 02H 06H 00H 90H 00H 00H 00H 07H
+                                   81   CSGLOBAL 03H 0000H "_intUA1INT" 08H 02H 18H 00H 91H 0aH 00H 00H 07H
+                                   82   CSGLOBAL 03H 0000H "_intPWFINT" 08H 02H 22H 00H 91H 0aH 00H 00H 07H
+                                   83   CSGLOBAL 03H 0000H "_intVLSINT" 08H 02H 09H 00H 91H 0aH 00H 00H 07H
+                                   84   CSGLOBAL 03H 0000H "_intNullHdr" 08H 02H 07H 00H 80H 00H 00H 00H 07H
+                                   85   CSTRUCTTAG 0000H 0000H 0000H 0008H 00000001H "_Notag"
+                                   86   CSTRUCTMEM 52H 00000001H 00000000H "b0" 02H 00H 00H
+                                   87   CSTRUCTMEM 52H 00000001H 00000001H "b1" 02H 00H 00H
+                                   88   CSTRUCTMEM 52H 00000001H 00000002H "b2" 02H 00H 00H
+                                   89   CSTRUCTMEM 52H 00000001H 00000003H "b3" 02H 00H 00H
+                                   90   CSTRUCTMEM 52H 00000001H 00000004H "b4" 02H 00H 00H
+                                   91   CSTRUCTMEM 52H 00000001H 00000005H "b5" 02H 00H 00H
+                                   92   CSTRUCTMEM 52H 00000001H 00000006H "b6" 02H 00H 00H
+                                   93   CSTRUCTMEM 52H 00000001H 00000007H "b7" 02H 00H 00H
+                                   94   CTYPEDEF 0000H 0000H 43H "_BYTE_FIELD" 04H 00H 05H 00H 00H
+                                   95   CSGLOBAL 43H 003EH "_sIrqHdr" 0DH 01H 1FH 00H 03H 00H 02H 05H 00H 10H 00H 00H 00H 07H
+                                   96   CFILE 0001H 00000023H "main\\mcu.h"
+                                   97   CFILE 0002H 0000085AH "main\\ML610112.H"
+                                   98   CFILE 0003H 00000057H "irq\\irq.h"
+                                   99   CFILE 0000H 00000141H "irq\\irq.c"
+                                  100   
+  --------------------------      101   	rseg $$irq_init$irq
+                                  102   CFUNCTION 0
+                                  103   
+00:0000                           104   _irq_init	:
+                                  105   CBLOCK 0 1 151
+                                  106   
+                                  107   ;;{
+                                  108   CLINEA 0000H 0001H 0097H 0001H 0001H
+00:0000 5E-F4                     109   	push	er4
+                                  110   CBLOCK 0 2 151
+                                  111   CLOCAL 47H 0002H 0026H 0002H "irqNo" 02H 00H 01H
+                                  112   
+                                  113   ;;	IE1 = (unsigned char)0x00u;
+                                  114   CLINEA 0000H 0001H 009BH 0002H 001CH
+00:0002 00 00                     115   	mov	r0,	#00h
+00:0004 11-90 11-F0               116   	st	r0,	0f011h
+                                  117   
+                                  118   ;;	IE2 = (unsigned char)0x00u;
+                                  119   CLINEA 0000H 0001H 009CH 0002H 001CH
+00:0008 11-90 12-F0               120   	st	r0,	0f012h
+                                  121   
+                                  122   ;;	IE3 = (unsigned char)0x00u;
+                                  123   CLINEA 0000H 0001H 009DH 0002H 001CH
+00:000C 11-90 13-F0               124   	st	r0,	0f013h
+                                  125   
+                                  126   ;;	IE4 = (unsigned char)0x00u;
+                                  127   CLINEA 0000H 0001H 009EH 0002H 001CH
+00:0010 11-90 14-F0               128   	st	r0,	0f014h
+                                  129   
+                                  130   ;;	IE5 = (unsigned char)0x00u;
+                                  131   CLINEA 0000H 0001H 009FH 0002H 001CH
+00:0014 11-90 15-F0               132   	st	r0,	0f015h
+                                  133   
+                                  134   ;;	IE6 = (unsigned char)0x00u;
+                                  135   CLINEA 0000H 0001H 00A0H 0002H 001CH
+00:0018 11-90 16-F0               136   	st	r0,	0f016h
+                                  137   
+                                  138   ;;	IE7 =  (unsigned char)0x00u;
+                                  139   CLINEA 0000H 0001H 00A1H 0002H 001DH
+00:001C 11-90 17-F0               140   	st	r0,	0f017h
+                                  141   
+                                  142   ;;	IRQ0 = (unsigned char)0x00u;
+                                  143   CLINEA 0000H 0001H 00A3H 0002H 001DH
+00:0020 11-90 18-F0               144   	st	r0,	0f018h
+                                  145   
+                                  146   ;;	IRQ1 = (unsigned char)0x00u;
+                                  147   CLINEA 0000H 0001H 00A4H 0002H 001DH
+00:0024 11-90 19-F0               148   	st	r0,	0f019h
+                                  149   
+                                  150   ;;	IRQ2 = (unsigned char)0x00u;
+                                  151   CLINEA 0000H 0001H 00A5H 0002H 001DH
+00:0028 11-90 1A-F0               152   	st	r0,	0f01ah
+                                  153   
+                                  154   ;;	IRQ3 = (unsigned char)0x00u;
+                                  155   CLINEA 0000H 0001H 00A6H 0002H 001DH
+00:002C 11-90 1B-F0               156   	st	r0,	0f01bh
+                                  157   
+                                  158   ;;	IRQ4 = (unsigned char)0x00u;
+                                  159   CLINEA 0000H 0001H 00A7H 0002H 001DH
+00:0030 11-90 1C-F0               160   	st	r0,	0f01ch
+                                  161   
+                                  162   ;;	IRQ5 = (unsigned char)0x00u;
+                                  163   CLINEA 0000H 0001H 00A8H 0002H 001DH
+00:0034 11-90 1D-F0               164   	st	r0,	0f01dh
+                                  165   
+                                  166   ;;	IRQ6 = (unsigned char)0x00u;
+                                  167   CLINEA 0000H 0001H 00A9H 0002H 001DH
+00:0038 11-90 1E-F0               168   	st	r0,	0f01eh
+                                  169   
+                                  170   ;;	IRQ7 = (unsigned char)0x00u;
+                                  171   CLINEA 0000H 0001H 00AAH 0002H 001DH
+00:003C 11-90 1F-F0               172   	st	r0,	0f01fh
+                                  173   
+                                  174   ;;	for( irqNo = 0; irqNo < IRQ_SIZE; irqNo++ ) {
+                                  175   CLINEA 0000H 0001H 00ADH 0002H 002EH
+00:0040 00 E4                     176   	mov	er4,	#0 
+00:0042                           177   _$L3 :
+                                  178   CBLOCK 0 3 173
+                                  179   
+                                  180   ;;		_sIrqHdr[irqNo] = _intNullHdr;
+                                  181   CLINEA 0000H 0001H 00AEH 0003H 0020H
+00:0042 45-F0                     182   	mov	er0,	er4
+00:0044 46-F0                     183   	add	er0,	er4
+00:0046 00'02                     184   	mov	r2,	#BYTE1 OFFSET __intNullHdr
+00:0048 00'03                     185   	mov	r3,	#BYTE2 OFFSET __intNullHdr
+00:004A 09-A2 00-00'              186   	st	er2,	NEAR __sIrqHdr[er0]
+                                  187   CBLOCKEND 0 3 175
+                                  188   
+                                  189   ;;	for( irqNo = 0; irqNo < IRQ_SIZE; irqNo++ ) {
+                                  190   CLINEA 0000H 0000H 00ADH 0002H 002EH
+00:004E 81 E4                     191   	add	er4,	#1 
+00:0050 1F 74                     192   	cmp	r4,	#01fh
+00:0052 00 55                     193   	cmpc	r5,	#00h
+00:0054 F6 C5                     194   	blts	_$L3
+                                  195   CBLOCKEND 0 2 176
+                                  196   
+                                  197   ;;}
+                                  198   CLINEA 0000H 0001H 00B0H 0001H 0001H
+00:0056 1E-F4                     199   	pop	er4
+00:0058 1F-FE                     200   	rt
+                                  201   CBLOCKEND 0 1 176
+                                  202   CFUNCTIONEND 0
+                                  203   
+                                  204   
+  --------------------------      205   	rseg $$irq_ei$irq
+                                  206   CFUNCTION 1
+                                  207   
+00:0000                           208   _irq_ei	:
+                                  209   CBLOCK 1 1 186
+                                  210   
+                                  211   ;;{
+                                  212   CLINEA 0000H 0001H 00BAH 0001H 0001H
+                                  213   CBLOCK 1 2 186
+                                  214   
+                                  215   ;;	__EI();
+                                  216   CLINEA 0000H 0001H 00BBH 0002H 0008H
+00:0000 08-ED                     217   	ei
+                                  218   CBLOCKEND 1 2 188
+                                  219   
+                                  220   ;;}
+                                  221   CLINEA 0000H 0001H 00BCH 0001H 0001H
+00:0002 1F-FE                     222   	rt
+                                  223   CBLOCKEND 1 1 188
+                                  224   CFUNCTIONEND 1
+                                  225   
+                                  226   
+  --------------------------      227   	rseg $$irq_di$irq
+                                  228   CFUNCTION 2
+                                  229   
+00:0000                           230   _irq_di	:
+                                  231   CBLOCK 2 1 198
+                                  232   
+                                  233   ;;{
+                                  234   CLINEA 0000H 0001H 00C6H 0001H 0001H
+                                  235   CBLOCK 2 2 198
+                                  236   
+                                  237   ;;	__DI();
+                                  238   CLINEA 0000H 0001H 00C7H 0002H 0008H
+00:0000 F7-EB                     239   	di
+                                  240   CBLOCKEND 2 2 200
+                                  241   
+                                  242   ;;}
+                                  243   CLINEA 0000H 0001H 00C8H 0001H 0001H
+00:0002 1F-FE                     244   	rt
+                                  245   CBLOCKEND 2 1 200
+                                  246   CFUNCTIONEND 2
+                                  247   
+                                  248   
+  --------------------------      249   	rseg $$irq_setHdr$irq
+                                  250   CFUNCTION 4
+                                  251   
+00:0000                           252   _irq_setHdr	:
+                                  253   CBLOCK 4 1 216
+                                  254   
+                                  255   ;;{
+                                  256   CLINEA 0000H 0001H 00D8H 0001H 0001H
+00:0000 6E-F8                     257   	push	xr8
+00:0002 00-88                     258   	mov	r8,	r0
+00:0004 25-FA                     259   	mov	er10,	er2
+                                  260   CBLOCK 4 2 216
+                                  261   CARGUMENT 46H 0001H 001CH "intNo" 02H 00H 00H
+                                  262   CARGUMENT 47H 0002H 0029H "func" 0AH 03H 00H 02H 2CH 00H 00H 00H 00H 00H 07H
+                                  263   
+                                  264   ;;	if( intNo >= (unsigned char)IRQ_SIZE ) {
+                                  265   CLINEA 0000H 0001H 00DBH 0002H 0029H
+00:0006 1F 70                     266   	cmp	r0,	#01fh
+00:0008 03 C1                     267   	blt	_$L10
+                                  268   CBLOCK 4 3 219
+                                  269   
+                                  270   ;;		return ( IRQ_R_ERR_INTNO );
+                                  271   CLINEA 0000H 0001H 00DCH 0003H 001DH
+00:000A 7F E0                     272   	mov	er0,	#-1
+                                  273   CBLOCKEND 4 3 221
+                                  274   CBLOCKEND 4 2 230
+                                  275   
+                                  276   ;;}
+                                  277   CLINEA 0000H 0001H 00E6H 0001H 0001H
+00:000C                           278   _$L9 :
+00:000C 2E-F8                     279   	pop	xr8
+00:000E 1F-FE                     280   	rt
+                                  281   
+                                  282   ;;	}
+                                  283   CLINEA 0000H 0000H 00DDH 0002H 0002H
+00:0010                           284   _$L10 :
+                                  285   
+                                  286   ;;	if( func != (void *)0 ) {
+                                  287   CLINEA 0000H 0001H 00DFH 0002H 001AH
+00:0010 25-F2                     288   	mov	er2,	er2
+00:0012 06 C9                     289   	beq	_$L12
+                                  290   CBLOCK 4 4 223
+                                  291   
+                                  292   ;;		_sIrqHdr[intNo] = func;
+                                  293   CLINEA 0000H 0001H 00E0H 0003H 0019H
+00:0014 80-80                     294   	mov	r0,	r8
+00:0016 00 01                     295   	mov	r1,	#00h
+00:0018 06-F0                     296   	add	er0,	er0
+00:001A 09-AA 00-00'              297   	st	er10,	NEAR __sIrqHdr[er0]
+                                  298   CBLOCKEND 4 4 225
+                                  299   
+                                  300   ;;	else {
+                                  301   CLINEA 0000H 0001H 00E2H 0002H 0007H
+00:001E 07 CE                     302   	bal	_$L14
+00:0020                           303   _$L12 :
+                                  304   CBLOCK 4 5 226
+                                  305   
+                                  306   ;;		_sIrqHdr[intNo] = _intNullHdr;
+                                  307   CLINEA 0000H 0001H 00E3H 0003H 0020H
+00:0020 80-80                     308   	mov	r0,	r8
+00:0022 00 01                     309   	mov	r1,	#00h
+00:0024 06-F0                     310   	add	er0,	er0
+00:0026 00'02                     311   	mov	r2,	#BYTE1 OFFSET __intNullHdr
+00:0028 00'03                     312   	mov	r3,	#BYTE2 OFFSET __intNullHdr
+00:002A 09-A2 00-00'              313   	st	er2,	NEAR __sIrqHdr[er0]
+                                  314   CBLOCKEND 4 5 228
+                                  315   
+                                  316   ;;	}
+                                  317   CLINEA 0000H 0000H 00E4H 0002H 0002H
+00:002E                           318   _$L14 :
+                                  319   
+                                  320   ;;	return ( IRQ_R_OK );
+                                  321   CLINEA 0000H 0001H 00E5H 0002H 0015H
+00:002E 00 E0                     322   	mov	er0,	#0 
+00:0030 ED CE                     323   	bal	_$L9
+                                  324   CBLOCKEND 4 1 230
+                                  325   CFUNCTIONEND 4
+                                  326   
+                                  327   
+  --------------------------      328   	rseg $$_intUndefHdr$irq
+                                  329   CFUNCTION 6
+                                  330   
+00:0000                           331   __intUndefHdr	:
+                                  332   CBLOCK 6 1 244
+                                  333   
+                                  334   ;;{
+                                  335   CLINEA 0000H 0001H 00F4H 0001H 0001H
+                                  336   CBLOCK 6 2 244
+                                  337   CBLOCKEND 6 2 246
+                                  338   
+                                  339   ;;}
+                                  340   CLINEA 0000H 0000H 00F6H 0001H 0001H
+00:0000 0F-FE                     341   	rti
+                                  342   CBLOCKEND 6 1 246
+                                  343   CFUNCTIONEND 6
+                                  344   
+                                  345   
+  --------------------------      346   	rseg $$_intNullHdr$irq
+                                  347   CFUNCTION 7
+                                  348   
+00:0000                           349   __intNullHdr	:
+                                  350   CBLOCK 7 1 256
+                                  351   
+                                  352   ;;{
+                                  353   CLINEA 0000H 0001H 0100H 0001H 0001H
+                                  354   CBLOCK 7 2 256
+                                  355   CBLOCKEND 7 2 258
+                                  356   
+                                  357   ;;}
+                                  358   CLINEA 0000H 0000H 0102H 0001H 0001H
+00:0000 1F-FE                     359   	rt
+                                  360   CBLOCKEND 7 1 258
+                                  361   CFUNCTIONEND 7
+                                  362   
+                                  363   
+  --------------------------      364   	rseg $$_branchHdr$irq
+                                  365   CFUNCTION 48
+                                  366   
+00:0000                           367   __branchHdr	:
+                                  368   CBLOCK 48 1 271
+                                  369   
+                                  370   ;;{
+                                  371   CLINEA 0000H 0001H 010FH 0001H 0001H
+                                  372   CBLOCK 48 2 271
+                                  373   CARGUMENT 46H 0001H 0014H "intNo" 02H 00H 00H
+                                  374   
+                                  375   ;;	_sIrqHdr[intNo]();
+                                  376   CLINEA 0000H 0001H 0110H 0002H 0013H
+00:0000 00 01                     377   	mov	r1,	#00h
+00:0002 06-F0                     378   	add	er0,	er0
+00:0004 08-A0 00-00'              379   	l	er0,	NEAR __sIrqHdr[er0]
+00:0008 02-F0                     380   	b	er0
+                                  381   CBLOCKEND 48 2 273
+                                  382   CLINEA 0000H 0001H 0111H 0001H 0001H
+                                  383   CBLOCKEND 48 1 273
+                                  384   CFUNCTIONEND 48
+                                  385   
+                                  386   
+  --------------------------      387   	rseg $$_intWDTINT$irq
+                                  388   CFUNCTION 8
+                                  389   
+00:0000                           390   __intWDTINT	:
+                                  391   CBLOCK 8 1 279
+                                  392   
+                                  393   ;;static void _intWDTINT(void)	{	_branchHdr(IRQ_NO_WDTINT);	}
+                                  394   CLINEA 0000H 0001H 0117H 0001H 003BH
+00:0000 CE-FF                     395   	push	elr, epsw, lr, ea
+00:0002 6E-F0                     396   	push	xr0
+00:0004 10-90 00-F0               397   	l	r0,	DSR
+00:0008 4E-F0                     398   	push	r0
+                                  399   CBLOCK 8 2 279
+                                  400   CRET 000CH
+                                  401   
+                                  402   ;;static void _intWDTINT(void)	{	_branchHdr(IRQ_NO_WDTINT);	}
+                                  403   CLINEA 0000H 0000H 0117H 0001H 003BH
+00:000A 00 00                     404   	mov	r0,	#00h
+00:000C 01-F0'00-00'              405   	bl	__branchHdr
+00:0010 0E-F0                     406   	pop	r0
+00:0012 11-90 00-F0               407   	st	r0,	DSR
+00:0016 2E-F0                     408   	pop	xr0
+00:0018 8E-FF                     409   	pop	ea, lr, psw, pc
+                                  410   CBLOCKEND 8 1 279
+                                  411   CFUNCTIONEND 8
+                                  412   
+                                  413   
+  --------------------------      414   	rseg $$_intVLSINT$irq
+                                  415   CFUNCTION 9
+                                  416   
+00:0000                           417   __intVLSINT	:
+                                  418   CBLOCK 9 1 280
+                                  419   
+                                  420   ;;static void _intVLSINT(void)	{	_branchHdr(IRQ_NO_VLSINT);	}
+                                  421   CLINEA 0000H 0001H 0118H 0001H 003BH
+00:0000 CE-F9                     422   	push	lr, ea
+00:0002 6E-F0                     423   	push	xr0
+00:0004 10-90 00-F0               424   	l	r0,	DSR
+00:0008 4E-F0                     425   	push	r0
+                                  426   CBLOCK 9 2 280
+                                  427   
+                                  428   ;;static void _intVLSINT(void)	{	_branchHdr(IRQ_NO_VLSINT);	}
+                                  429   CLINEA 0000H 0000H 0118H 0001H 003BH
+00:000A 01 00                     430   	mov	r0,	#01h
+00:000C 01-F0'00-00'              431   	bl	__branchHdr
+00:0010 0E-F0                     432   	pop	r0
+00:0012 11-90 00-F0               433   	st	r0,	DSR
+00:0016 2E-F0                     434   	pop	xr0
+00:0018 8E-F9                     435   	pop	ea, lr
+00:001A 0F-FE                     436   	rti
+                                  437   CBLOCKEND 9 1 280
+                                  438   CFUNCTIONEND 9
+                                  439   
+                                  440   
+  --------------------------      441   	rseg $$_intPA0INT$irq
+                                  442   CFUNCTION 10
+                                  443   
+00:0000                           444   __intPA0INT	:
+                                  445   CBLOCK 10 1 282
+                                  446   
+                                  447   ;;static void _intPA0INT(void)	{	_branchHdr(IRQ_NO_PA0INT);	}
+                                  448   CLINEA 0000H 0001H 011AH 0001H 003BH
+00:0000 CE-F9                     449   	push	lr, ea
+00:0002 6E-F0                     450   	push	xr0
+00:0004 10-90 00-F0               451   	l	r0,	DSR
+00:0008 4E-F0                     452   	push	r0
+                                  453   CBLOCK 10 2 282
+                                  454   
+                                  455   ;;static void _intPA0INT(void)	{	_branchHdr(IRQ_NO_PA0INT);	}
+                                  456   CLINEA 0000H 0000H 011AH 0001H 003BH
+00:000A 02 00                     457   	mov	r0,	#02h
+00:000C 01-F0'00-00'              458   	bl	__branchHdr
+00:0010 0E-F0                     459   	pop	r0
+00:0012 11-90 00-F0               460   	st	r0,	DSR
+00:0016 2E-F0                     461   	pop	xr0
+00:0018 8E-F9                     462   	pop	ea, lr
+00:001A 0F-FE                     463   	rti
+                                  464   CBLOCKEND 10 1 282
+                                  465   CFUNCTIONEND 10
+                                  466   
+                                  467   
+  --------------------------      468   	rseg $$_intPA1INT$irq
+                                  469   CFUNCTION 11
+                                  470   
+00:0000                           471   __intPA1INT	:
+                                  472   CBLOCK 11 1 283
+                                  473   
+                                  474   ;;static void _intPA1INT(void)	{	_branchHdr(IRQ_NO_PA1INT);	}
+                                  475   CLINEA 0000H 0001H 011BH 0001H 003BH
+00:0000 CE-F9                     476   	push	lr, ea
+00:0002 6E-F0                     477   	push	xr0
+00:0004 10-90 00-F0               478   	l	r0,	DSR
+00:0008 4E-F0                     479   	push	r0
+                                  480   CBLOCK 11 2 283
+                                  481   
+                                  482   ;;static void _intPA1INT(void)	{	_branchHdr(IRQ_NO_PA1INT);	}
+                                  483   CLINEA 0000H 0000H 011BH 0001H 003BH
+00:000A 03 00                     484   	mov	r0,	#03h
+00:000C 01-F0'00-00'              485   	bl	__branchHdr
+00:0010 0E-F0                     486   	pop	r0
+00:0012 11-90 00-F0               487   	st	r0,	DSR
+00:0016 2E-F0                     488   	pop	xr0
+00:0018 8E-F9                     489   	pop	ea, lr
+00:001A 0F-FE                     490   	rti
+                                  491   CBLOCKEND 11 1 283
+                                  492   CFUNCTIONEND 11
+                                  493   
+                                  494   
+  --------------------------      495   	rseg $$_intPA2INT$irq
+                                  496   CFUNCTION 12
+                                  497   
+00:0000                           498   __intPA2INT	:
+                                  499   CBLOCK 12 1 284
+                                  500   
+                                  501   ;;static void _intPA2INT(void)	{	_branchHdr(IRQ_NO_PA2INT);	}
+                                  502   CLINEA 0000H 0001H 011CH 0001H 003BH
+00:0000 CE-F9                     503   	push	lr, ea
+00:0002 6E-F0                     504   	push	xr0
+00:0004 10-90 00-F0               505   	l	r0,	DSR
+00:0008 4E-F0                     506   	push	r0
+                                  507   CBLOCK 12 2 284
+                                  508   
+                                  509   ;;static void _intPA2INT(void)	{	_branchHdr(IRQ_NO_PA2INT);	}
+                                  510   CLINEA 0000H 0000H 011CH 0001H 003BH
+00:000A 04 00                     511   	mov	r0,	#04h
+00:000C 01-F0'00-00'              512   	bl	__branchHdr
+00:0010 0E-F0                     513   	pop	r0
+00:0012 11-90 00-F0               514   	st	r0,	DSR
+00:0016 2E-F0                     515   	pop	xr0
+00:0018 8E-F9                     516   	pop	ea, lr
+00:001A 0F-FE                     517   	rti
+                                  518   CBLOCKEND 12 1 284
+                                  519   CFUNCTIONEND 12
+                                  520   
+                                  521   
+  --------------------------      522   	rseg $$_intPB0INT$irq
+                                  523   CFUNCTION 13
+                                  524   
+00:0000                           525   __intPB0INT	:
+                                  526   CBLOCK 13 1 286
+                                  527   
+                                  528   ;;static void _intPB0INT(void)	{	_branchHdr(IRQ_NO_PB0INT);	}
+                                  529   CLINEA 0000H 0001H 011EH 0001H 003BH
+00:0000 CE-F9                     530   	push	lr, ea
+00:0002 6E-F0                     531   	push	xr0
+00:0004 10-90 00-F0               532   	l	r0,	DSR
+00:0008 4E-F0                     533   	push	r0
+                                  534   CBLOCK 13 2 286
+                                  535   
+                                  536   ;;static void _intPB0INT(void)	{	_branchHdr(IRQ_NO_PB0INT);	}
+                                  537   CLINEA 0000H 0000H 011EH 0001H 003BH
+00:000A 05 00                     538   	mov	r0,	#05h
+00:000C 01-F0'00-00'              539   	bl	__branchHdr
+00:0010 0E-F0                     540   	pop	r0
+00:0012 11-90 00-F0               541   	st	r0,	DSR
+00:0016 2E-F0                     542   	pop	xr0
+00:0018 8E-F9                     543   	pop	ea, lr
+00:001A 0F-FE                     544   	rti
+                                  545   CBLOCKEND 13 1 286
+                                  546   CFUNCTIONEND 13
+                                  547   
+                                  548   
+  --------------------------      549   	rseg $$_intPB1INT$irq
+                                  550   CFUNCTION 14
+                                  551   
+00:0000                           552   __intPB1INT	:
+                                  553   CBLOCK 14 1 287
+                                  554   
+                                  555   ;;static void _intPB1INT(void)	{	_branchHdr(IRQ_NO_PB1INT);	}
+                                  556   CLINEA 0000H 0001H 011FH 0001H 003BH
+00:0000 CE-F9                     557   	push	lr, ea
+00:0002 6E-F0                     558   	push	xr0
+00:0004 10-90 00-F0               559   	l	r0,	DSR
+00:0008 4E-F0                     560   	push	r0
+                                  561   CBLOCK 14 2 287
+                                  562   
+                                  563   ;;static void _intPB1INT(void)	{	_branchHdr(IRQ_NO_PB1INT);	}
+                                  564   CLINEA 0000H 0000H 011FH 0001H 003BH
+00:000A 06 00                     565   	mov	r0,	#06h
+00:000C 01-F0'00-00'              566   	bl	__branchHdr
+00:0010 0E-F0                     567   	pop	r0
+00:0012 11-90 00-F0               568   	st	r0,	DSR
+00:0016 2E-F0                     569   	pop	xr0
+00:0018 8E-F9                     570   	pop	ea, lr
+00:001A 0F-FE                     571   	rti
+                                  572   CBLOCKEND 14 1 287
+                                  573   CFUNCTIONEND 14
+                                  574   
+                                  575   
+  --------------------------      576   	rseg $$_intPB2INT$irq
+                                  577   CFUNCTION 15
+                                  578   
+00:0000                           579   __intPB2INT	:
+                                  580   CBLOCK 15 1 288
+                                  581   
+                                  582   ;;static void _intPB2INT(void)	{	_branchHdr(IRQ_NO_PB2INT);	}
+                                  583   CLINEA 0000H 0001H 0120H 0001H 003BH
+00:0000 CE-F9                     584   	push	lr, ea
+00:0002 6E-F0                     585   	push	xr0
+00:0004 10-90 00-F0               586   	l	r0,	DSR
+00:0008 4E-F0                     587   	push	r0
+                                  588   CBLOCK 15 2 288
+                                  589   
+                                  590   ;;static void _intPB2INT(void)	{	_branchHdr(IRQ_NO_PB2INT);	}
+                                  591   CLINEA 0000H 0000H 0120H 0001H 003BH
+00:000A 07 00                     592   	mov	r0,	#07h
+00:000C 01-F0'00-00'              593   	bl	__branchHdr
+00:0010 0E-F0                     594   	pop	r0
+00:0012 11-90 00-F0               595   	st	r0,	DSR
+00:0016 2E-F0                     596   	pop	xr0
+00:0018 8E-F9                     597   	pop	ea, lr
+00:001A 0F-FE                     598   	rti
+                                  599   CBLOCKEND 15 1 288
+                                  600   CFUNCTIONEND 15
+                                  601   
+                                  602   
+  --------------------------      603   	rseg $$_intPB3INT$irq
+                                  604   CFUNCTION 16
+                                  605   
+00:0000                           606   __intPB3INT	:
+                                  607   CBLOCK 16 1 289
+                                  608   
+                                  609   ;;static void _intPB3INT(void)	{	_branchHdr(IRQ_NO_PB3INT);	}
+                                  610   CLINEA 0000H 0001H 0121H 0001H 003BH
+00:0000 CE-F9                     611   	push	lr, ea
+00:0002 6E-F0                     612   	push	xr0
+00:0004 10-90 00-F0               613   	l	r0,	DSR
+00:0008 4E-F0                     614   	push	r0
+                                  615   CBLOCK 16 2 289
+                                  616   
+                                  617   ;;static void _intPB3INT(void)	{	_branchHdr(IRQ_NO_PB3INT);	}
+                                  618   CLINEA 0000H 0000H 0121H 0001H 003BH
+00:000A 08 00                     619   	mov	r0,	#08h
+00:000C 01-F0'00-00'              620   	bl	__branchHdr
+00:0010 0E-F0                     621   	pop	r0
+00:0012 11-90 00-F0               622   	st	r0,	DSR
+00:0016 2E-F0                     623   	pop	xr0
+00:0018 8E-F9                     624   	pop	ea, lr
+00:001A 0F-FE                     625   	rti
+                                  626   CBLOCKEND 16 1 289
+                                  627   CFUNCTIONEND 16
+                                  628   
+                                  629   
+  --------------------------      630   	rseg $$_intSIO0INT$irq
+                                  631   CFUNCTION 17
+                                  632   
+00:0000                           633   __intSIO0INT	:
+                                  634   CBLOCK 17 1 291
+                                  635   
+                                  636   ;;static void _intSIO0INT(void)	{	_branchHdr(IRQ_NO_SIO0INT);	}
+                                  637   CLINEA 0000H 0001H 0123H 0001H 003DH
+00:0000 CE-F9                     638   	push	lr, ea
+00:0002 6E-F0                     639   	push	xr0
+00:0004 10-90 00-F0               640   	l	r0,	DSR
+00:0008 4E-F0                     641   	push	r0
+                                  642   CBLOCK 17 2 291
+                                  643   
+                                  644   ;;static void _intSIO0INT(void)	{	_branchHdr(IRQ_NO_SIO0INT);	}
+                                  645   CLINEA 0000H 0000H 0123H 0001H 003DH
+00:000A 09 00                     646   	mov	r0,	#09h
+00:000C 01-F0'00-00'              647   	bl	__branchHdr
+00:0010 0E-F0                     648   	pop	r0
+00:0012 11-90 00-F0               649   	st	r0,	DSR
+00:0016 2E-F0                     650   	pop	xr0
+00:0018 8E-F9                     651   	pop	ea, lr
+00:001A 0F-FE                     652   	rti
+                                  653   CBLOCKEND 17 1 291
+                                  654   CFUNCTIONEND 17
+                                  655   
+                                  656   
+  --------------------------      657   	rseg $$_intSADINT$irq
+                                  658   CFUNCTION 18
+                                  659   
+00:0000                           660   __intSADINT	:
+                                  661   CBLOCK 18 1 293
+                                  662   
+                                  663   ;;static void _intSADINT(void)	{	_branchHdr(IRQ_NO_SADINT);	}
+                                  664   CLINEA 0000H 0001H 0125H 0001H 003BH
+00:0000 CE-F9                     665   	push	lr, ea
+00:0002 6E-F0                     666   	push	xr0
+00:0004 10-90 00-F0               667   	l	r0,	DSR
+00:0008 4E-F0                     668   	push	r0
+                                  669   CBLOCK 18 2 293
+                                  670   
+                                  671   ;;static void _intSADINT(void)	{	_branchHdr(IRQ_NO_SADINT);	}
+                                  672   CLINEA 0000H 0000H 0125H 0001H 003BH
+00:000A 0A 00                     673   	mov	r0,	#0ah
+00:000C 01-F0'00-00'              674   	bl	__branchHdr
+00:0010 0E-F0                     675   	pop	r0
+00:0012 11-90 00-F0               676   	st	r0,	DSR
+00:0016 2E-F0                     677   	pop	xr0
+00:0018 8E-F9                     678   	pop	ea, lr
+00:001A 0F-FE                     679   	rti
+                                  680   CBLOCKEND 18 1 293
+                                  681   CFUNCTIONEND 18
+                                  682   
+                                  683   
+  --------------------------      684   	rseg $$_intI2CSINT$irq
+                                  685   CFUNCTION 19
+                                  686   
+00:0000                           687   __intI2CSINT	:
+                                  688   CBLOCK 19 1 295
+                                  689   
+                                  690   ;;static void _intI2CSINT(void)	{	_branchHdr(IRQ_NO_I2CSINT);	}
+                                  691   CLINEA 0000H 0001H 0127H 0001H 003DH
+00:0000 CE-F9                     692   	push	lr, ea
+00:0002 6E-F0                     693   	push	xr0
+00:0004 10-90 00-F0               694   	l	r0,	DSR
+00:0008 4E-F0                     695   	push	r0
+                                  696   CBLOCK 19 2 295
+                                  697   
+                                  698   ;;static void _intI2CSINT(void)	{	_branchHdr(IRQ_NO_I2CSINT);	}
+                                  699   CLINEA 0000H 0000H 0127H 0001H 003DH
+00:000A 0B 00                     700   	mov	r0,	#0bh
+00:000C 01-F0'00-00'              701   	bl	__branchHdr
+00:0010 0E-F0                     702   	pop	r0
+00:0012 11-90 00-F0               703   	st	r0,	DSR
+00:0016 2E-F0                     704   	pop	xr0
+00:0018 8E-F9                     705   	pop	ea, lr
+00:001A 0F-FE                     706   	rti
+                                  707   CBLOCKEND 19 1 295
+                                  708   CFUNCTIONEND 19
+                                  709   
+                                  710   
+  --------------------------      711   	rseg $$_intI2CMINT$irq
+                                  712   CFUNCTION 20
+                                  713   
+00:0000                           714   __intI2CMINT	:
+                                  715   CBLOCK 20 1 296
+                                  716   
+                                  717   ;;static void _intI2CMINT(void)	{	_branchHdr(IRQ_NO_I2CMINT);	}
+                                  718   CLINEA 0000H 0001H 0128H 0001H 003DH
+00:0000 CE-F9                     719   	push	lr, ea
+00:0002 6E-F0                     720   	push	xr0
+00:0004 10-90 00-F0               721   	l	r0,	DSR
+00:0008 4E-F0                     722   	push	r0
+                                  723   CBLOCK 20 2 296
+                                  724   
+                                  725   ;;static void _intI2CMINT(void)	{	_branchHdr(IRQ_NO_I2CMINT);	}
+                                  726   CLINEA 0000H 0000H 0128H 0001H 003DH
+00:000A 0C 00                     727   	mov	r0,	#0ch
+00:000C 01-F0'00-00'              728   	bl	__branchHdr
+00:0010 0E-F0                     729   	pop	r0
+00:0012 11-90 00-F0               730   	st	r0,	DSR
+00:0016 2E-F0                     731   	pop	xr0
+00:0018 8E-F9                     732   	pop	ea, lr
+00:001A 0F-FE                     733   	rti
+                                  734   CBLOCKEND 20 1 296
+                                  735   CFUNCTIONEND 20
+                                  736   
+                                  737   
+  --------------------------      738   	rseg $$_intTM8INT$irq
+                                  739   CFUNCTION 21
+                                  740   
+00:0000                           741   __intTM8INT	:
+                                  742   CBLOCK 21 1 298
+                                  743   
+                                  744   ;;static void _intTM8INT(void)	{	_branchHdr(IRQ_NO_TM8INT);	}
+                                  745   CLINEA 0000H 0001H 012AH 0001H 003BH
+00:0000 CE-F9                     746   	push	lr, ea
+00:0002 6E-F0                     747   	push	xr0
+00:0004 10-90 00-F0               748   	l	r0,	DSR
+00:0008 4E-F0                     749   	push	r0
+                                  750   CBLOCK 21 2 298
+                                  751   
+                                  752   ;;static void _intTM8INT(void)	{	_branchHdr(IRQ_NO_TM8INT);	}
+                                  753   CLINEA 0000H 0000H 012AH 0001H 003BH
+00:000A 0D 00                     754   	mov	r0,	#0dh
+00:000C 01-F0'00-00'              755   	bl	__branchHdr
+00:0010 0E-F0                     756   	pop	r0
+00:0012 11-90 00-F0               757   	st	r0,	DSR
+00:0016 2E-F0                     758   	pop	xr0
+00:0018 8E-F9                     759   	pop	ea, lr
+00:001A 0F-FE                     760   	rti
+                                  761   CBLOCKEND 21 1 298
+                                  762   CFUNCTIONEND 21
+                                  763   
+                                  764   
+  --------------------------      765   	rseg $$_intTM9INT$irq
+                                  766   CFUNCTION 22
+                                  767   
+00:0000                           768   __intTM9INT	:
+                                  769   CBLOCK 22 1 299
+                                  770   
+                                  771   ;;static void _intTM9INT(void)	{	_branchHdr(IRQ_NO_TM9INT);	}
+                                  772   CLINEA 0000H 0001H 012BH 0001H 003BH
+00:0000 CE-F9                     773   	push	lr, ea
+00:0002 6E-F0                     774   	push	xr0
+00:0004 10-90 00-F0               775   	l	r0,	DSR
+00:0008 4E-F0                     776   	push	r0
+                                  777   CBLOCK 22 2 299
+                                  778   
+                                  779   ;;static void _intTM9INT(void)	{	_branchHdr(IRQ_NO_TM9INT);	}
+                                  780   CLINEA 0000H 0000H 012BH 0001H 003BH
+00:000A 0E 00                     781   	mov	r0,	#0eh
+00:000C 01-F0'00-00'              782   	bl	__branchHdr
+00:0010 0E-F0                     783   	pop	r0
+00:0012 11-90 00-F0               784   	st	r0,	DSR
+00:0016 2E-F0                     785   	pop	xr0
+00:0018 8E-F9                     786   	pop	ea, lr
+00:001A 0F-FE                     787   	rti
+                                  788   CBLOCKEND 22 1 299
+                                  789   CFUNCTIONEND 22
+                                  790   
+                                  791   
+  --------------------------      792   	rseg $$_intUA0INT$irq
+                                  793   CFUNCTION 23
+                                  794   
+00:0000                           795   __intUA0INT	:
+                                  796   CBLOCK 23 1 301
+                                  797   
+                                  798   ;;static void _intUA0INT(void)	{	_branchHdr(IRQ_NO_UA0INT);	}
+                                  799   CLINEA 0000H 0001H 012DH 0001H 003BH
+00:0000 CE-F9                     800   	push	lr, ea
+00:0002 6E-F0                     801   	push	xr0
+00:0004 10-90 00-F0               802   	l	r0,	DSR
+00:0008 4E-F0                     803   	push	r0
+                                  804   CBLOCK 23 2 301
+                                  805   
+                                  806   ;;static void _intUA0INT(void)	{	_branchHdr(IRQ_NO_UA0INT);	}
+                                  807   CLINEA 0000H 0000H 012DH 0001H 003BH
+00:000A 0F 00                     808   	mov	r0,	#0fh
+00:000C 01-F0'00-00'              809   	bl	__branchHdr
+00:0010 0E-F0                     810   	pop	r0
+00:0012 11-90 00-F0               811   	st	r0,	DSR
+00:0016 2E-F0                     812   	pop	xr0
+00:0018 8E-F9                     813   	pop	ea, lr
+00:001A 0F-FE                     814   	rti
+                                  815   CBLOCKEND 23 1 301
+                                  816   CFUNCTIONEND 23
+                                  817   
+                                  818   
+  --------------------------      819   	rseg $$_intUA1INT$irq
+                                  820   CFUNCTION 24
+                                  821   
+00:0000                           822   __intUA1INT	:
+                                  823   CBLOCK 24 1 302
+                                  824   
+                                  825   ;;static void _intUA1INT(void)	{	_branchHdr(IRQ_NO_UA1INT);	}
+                                  826   CLINEA 0000H 0001H 012EH 0001H 003BH
+00:0000 CE-F9                     827   	push	lr, ea
+00:0002 6E-F0                     828   	push	xr0
+00:0004 10-90 00-F0               829   	l	r0,	DSR
+00:0008 4E-F0                     830   	push	r0
+                                  831   CBLOCK 24 2 302
+                                  832   
+                                  833   ;;static void _intUA1INT(void)	{	_branchHdr(IRQ_NO_UA1INT);	}
+                                  834   CLINEA 0000H 0000H 012EH 0001H 003BH
+00:000A 10 00                     835   	mov	r0,	#010h
+00:000C 01-F0'00-00'              836   	bl	__branchHdr
+00:0010 0E-F0                     837   	pop	r0
+00:0012 11-90 00-F0               838   	st	r0,	DSR
+00:0016 2E-F0                     839   	pop	xr0
+00:0018 8E-F9                     840   	pop	ea, lr
+00:001A 0F-FE                     841   	rti
+                                  842   CBLOCKEND 24 1 302
+                                  843   CFUNCTIONEND 24
+                                  844   
+                                  845   
+  --------------------------      846   	rseg $$_intCMP0INT$irq
+                                  847   CFUNCTION 25
+                                  848   
+00:0000                           849   __intCMP0INT	:
+                                  850   CBLOCK 25 1 304
+                                  851   
+                                  852   ;;static void _intCMP0INT(void)	{	_branchHdr(IRQ_NO_CMP0INT);	}
+                                  853   CLINEA 0000H 0001H 0130H 0001H 003DH
+00:0000 CE-F9                     854   	push	lr, ea
+00:0002 6E-F0                     855   	push	xr0
+00:0004 10-90 00-F0               856   	l	r0,	DSR
+00:0008 4E-F0                     857   	push	r0
+                                  858   CBLOCK 25 2 304
+                                  859   
+                                  860   ;;static void _intCMP0INT(void)	{	_branchHdr(IRQ_NO_CMP0INT);	}
+                                  861   CLINEA 0000H 0000H 0130H 0001H 003DH
+00:000A 11 00                     862   	mov	r0,	#011h
+00:000C 01-F0'00-00'              863   	bl	__branchHdr
+00:0010 0E-F0                     864   	pop	r0
+00:0012 11-90 00-F0               865   	st	r0,	DSR
+00:0016 2E-F0                     866   	pop	xr0
+00:0018 8E-F9                     867   	pop	ea, lr
+00:001A 0F-FE                     868   	rti
+                                  869   CBLOCKEND 25 1 304
+                                  870   CFUNCTIONEND 25
+                                  871   
+                                  872   
+  --------------------------      873   	rseg $$_intCMP1INT$irq
+                                  874   CFUNCTION 26
+                                  875   
+00:0000                           876   __intCMP1INT	:
+                                  877   CBLOCK 26 1 305
+                                  878   
+                                  879   ;;static void _intCMP1INT(void)	{	_branchHdr(IRQ_NO_CMP1INT);	}
+                                  880   CLINEA 0000H 0001H 0131H 0001H 003DH
+00:0000 CE-F9                     881   	push	lr, ea
+00:0002 6E-F0                     882   	push	xr0
+00:0004 10-90 00-F0               883   	l	r0,	DSR
+00:0008 4E-F0                     884   	push	r0
+                                  885   CBLOCK 26 2 305
+                                  886   
+                                  887   ;;static void _intCMP1INT(void)	{	_branchHdr(IRQ_NO_CMP1INT);	}
+                                  888   CLINEA 0000H 0000H 0131H 0001H 003DH
+00:000A 12 00                     889   	mov	r0,	#012h
+00:000C 01-F0'00-00'              890   	bl	__branchHdr
+00:0010 0E-F0                     891   	pop	r0
+00:0012 11-90 00-F0               892   	st	r0,	DSR
+00:0016 2E-F0                     893   	pop	xr0
+00:0018 8E-F9                     894   	pop	ea, lr
+00:001A 0F-FE                     895   	rti
+                                  896   CBLOCKEND 26 1 305
+                                  897   CFUNCTIONEND 26
+                                  898   
+                                  899   
+  --------------------------      900   	rseg $$_intTMEINT$irq
+                                  901   CFUNCTION 27
+                                  902   
+00:0000                           903   __intTMEINT	:
+                                  904   CBLOCK 27 1 307
+                                  905   
+                                  906   ;;static void _intTMEINT(void)	{	_branchHdr(IRQ_NO_TMEINT);	}
+                                  907   CLINEA 0000H 0001H 0133H 0001H 003BH
+00:0000 CE-F9                     908   	push	lr, ea
+00:0002 6E-F0                     909   	push	xr0
+00:0004 10-90 00-F0               910   	l	r0,	DSR
+00:0008 4E-F0                     911   	push	r0
+                                  912   CBLOCK 27 2 307
+                                  913   
+                                  914   ;;static void _intTMEINT(void)	{	_branchHdr(IRQ_NO_TMEINT);	}
+                                  915   CLINEA 0000H 0000H 0133H 0001H 003BH
+00:000A 13 00                     916   	mov	r0,	#013h
+00:000C 01-F0'00-00'              917   	bl	__branchHdr
+00:0010 0E-F0                     918   	pop	r0
+00:0012 11-90 00-F0               919   	st	r0,	DSR
+00:0016 2E-F0                     920   	pop	xr0
+00:0018 8E-F9                     921   	pop	ea, lr
+00:001A 0F-FE                     922   	rti
+                                  923   CBLOCKEND 27 1 307
+                                  924   CFUNCTIONEND 27
+                                  925   
+                                  926   
+  --------------------------      927   	rseg $$_intTMFINT$irq
+                                  928   CFUNCTION 28
+                                  929   
+00:0000                           930   __intTMFINT	:
+                                  931   CBLOCK 28 1 308
+                                  932   
+                                  933   ;;static void _intTMFINT(void)	{	_branchHdr(IRQ_NO_TMFINT);	}
+                                  934   CLINEA 0000H 0001H 0134H 0001H 003BH
+00:0000 CE-F9                     935   	push	lr, ea
+00:0002 6E-F0                     936   	push	xr0
+00:0004 10-90 00-F0               937   	l	r0,	DSR
+00:0008 4E-F0                     938   	push	r0
+                                  939   CBLOCK 28 2 308
+                                  940   
+                                  941   ;;static void _intTMFINT(void)	{	_branchHdr(IRQ_NO_TMFINT);	}
+                                  942   CLINEA 0000H 0000H 0134H 0001H 003BH
+00:000A 14 00                     943   	mov	r0,	#014h
+00:000C 01-F0'00-00'              944   	bl	__branchHdr
+00:0010 0E-F0                     945   	pop	r0
+00:0012 11-90 00-F0               946   	st	r0,	DSR
+00:0016 2E-F0                     947   	pop	xr0
+00:0018 8E-F9                     948   	pop	ea, lr
+00:001A 0F-FE                     949   	rti
+                                  950   CBLOCKEND 28 1 308
+                                  951   CFUNCTIONEND 28
+                                  952   
+                                  953   
+  --------------------------      954   	rseg $$_intTMAINT$irq
+                                  955   CFUNCTION 29
+                                  956   
+00:0000                           957   __intTMAINT	:
+                                  958   CBLOCK 29 1 309
+                                  959   
+                                  960   ;;static void _intTMAINT(void)	{	_branchHdr(IRQ_NO_TMAINT);	}
+                                  961   CLINEA 0000H 0001H 0135H 0001H 003BH
+00:0000 CE-F9                     962   	push	lr, ea
+00:0002 6E-F0                     963   	push	xr0
+00:0004 10-90 00-F0               964   	l	r0,	DSR
+00:0008 4E-F0                     965   	push	r0
+                                  966   CBLOCK 29 2 309
+                                  967   
+                                  968   ;;static void _intTMAINT(void)	{	_branchHdr(IRQ_NO_TMAINT);	}
+                                  969   CLINEA 0000H 0000H 0135H 0001H 003BH
+00:000A 15 00                     970   	mov	r0,	#015h
+00:000C 01-F0'00-00'              971   	bl	__branchHdr
+00:0010 0E-F0                     972   	pop	r0
+00:0012 11-90 00-F0               973   	st	r0,	DSR
+00:0016 2E-F0                     974   	pop	xr0
+00:0018 8E-F9                     975   	pop	ea, lr
+00:001A 0F-FE                     976   	rti
+                                  977   CBLOCKEND 29 1 309
+                                  978   CFUNCTIONEND 29
+                                  979   
+                                  980   
+  --------------------------      981   	rseg $$_intTMBINT$irq
+                                  982   CFUNCTION 30
+                                  983   
+00:0000                           984   __intTMBINT	:
+                                  985   CBLOCK 30 1 310
+                                  986   
+                                  987   ;;static void _intTMBINT(void)	{	_branchHdr(IRQ_NO_TMBINT);	}
+                                  988   CLINEA 0000H 0001H 0136H 0001H 003BH
+00:0000 CE-F9                     989   	push	lr, ea
+00:0002 6E-F0                     990   	push	xr0
+00:0004 10-90 00-F0               991   	l	r0,	DSR
+00:0008 4E-F0                     992   	push	r0
+                                  993   CBLOCK 30 2 310
+                                  994   
+                                  995   ;;static void _intTMBINT(void)	{	_branchHdr(IRQ_NO_TMBINT);	}
+                                  996   CLINEA 0000H 0000H 0136H 0001H 003BH
+00:000A 16 00                     997   	mov	r0,	#016h
+00:000C 01-F0'00-00'              998   	bl	__branchHdr
+00:0010 0E-F0                     999   	pop	r0
+00:0012 11-90 00-F0              1000   	st	r0,	DSR
+00:0016 2E-F0                    1001   	pop	xr0
+00:0018 8E-F9                    1002   	pop	ea, lr
+00:001A 0F-FE                    1003   	rti
+                                 1004   CBLOCKEND 30 1 310
+                                 1005   CFUNCTIONEND 30
+                                 1006   
+                                 1007   
+  --------------------------     1008   	rseg $$_intPWCINT$irq
+                                 1009   CFUNCTION 31
+                                 1010   
+00:0000                          1011   __intPWCINT	:
+                                 1012   CBLOCK 31 1 312
+                                 1013   
+                                 1014   ;;static void _intPWCINT(void)	{	_branchHdr(IRQ_NO_PWCINT);	}
+                                 1015   CLINEA 0000H 0001H 0138H 0001H 003BH
+00:0000 CE-F9                    1016   	push	lr, ea
+00:0002 6E-F0                    1017   	push	xr0
+00:0004 10-90 00-F0              1018   	l	r0,	DSR
+00:0008 4E-F0                    1019   	push	r0
+                                 1020   CBLOCK 31 2 312
+                                 1021   
+                                 1022   ;;static void _intPWCINT(void)	{	_branchHdr(IRQ_NO_PWCINT);	}
+                                 1023   CLINEA 0000H 0000H 0138H 0001H 003BH
+00:000A 17 00                    1024   	mov	r0,	#017h
+00:000C 01-F0'00-00'             1025   	bl	__branchHdr
+00:0010 0E-F0                    1026   	pop	r0
+00:0012 11-90 00-F0              1027   	st	r0,	DSR
+00:0016 2E-F0                    1028   	pop	xr0
+00:0018 8E-F9                    1029   	pop	ea, lr
+00:001A 0F-FE                    1030   	rti
+                                 1031   CBLOCKEND 31 1 312
+                                 1032   CFUNCTIONEND 31
+                                 1033   
+                                 1034   
+  --------------------------     1035   	rseg $$_intPWDINT$irq
+                                 1036   CFUNCTION 32
+                                 1037   
+00:0000                          1038   __intPWDINT	:
+                                 1039   CBLOCK 32 1 313
+                                 1040   
+                                 1041   ;;static void _intPWDINT(void)	{	_branchHdr(IRQ_NO_PWDINT);	}
+                                 1042   CLINEA 0000H 0001H 0139H 0001H 003BH
+00:0000 CE-F9                    1043   	push	lr, ea
+00:0002 6E-F0                    1044   	push	xr0
+00:0004 10-90 00-F0              1045   	l	r0,	DSR
+00:0008 4E-F0                    1046   	push	r0
+                                 1047   CBLOCK 32 2 313
+                                 1048   
+                                 1049   ;;static void _intPWDINT(void)	{	_branchHdr(IRQ_NO_PWDINT);	}
+                                 1050   CLINEA 0000H 0000H 0139H 0001H 003BH
+00:000A 18 00                    1051   	mov	r0,	#018h
+00:000C 01-F0'00-00'             1052   	bl	__branchHdr
+00:0010 0E-F0                    1053   	pop	r0
+00:0012 11-90 00-F0              1054   	st	r0,	DSR
+00:0016 2E-F0                    1055   	pop	xr0
+00:0018 8E-F9                    1056   	pop	ea, lr
+00:001A 0F-FE                    1057   	rti
+                                 1058   CBLOCKEND 32 1 313
+                                 1059   CFUNCTIONEND 32
+                                 1060   
+                                 1061   
+  --------------------------     1062   	rseg $$_intPWEINT$irq
+                                 1063   CFUNCTION 33
+                                 1064   
+00:0000                          1065   __intPWEINT	:
+                                 1066   CBLOCK 33 1 314
+                                 1067   
+                                 1068   ;;static void _intPWEINT(void)	{	_branchHdr(IRQ_NO_PWEINT);	}
+                                 1069   CLINEA 0000H 0001H 013AH 0001H 003BH
+00:0000 CE-F9                    1070   	push	lr, ea
+00:0002 6E-F0                    1071   	push	xr0
+00:0004 10-90 00-F0              1072   	l	r0,	DSR
+00:0008 4E-F0                    1073   	push	r0
+                                 1074   CBLOCK 33 2 314
+                                 1075   
+                                 1076   ;;static void _intPWEINT(void)	{	_branchHdr(IRQ_NO_PWEINT);	}
+                                 1077   CLINEA 0000H 0000H 013AH 0001H 003BH
+00:000A 19 00                    1078   	mov	r0,	#019h
+00:000C 01-F0'00-00'             1079   	bl	__branchHdr
+00:0010 0E-F0                    1080   	pop	r0
+00:0012 11-90 00-F0              1081   	st	r0,	DSR
+00:0016 2E-F0                    1082   	pop	xr0
+00:0018 8E-F9                    1083   	pop	ea, lr
+00:001A 0F-FE                    1084   	rti
+                                 1085   CBLOCKEND 33 1 314
+                                 1086   CFUNCTIONEND 33
+                                 1087   
+                                 1088   
+  --------------------------     1089   	rseg $$_intPWFINT$irq
+                                 1090   CFUNCTION 34
+                                 1091   
+00:0000                          1092   __intPWFINT	:
+                                 1093   CBLOCK 34 1 315
+                                 1094   
+                                 1095   ;;static void _intPWFINT(void)	{	_branchHdr(IRQ_NO_PWFINT);	}
+                                 1096   CLINEA 0000H 0001H 013BH 0001H 003BH
+00:0000 CE-F9                    1097   	push	lr, ea
+00:0002 6E-F0                    1098   	push	xr0
+00:0004 10-90 00-F0              1099   	l	r0,	DSR
+00:0008 4E-F0                    1100   	push	r0
+                                 1101   CBLOCK 34 2 315
+                                 1102   
+                                 1103   ;;static void _intPWFINT(void)	{	_branchHdr(IRQ_NO_PWFINT);	}
+                                 1104   CLINEA 0000H 0000H 013BH 0001H 003BH
+00:000A 1A 00                    1105   	mov	r0,	#01ah
+00:000C 01-F0'00-00'             1106   	bl	__branchHdr
+00:0010 0E-F0                    1107   	pop	r0
+00:0012 11-90 00-F0              1108   	st	r0,	DSR
+00:0016 2E-F0                    1109   	pop	xr0
+00:0018 8E-F9                    1110   	pop	ea, lr
+00:001A 0F-FE                    1111   	rti
+                                 1112   CBLOCKEND 34 1 315
+                                 1113   CFUNCTIONEND 34
+                                 1114   
+                                 1115   
+  --------------------------     1116   	rseg $$_intT128HINT$irq
+                                 1117   CFUNCTION 35
+                                 1118   
+00:0000                          1119   __intT128HINT	:
+                                 1120   CBLOCK 35 1 317
+                                 1121   
+                                 1122   ;;static void _intT128HINT(void){	_branchHdr(IRQ_NO_T128HINT);	}
+                                 1123   CLINEA 0000H 0001H 013DH 0001H 003EH
+00:0000 CE-F9                    1124   	push	lr, ea
+00:0002 6E-F0                    1125   	push	xr0
+00:0004 10-90 00-F0              1126   	l	r0,	DSR
+00:0008 4E-F0                    1127   	push	r0
+                                 1128   CBLOCK 35 2 317
+                                 1129   
+                                 1130   ;;static void _intT128HINT(void){	_branchHdr(IRQ_NO_T128HINT);	}
+                                 1131   CLINEA 0000H 0000H 013DH 0001H 003EH
+00:000A 1B 00                    1132   	mov	r0,	#01bh
+00:000C 01-F0'00-00'             1133   	bl	__branchHdr
+00:0010 0E-F0                    1134   	pop	r0
+00:0012 11-90 00-F0              1135   	st	r0,	DSR
+00:0016 2E-F0                    1136   	pop	xr0
+00:0018 8E-F9                    1137   	pop	ea, lr
+00:001A 0F-FE                    1138   	rti
+                                 1139   CBLOCKEND 35 1 317
+                                 1140   CFUNCTIONEND 35
+                                 1141   
+                                 1142   
+  --------------------------     1143   	rseg $$_intT32HINT$irq
+                                 1144   CFUNCTION 36
+                                 1145   
+00:0000                          1146   __intT32HINT	:
+                                 1147   CBLOCK 36 1 318
+                                 1148   
+                                 1149   ;;static void _intT32HINT(void)	{	_branchHdr(IRQ_NO_T32HINT);	}
+                                 1150   CLINEA 0000H 0001H 013EH 0001H 003DH
+00:0000 CE-F9                    1151   	push	lr, ea
+00:0002 6E-F0                    1152   	push	xr0
+00:0004 10-90 00-F0              1153   	l	r0,	DSR
+00:0008 4E-F0                    1154   	push	r0
+                                 1155   CBLOCK 36 2 318
+                                 1156   
+                                 1157   ;;static void _intT32HINT(void)	{	_branchHdr(IRQ_NO_T32HINT);	}
+                                 1158   CLINEA 0000H 0000H 013EH 0001H 003DH
+00:000A 1C 00                    1159   	mov	r0,	#01ch
+00:000C 01-F0'00-00'             1160   	bl	__branchHdr
+00:0010 0E-F0                    1161   	pop	r0
+00:0012 11-90 00-F0              1162   	st	r0,	DSR
+00:0016 2E-F0                    1163   	pop	xr0
+00:0018 8E-F9                    1164   	pop	ea, lr
+00:001A 0F-FE                    1165   	rti
+                                 1166   CBLOCKEND 36 1 318
+                                 1167   CFUNCTIONEND 36
+                                 1168   
+                                 1169   
+  --------------------------     1170   	rseg $$_intT16HINT$irq
+                                 1171   CFUNCTION 37
+                                 1172   
+00:0000                          1173   __intT16HINT	:
+                                 1174   CBLOCK 37 1 319
+                                 1175   
+                                 1176   ;;static void _intT16HINT(void)	{	_branchHdr(IRQ_NO_T16HINT);	}
+                                 1177   CLINEA 0000H 0001H 013FH 0001H 003DH
+00:0000 CE-F9                    1178   	push	lr, ea
+00:0002 6E-F0                    1179   	push	xr0
+00:0004 10-90 00-F0              1180   	l	r0,	DSR
+00:0008 4E-F0                    1181   	push	r0
+                                 1182   CBLOCK 37 2 319
+                                 1183   
+                                 1184   ;;static void _intT16HINT(void)	{	_branchHdr(IRQ_NO_T16HINT);	}
+                                 1185   CLINEA 0000H 0000H 013FH 0001H 003DH
+00:000A 1D 00                    1186   	mov	r0,	#01dh
+00:000C 01-F0'00-00'             1187   	bl	__branchHdr
+00:0010 0E-F0                    1188   	pop	r0
+00:0012 11-90 00-F0              1189   	st	r0,	DSR
+00:0016 2E-F0                    1190   	pop	xr0
+00:0018 8E-F9                    1191   	pop	ea, lr
+00:001A 0F-FE                    1192   	rti
+                                 1193   CBLOCKEND 37 1 319
+                                 1194   CFUNCTIONEND 37
+                                 1195   
+                                 1196   
+  --------------------------     1197   	rseg $$_intT2HINT$irq
+                                 1198   CFUNCTION 38
+                                 1199   
+00:0000                          1200   __intT2HINT	:
+                                 1201   CBLOCK 38 1 320
+                                 1202   
+                                 1203   ;;static void _intT2HINT(void)	{	_branchHdr(IRQ_NO_T2HINT);	}
+                                 1204   CLINEA 0000H 0001H 0140H 0001H 003BH
+00:0000 CE-F9                    1205   	push	lr, ea
+00:0002 6E-F0                    1206   	push	xr0
+00:0004 10-90 00-F0              1207   	l	r0,	DSR
+00:0008 4E-F0                    1208   	push	r0
+                                 1209   CBLOCK 38 2 320
+                                 1210   
+                                 1211   ;;static void _intT2HINT(void)	{	_branchHdr(IRQ_NO_T2HINT);	}
+                                 1212   CLINEA 0000H 0000H 0140H 0001H 003BH
+00:000A 1E 00                    1213   	mov	r0,	#01eh
+00:000C 01-F0'00-00'             1214   	bl	__branchHdr
+00:0010 0E-F0                    1215   	pop	r0
+00:0012 11-90 00-F0              1216   	st	r0,	DSR
+00:0016 2E-F0                    1217   	pop	xr0
+00:0018 8E-F9                    1218   	pop	ea, lr
+00:001A 0F-FE                    1219   	rti
+                                 1220   CBLOCKEND 38 1 320
+                                 1221   CFUNCTIONEND 38
+                                 1222   
+                                 1223   	public _irq_init
+                                 1224   	public _irq_di
+                                 1225   	public _irq_ei
+                                 1226   	public _irq_setHdr
+                                 1227   	extrn code near : _main
+                                 1228   
+  --------------------------     1229   	cseg #00h at 08h
+00:0008 00-00'                   1230   	dw	__intWDTINT
+                                 1231   
+  --------------------------     1232   	cseg #00h at 0Ch
+00:000C 00-00'                   1233   	dw	__intVLSINT
+00:000E 00-00'                   1234   	dw	__intUndefHdr
+00:0010 00-00'                   1235   	dw	__intPA0INT
+00:0012 00-00'                   1236   	dw	__intPA1INT
+00:0014 00-00'                   1237   	dw	__intPA2INT
+00:0016 00-00'                   1238   	dw	__intUndefHdr
+00:0018 00-00'                   1239   	dw	__intPB0INT
+00:001A 00-00'                   1240   	dw	__intPB1INT
+00:001C 00-00'                   1241   	dw	__intPB2INT
+00:001E 00-00'                   1242   	dw	__intPB3INT
+00:0020 00-00'                   1243   	dw	__intSIO0INT
+00:0022 00-00'                   1244   	dw	__intUndefHdr
+00:0024 00-00'                   1245   	dw	__intSADINT
+00:0026 00-00'                   1246   	dw	__intUndefHdr
+00:0028 00-00'                   1247   	dw	__intUndefHdr
+00:002A 00-00'                   1248   	dw	__intUndefHdr
+00:002C 00-00'                   1249   	dw	__intI2CSINT
+00:002E 00-00'                   1250   	dw	__intI2CMINT
+00:0030 00-00'                   1251   	dw	__intUndefHdr
+00:0032 00-00'                   1252   	dw	__intUndefHdr
+00:0034 00-00'                   1253   	dw	__intTM8INT
+00:0036 00-00'                   1254   	dw	__intTM9INT
+00:0038 00-00'                   1255   	dw	__intUndefHdr
+00:003A 00-00'                   1256   	dw	__intUndefHdr
+00:003C 00-00'                   1257   	dw	__intUndefHdr
+00:003E 00-00'                   1258   	dw	__intUndefHdr
+00:0040 00-00'                   1259   	dw	__intUA0INT
+00:0042 00-00'                   1260   	dw	__intUA1INT
+00:0044 00-00'                   1261   	dw	__intUndefHdr
+00:0046 00-00'                   1262   	dw	__intUndefHdr
+00:0048 00-00'                   1263   	dw	__intUndefHdr
+00:004A 00-00'                   1264   	dw	__intUndefHdr
+00:004C 00-00'                   1265   	dw	__intCMP0INT
+00:004E 00-00'                   1266   	dw	__intCMP1INT
+00:0050 00-00'                   1267   	dw	__intUndefHdr
+00:0052 00-00'                   1268   	dw	__intUndefHdr
+00:0054 00-00'                   1269   	dw	__intUndefHdr
+00:0056 00-00'                   1270   	dw	__intUndefHdr
+00:0058 00-00'                   1271   	dw	__intTMEINT
+00:005A 00-00'                   1272   	dw	__intTMFINT
+00:005C 00-00'                   1273   	dw	__intTMAINT
+00:005E 00-00'                   1274   	dw	__intTMBINT
+00:0060 00-00'                   1275   	dw	__intPWCINT
+00:0062 00-00'                   1276   	dw	__intPWDINT
+00:0064 00-00'                   1277   	dw	__intPWEINT
+00:0066 00-00'                   1278   	dw	__intPWFINT
+00:0068 00-00'                   1279   	dw	__intUndefHdr
+00:006A 00-00'                   1280   	dw	__intT128HINT
+00:006C 00-00'                   1281   	dw	__intUndefHdr
+00:006E 00-00'                   1282   	dw	__intT32HINT
+00:0070 00-00'                   1283   	dw	__intT16HINT
+00:0072 00-00'                   1284   	dw	__intUndefHdr
+00:0074 00-00'                   1285   	dw	__intUndefHdr
+00:0076 00-00'                   1286   	dw	__intT2HINT
+                                 1287   
+  --------------------------     1288   	rseg $$NVARirq
+00:0000                          1289   __sIrqHdr :
+00:0000                          1290   	ds	03eh
+                                 1291   
+                                 1292   	end
+
+
+
+  Target       : ML610112 (nX-U8/100)
+  Memory Model : SMALL
+  Data   Model : NEAR
+  ROM WINDOW   : (not specified)
+  Internal RAM : E000H to EFFFH
+
+  Errors   : 0
+  Warnings : 0  (/Wrpeast)
+  Lines    : 1292

@@ -1,0 +1,116 @@
+RASU8(ML610102)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1 
+ Source File: _output\_obj\volume.asm
+ Object File: _output\_obj\volume.obj
+ Date  : 2012/12/20 Thu.[17:50]
+ Title : 
+## Loc. Object                   Line   Source Statements
+
+                                    1   ;; Compile Options : /TML610102 /MS /near /Icommon /Imain /Iirq /Itimer /Iclock /Itbc /Ipwm /Iuart /Ivolume /Iled /D_ML610Q178 /SS 256 /SD /Oa /Ot /W 3 /Wc /Fa_output\_obj\ 
+                                    2   ;; Version Number  : Ver.3.31.4
+                                    3   ;; File Name       : volume.c
+                                    4   
+                                    5   	type (ML610102) 
+                                    6   	model small, near
+                                    7   	$$volGetAdValue$volume segment code 2h #0h
+                                    8   	$$volInit$volume segment code 2h #0h
+                                    9   CVERSION 3.31.4
+                                   10   CGLOBAL 01H 03H 0000H "volInit" 08H 02H 00H 00H 80H 00H 00H 00H 07H
+                                   11   CGLOBAL 01H 02H 0000H "volGetAdValue" 08H 02H 01H 00H 80H 00H 00H 00H 08H
+                                   12   CSTRUCTTAG 0000H 0000H 0000H 0008H 00000001H "_Notag"
+                                   13   CSTRUCTMEM 52H 00000001H 00000000H "b0" 02H 00H 00H
+                                   14   CSTRUCTMEM 52H 00000001H 00000001H "b1" 02H 00H 00H
+                                   15   CSTRUCTMEM 52H 00000001H 00000002H "b2" 02H 00H 00H
+                                   16   CSTRUCTMEM 52H 00000001H 00000003H "b3" 02H 00H 00H
+                                   17   CSTRUCTMEM 52H 00000001H 00000004H "b4" 02H 00H 00H
+                                   18   CSTRUCTMEM 52H 00000001H 00000005H "b5" 02H 00H 00H
+                                   19   CSTRUCTMEM 52H 00000001H 00000006H "b6" 02H 00H 00H
+                                   20   CSTRUCTMEM 52H 00000001H 00000007H "b7" 02H 00H 00H
+                                   21   CTYPEDEF 0000H 0000H 43H "_BYTE_FIELD" 04H 00H 05H 00H 00H
+                                   22   CFILE 0001H 00000026H "main\\mcu.h"
+                                   23   CFILE 0002H 000003F4H "C:\\PROGRA~1\\U8Dev\\Inc\\ML610102.h"
+                                   24   CFILE 0003H 0000001FH "volume\\volume.h"
+                                   25   CFILE 0000H 00000038H "volume\\volume.c"
+                                   26   
+  --------------------------       27   	rseg $$volInit$volume
+                                   28   CFUNCTION 0
+                                   29   
+00:0000                            30   _volInit	:
+                                   31   CBLOCK 0 1 29
+                                   32   
+                                   33   ;;{
+                                   34   CLINEA 0000H 0001H 001DH 0001H 0001H
+                                   35   CBLOCK 0 2 29
+                                   36   
+                                   37   ;;	SARUN = 0; // stop
+                                   38   CLINEA 0000H 0001H 0024H 0002H 0013H
+00:0000 82-A0 F1-F2                39   	rb	0f2f1h.0
+                                   40   
+                                   41   ;;	SADMOD0 = 0x0001;  // ch0 select
+                                   42   CLINEA 0000H 0001H 0027H 0002H 0021H
+00:0004 01 00                      43   	mov	r0,	#01h
+00:0006 11-90 F2-F2                44   	st	r0,	0f2f2h
+                                   45   CBLOCKEND 0 2 40
+                                   46   
+                                   47   ;;}
+                                   48   CLINEA 0000H 0001H 0028H 0001H 0001H
+00:000A 1F-FE                      49   	rt
+                                   50   CBLOCKEND 0 1 40
+                                   51   CFUNCTIONEND 0
+                                   52   
+                                   53   
+  --------------------------       54   	rseg $$volGetAdValue$volume
+                                   55   CFUNCTION 1
+                                   56   
+00:0000                            57   _volGetAdValue	:
+                                   58   CBLOCK 1 1 43
+                                   59   
+                                   60   ;;{
+                                   61   CLINEA 0000H 0001H 002BH 0001H 0001H
+                                   62   CBLOCK 1 2 43
+                                   63   CLOCAL 46H 0002H 0024H 0002H "result" 02H 00H 08H
+                                   64   
+                                   65   ;;	SARUN = 1; 			// start
+                                   66   CLINEA 0000H 0001H 002EH 0002H 0017H
+00:0000 80-A0 F1-F2                67   	sb	0f2f1h.0
+                                   68   
+                                   69   ;;	while( SARUN != 0 ) 	// wait finish
+                                   70   CLINEA 0000H 0000H 002FH 0002H 0024H
+00:0004                            71   _$L4 :
+                                   72   CBLOCK 1 3 48
+                                   73   CBLOCKEND 1 3 50
+00:0004 81-A0 F1-F2                74   	tb	0f2f1h.0
+00:0008 FD C8                      75   	bne	_$L4
+                                   76   
+                                   77   ;;	result = SADR0 >> 6; 
+                                   78   CLINEA 0000H 0001H 0034H 0002H 0016H
+00:000A 12-90 D0-F2                79   	l	er0,	0f2d0h
+00:000E 6D-90                      80   	srlc	r0,	#06h
+00:0010 6C-91                      81   	srl	r1,	#06h
+                                   82   
+                                   83   ;;	return result;
+                                   84   CLINEA 0000H 0001H 0035H 0002H 000FH
+                                   85   CBLOCKEND 1 2 54
+                                   86   
+                                   87   ;;}
+                                   88   CLINEA 0000H 0000H 0036H 0001H 0001H
+00:0012 1F-FE                      89   	rt
+                                   90   CBLOCKEND 1 1 54
+                                   91   CFUNCTIONEND 1
+                                   92   
+                                   93   	public _volInit
+                                   94   	public _volGetAdValue
+                                   95   	extrn code near : _main
+                                   96   
+                                   97   	end
+
+
+
+  Target       : ML610102 (nX-U8/100)
+  Memory Model : SMALL
+  Data   Model : NEAR
+  ROM WINDOW   : (not specified)
+  Internal RAM : E000H to E0FFH
+
+  Errors   : 0
+  Warnings : 0  (/Wrpeast)
+  Lines    : 97
