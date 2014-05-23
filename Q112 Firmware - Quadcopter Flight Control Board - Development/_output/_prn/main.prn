@@ -1,7 +1,7 @@
 RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1 
  Source File: _output\_obj\main.asm
  Object File: _output\_obj\main.obj
- Date  : 2014/05/21 Wed.[18:22]
+ Date  : 2014/05/22 Thu.[19:54]
  Title : 
 ## Loc. Object                   Line   Source Statements
 
@@ -705,11 +705,11 @@ RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1
                                   698   CBLOCK 257 10 658
                                   699   CBLOCKEND 257 10 662
                                   700   
-                                  701   ;;		if(TestingEndTimer < 100){		//50 == 3secs = 250 = 15 seconds
-                                  702   CLINEA 0000H 0001H 02A0H 0003H 003EH
+                                  701   ;;		if(TestingEndTimer < 10000){		//50 == 3secs = 250 = 15 seconds
+                                  702   CLINEA 0000H 0001H 02A0H 0003H 0040H
 00:0166 12-90 00-00'              703   	l	er0,	NEAR _TestingEndTimer
-00:016A 64 70                     704   	cmp	r0,	#064h
-00:016C 00 51                     705   	cmpc	r1,	#00h
+00:016A 10 70                     704   	cmp	r0,	#010h
+00:016C 27 51                     705   	cmpc	r1,	#027h
 00:016E D7 C1                     706   	blt	_$L46
                                   707   
                                   708   ;;		else{
@@ -11737,917 +11737,771 @@ RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1
                                 11730   ;;		if(MotorStepUpDnFlg == 0){
                                 11731   CLINEA 0000H 0001H 0E8DH 0003H 001CH
 00:0014 10-90 00-00'            11732   	l	r0,	NEAR _MotorStepUpDnFlg
-00:0018 02 C9                   11733   	beq	_$M75
-00:001A 00-F0'00-00'            11734   	b	_$L751
-00:001E                         11735   _$M75 :
-                                11736   CBLOCK 256 4 3725
-                                11737   
-                                11738   ;;			PFRUN = 0;	//Turn OFF PWM
-                                11739   CLINEA 0000H 0001H 0E8EH 0004H 001CH
-00:001E 82-A0 73-F9             11740   	rb	0f973h.0
-                                11741   
-                                11742   ;;			PERUN = 0;
-                                11743   CLINEA 0000H 0001H 0E8FH 0004H 000DH
-00:0022 82-A0 37-F9             11744   	rb	0f937h.0
-                                11745   
-                                11746   ;;			PDRUN = 0;
-                                11747   CLINEA 0000H 0001H 0E90H 0004H 000DH
-00:0026 82-A0 27-F9             11748   	rb	0f927h.0
-                                11749   
-                                11750   ;;			PCRUN = 0;
-                                11751   CLINEA 0000H 0001H 0E91H 0004H 000DH
-00:002A 82-A0 17-F9             11752   	rb	0f917h.0
-                                11753   
-                                11754   ;;			PWF0D = StepTestNominal+MotorSpeedChange; 		//Can't be running to change (Only this variable)
-                                11755   CLINEA 0000H 0001H 0E94H 0004H 0060H
-00:002E 12-90 00-00'            11756   	l	er0,	NEAR _MotorSpeedChange
-00:0032 5A 10                   11757   	add	r0,	#05ah
-00:0034 23 61                   11758   	addc	r1,	#023h
-00:0036 13-90 62-F9             11759   	st	er0,	0f962h
-                                11760   
-                                11761   ;;			PWED = StepTestNominal;
-                                11762   CLINEA 0000H 0001H 0E95H 0004H 001AH
-00:003A 5A 00                   11763   	mov	r0,	#05ah
-00:003C 23 01                   11764   	mov	r1,	#023h
-00:003E 13-90 32-F9             11765   	st	er0,	0f932h
-                                11766   
-                                11767   ;;			PWDD = StepTestNominal;
-                                11768   CLINEA 0000H 0001H 0E96H 0004H 001AH
-00:0042 13-90 22-F9             11769   	st	er0,	0f922h
-                                11770   
-                                11771   ;;			PWCD = StepTestNominal+MotorSpeedChange;	
-                                11772   CLINEA 0000H 0001H 0E97H 0004H 002CH
-00:0046 12-90 00-00'            11773   	l	er0,	NEAR _MotorSpeedChange
-00:004A 5A 10                   11774   	add	r0,	#05ah
-00:004C 23 61                   11775   	addc	r1,	#023h
-00:004E 13-90 12-F9             11776   	st	er0,	0f912h
-                                11777   
-                                11778   ;;			PWF0D = StepTestNominal; 						//Can't be running to change (Only this variable)
-                                11779   CLINEA 0000H 0001H 0E9AH 0004H 0053H
-00:0052 5A 00                   11780   	mov	r0,	#05ah
-00:0054 23 01                   11781   	mov	r1,	#023h
-00:0056 13-90 62-F9             11782   	st	er0,	0f962h
+00:0018 29 C8                   11733   	bne	_$L751
+                                11734   CBLOCK 256 4 3725
+                                11735   
+                                11736   ;;			PFRUN = 0;	//Turn OFF PWM
+                                11737   CLINEA 0000H 0001H 0E8EH 0004H 001CH
+00:001A 82-A0 73-F9             11738   	rb	0f973h.0
+                                11739   
+                                11740   ;;			PERUN = 0;
+                                11741   CLINEA 0000H 0001H 0E8FH 0004H 000DH
+00:001E 82-A0 37-F9             11742   	rb	0f937h.0
+                                11743   
+                                11744   ;;			PDRUN = 0;
+                                11745   CLINEA 0000H 0001H 0E90H 0004H 000DH
+00:0022 82-A0 27-F9             11746   	rb	0f927h.0
+                                11747   
+                                11748   ;;			PCRUN = 0;
+                                11749   CLINEA 0000H 0001H 0E91H 0004H 000DH
+00:0026 82-A0 17-F9             11750   	rb	0f917h.0
+                                11751   
+                                11752   ;;			PWF0D = StepTestNominal+MotorSpeedChange; 		//Can't be running to change (Only this variable)
+                                11753   CLINEA 0000H 0001H 0E94H 0004H 0060H
+00:002A 12-90 00-00'            11754   	l	er0,	NEAR _MotorSpeedChange
+00:002E 86 10                   11755   	add	r0,	#086h
+00:0030 24 61                   11756   	addc	r1,	#024h
+00:0032 13-90 62-F9             11757   	st	er0,	0f962h
+                                11758   
+                                11759   ;;			PWED = StepTestNominal;
+                                11760   CLINEA 0000H 0001H 0E95H 0004H 001AH
+00:0036 86 00                   11761   	mov	r0,	#086h
+00:0038 24 01                   11762   	mov	r1,	#024h
+00:003A 13-90 32-F9             11763   	st	er0,	0f932h
+                                11764   
+                                11765   ;;			PWDD = StepTestNominal;
+                                11766   CLINEA 0000H 0001H 0E96H 0004H 001AH
+00:003E 13-90 22-F9             11767   	st	er0,	0f922h
+                                11768   
+                                11769   ;;			PWCD = StepTestNominal+MotorSpeedChange;	
+                                11770   CLINEA 0000H 0001H 0E97H 0004H 002CH
+00:0042 12-90 00-00'            11771   	l	er0,	NEAR _MotorSpeedChange
+00:0046 86 10                   11772   	add	r0,	#086h
+00:0048 24 61                   11773   	addc	r1,	#024h
+00:004A 13-90 12-F9             11774   	st	er0,	0f912h
+                                11775   
+                                11776   ;;			CheckSafetyLimit();
+                                11777   CLINEA 0000H 0001H 0EACH 0004H 0016H
+00:004E 01-F0'00-00'            11778   	bl	_CheckSafetyLimit
+                                11779   
+                                11780   ;;			PFRUN = 1;	//Turn ON PWM
+                                11781   CLINEA 0000H 0001H 0EADH 0004H 001BH
+00:0052 80-A0 73-F9             11782   	sb	0f973h.0
                                 11783   
-                                11784   ;;			PWED = StepTestNominal+MotorSpeedChange;
-                                11785   CLINEA 0000H 0001H 0E9BH 0004H 002BH
-00:005A 12-90 00-00'            11786   	l	er0,	NEAR _MotorSpeedChange
-00:005E 5A 10                   11787   	add	r0,	#05ah
-00:0060 23 61                   11788   	addc	r1,	#023h
-00:0062 13-90 32-F9             11789   	st	er0,	0f932h
-                                11790   
-                                11791   ;;			PWDD = StepTestNominal+MotorSpeedChange;
-                                11792   CLINEA 0000H 0001H 0E9CH 0004H 002BH
-00:0066 12-90 00-00'            11793   	l	er0,	NEAR _MotorSpeedChange
-00:006A 5A 10                   11794   	add	r0,	#05ah
-00:006C 23 61                   11795   	addc	r1,	#023h
-00:006E 13-90 22-F9             11796   	st	er0,	0f922h
-                                11797   
-                                11798   ;;			PWCD = StepTestNominal;	
-                                11799   CLINEA 0000H 0001H 0E9DH 0004H 001BH
-00:0072 5A 00                   11800   	mov	r0,	#05ah
-00:0074 23 01                   11801   	mov	r1,	#023h
-00:0076 13-90 12-F9             11802   	st	er0,	0f912h
-                                11803   
-                                11804   ;;			PWF0D = StepTestNominal+MotorSpeedChange; 		//Can't be running to change (Only this variable)
-                                11805   CLINEA 0000H 0001H 0EA0H 0004H 0060H
-00:007A 12-90 00-00'            11806   	l	er0,	NEAR _MotorSpeedChange
-00:007E 5A 10                   11807   	add	r0,	#05ah
-00:0080 23 61                   11808   	addc	r1,	#023h
-00:0082 13-90 62-F9             11809   	st	er0,	0f962h
-                                11810   
-                                11811   ;;			PWED = StepTestNominal+MotorSpeedChange;
-                                11812   CLINEA 0000H 0001H 0EA1H 0004H 002BH
-00:0086 12-90 00-00'            11813   	l	er0,	NEAR _MotorSpeedChange
-00:008A 5A 10                   11814   	add	r0,	#05ah
-00:008C 23 61                   11815   	addc	r1,	#023h
-00:008E 13-90 32-F9             11816   	st	er0,	0f932h
-                                11817   
-                                11818   ;;			PWDD = StepTestNominal;
-                                11819   CLINEA 0000H 0001H 0EA2H 0004H 001AH
-00:0092 5A 00                   11820   	mov	r0,	#05ah
-00:0094 23 01                   11821   	mov	r1,	#023h
-00:0096 13-90 22-F9             11822   	st	er0,	0f922h
-                                11823   
-                                11824   ;;			PWCD = StepTestNominal;	
-                                11825   CLINEA 0000H 0001H 0EA3H 0004H 001BH
-00:009A 13-90 12-F9             11826   	st	er0,	0f912h
-                                11827   
-                                11828   ;;			PWF0D = StepTestNominal; 						//Can't be running to change (Only this variable)
-                                11829   CLINEA 0000H 0001H 0EA6H 0004H 0053H
-00:009E 13-90 62-F9             11830   	st	er0,	0f962h
-                                11831   
-                                11832   ;;			PWED = StepTestNominal;
-                                11833   CLINEA 0000H 0001H 0EA7H 0004H 001AH
-00:00A2 13-90 32-F9             11834   	st	er0,	0f932h
-                                11835   
-                                11836   ;;			PWDD = StepTestNominal+MotorSpeedChange;
-                                11837   CLINEA 0000H 0001H 0EA8H 0004H 002BH
-00:00A6 12-90 00-00'            11838   	l	er0,	NEAR _MotorSpeedChange
-00:00AA 5A 10                   11839   	add	r0,	#05ah
-00:00AC 23 61                   11840   	addc	r1,	#023h
-00:00AE 13-90 22-F9             11841   	st	er0,	0f922h
-                                11842   
-                                11843   ;;			PWCD = StepTestNominal+MotorSpeedChange;	
-                                11844   CLINEA 0000H 0001H 0EA9H 0004H 002CH
-00:00B2 12-90 00-00'            11845   	l	er0,	NEAR _MotorSpeedChange
-00:00B6 5A 10                   11846   	add	r0,	#05ah
-00:00B8 23 61                   11847   	addc	r1,	#023h
-00:00BA 13-90 12-F9             11848   	st	er0,	0f912h
+                                11784   ;;			PERUN = 1;
+                                11785   CLINEA 0000H 0001H 0EAEH 0004H 000DH
+00:0056 80-A0 37-F9             11786   	sb	0f937h.0
+                                11787   
+                                11788   ;;			PDRUN = 1;
+                                11789   CLINEA 0000H 0001H 0EAFH 0004H 000DH
+00:005A 80-A0 27-F9             11790   	sb	0f927h.0
+                                11791   
+                                11792   ;;			PCRUN = 1;
+                                11793   CLINEA 0000H 0001H 0EB0H 0004H 000DH
+00:005E 80-A0 17-F9             11794   	sb	0f917h.0
+                                11795   
+                                11796   ;;			MotorSpeedUT = StepTestNominal+MotorSpeedChange;
+                                11797   CLINEA 0000H 0001H 0EB1H 0004H 0033H
+00:0062 12-90 00-00'            11798   	l	er0,	NEAR _MotorSpeedChange
+00:0066 86 10                   11799   	add	r0,	#086h
+00:0068 24 61                   11800   	addc	r1,	#024h
+                                11801   CBLOCKEND 256 4 3762
+                                11802   
+                                11803   ;;		else{
+                                11804   CLINEA 0000H 0001H 0EB3H 0003H 0007H
+00:006A 2A CE                   11805   	bal	_$L753
+00:006C                         11806   _$L751 :
+                                11807   CBLOCK 256 5 3763
+                                11808   
+                                11809   ;;			PFRUN = 0;	//Turn OFF PWM
+                                11810   CLINEA 0000H 0001H 0EB4H 0004H 001CH
+00:006C 82-A0 73-F9             11811   	rb	0f973h.0
+                                11812   
+                                11813   ;;			PERUN = 0;
+                                11814   CLINEA 0000H 0001H 0EB5H 0004H 000DH
+00:0070 82-A0 37-F9             11815   	rb	0f937h.0
+                                11816   
+                                11817   ;;			PDRUN = 0;
+                                11818   CLINEA 0000H 0001H 0EB6H 0004H 000DH
+00:0074 82-A0 27-F9             11819   	rb	0f927h.0
+                                11820   
+                                11821   ;;			PCRUN = 0;
+                                11822   CLINEA 0000H 0001H 0EB7H 0004H 000DH
+00:0078 82-A0 17-F9             11823   	rb	0f917h.0
+                                11824   
+                                11825   ;;			PWF0D = StepTestNominal-MotorSpeedChange; 		//Can't be running to change (Only this variable)
+                                11826   CLINEA 0000H 0001H 0EBAH 0004H 0060H
+00:007C 86 00                   11827   	mov	r0,	#086h
+00:007E 24 01                   11828   	mov	r1,	#024h
+00:0080 12-92 00-00'            11829   	l	er2,	NEAR _MotorSpeedChange
+00:0084 28-80                   11830   	sub	r0,	r2
+00:0086 39-81                   11831   	subc	r1,	r3
+00:0088 13-90 62-F9             11832   	st	er0,	0f962h
+                                11833   
+                                11834   ;;			PWED = StepTestNominal;
+                                11835   CLINEA 0000H 0001H 0EBBH 0004H 001AH
+00:008C 86 00                   11836   	mov	r0,	#086h
+00:008E 24 01                   11837   	mov	r1,	#024h
+00:0090 13-90 32-F9             11838   	st	er0,	0f932h
+                                11839   
+                                11840   ;;			PWDD = StepTestNominal;
+                                11841   CLINEA 0000H 0001H 0EBCH 0004H 001AH
+00:0094 13-90 22-F9             11842   	st	er0,	0f922h
+                                11843   
+                                11844   ;;			PWCD = StepTestNominal-MotorSpeedChange;	
+                                11845   CLINEA 0000H 0001H 0EBDH 0004H 002CH
+00:0098 28-80                   11846   	sub	r0,	r2
+00:009A 39-81                   11847   	subc	r1,	r3
+00:009C 13-90 12-F9             11848   	st	er0,	0f912h
                                 11849   
                                 11850   ;;			CheckSafetyLimit();
-                                11851   CLINEA 0000H 0001H 0EACH 0004H 0016H
-00:00BE 01-F0'00-00'            11852   	bl	_CheckSafetyLimit
+                                11851   CLINEA 0000H 0001H 0ED2H 0004H 0016H
+00:00A0 01-F0'00-00'            11852   	bl	_CheckSafetyLimit
                                 11853   
                                 11854   ;;			PFRUN = 1;	//Turn ON PWM
-                                11855   CLINEA 0000H 0001H 0EADH 0004H 001BH
-00:00C2 80-A0 73-F9             11856   	sb	0f973h.0
+                                11855   CLINEA 0000H 0001H 0ED3H 0004H 001BH
+00:00A4 80-A0 73-F9             11856   	sb	0f973h.0
                                 11857   
                                 11858   ;;			PERUN = 1;
-                                11859   CLINEA 0000H 0001H 0EAEH 0004H 000DH
-00:00C6 80-A0 37-F9             11860   	sb	0f937h.0
+                                11859   CLINEA 0000H 0001H 0ED4H 0004H 000DH
+00:00A8 80-A0 37-F9             11860   	sb	0f937h.0
                                 11861   
                                 11862   ;;			PDRUN = 1;
-                                11863   CLINEA 0000H 0001H 0EAFH 0004H 000DH
-00:00CA 80-A0 27-F9             11864   	sb	0f927h.0
+                                11863   CLINEA 0000H 0001H 0ED5H 0004H 000DH
+00:00AC 80-A0 27-F9             11864   	sb	0f927h.0
                                 11865   
                                 11866   ;;			PCRUN = 1;
-                                11867   CLINEA 0000H 0001H 0EB0H 0004H 000DH
-00:00CE 80-A0 17-F9             11868   	sb	0f917h.0
+                                11867   CLINEA 0000H 0001H 0ED6H 0004H 000DH
+00:00B0 80-A0 17-F9             11868   	sb	0f917h.0
                                 11869   
-                                11870   ;;			MotorSpeedUT = StepTestNominal+MotorSpeedChange;
-                                11871   CLINEA 0000H 0001H 0EB1H 0004H 0033H
-00:00D2 12-90 00-00'            11872   	l	er0,	NEAR _MotorSpeedChange
-00:00D6 5A 10                   11873   	add	r0,	#05ah
-00:00D8 23 61                   11874   	addc	r1,	#023h
-                                11875   CBLOCKEND 256 4 3762
-                                11876   
-                                11877   ;;		else{
-                                11878   CLINEA 0000H 0001H 0EB3H 0003H 0007H
-00:00DA 00-F0'00-00'            11879   	b	_$L753
-00:00DE                         11880   _$L751 :
-                                11881   CBLOCK 256 5 3763
-                                11882   
-                                11883   ;;			PFRUN = 0;	//Turn OFF PWM
-                                11884   CLINEA 0000H 0001H 0EB4H 0004H 001CH
-00:00DE 82-A0 73-F9             11885   	rb	0f973h.0
-                                11886   
-                                11887   ;;			PERUN = 0;
-                                11888   CLINEA 0000H 0001H 0EB5H 0004H 000DH
-00:00E2 82-A0 37-F9             11889   	rb	0f937h.0
-                                11890   
-                                11891   ;;			PDRUN = 0;
-                                11892   CLINEA 0000H 0001H 0EB6H 0004H 000DH
-00:00E6 82-A0 27-F9             11893   	rb	0f927h.0
-                                11894   
-                                11895   ;;			PCRUN = 0;
-                                11896   CLINEA 0000H 0001H 0EB7H 0004H 000DH
-00:00EA 82-A0 17-F9             11897   	rb	0f917h.0
-                                11898   
-                                11899   ;;			PWF0D = StepTestNominal-MotorSpeedChange; 		//Can't be running to change (Only this variable)
-                                11900   CLINEA 0000H 0001H 0EBAH 0004H 0060H
-00:00EE 5A 00                   11901   	mov	r0,	#05ah
-00:00F0 23 01                   11902   	mov	r1,	#023h
-00:00F2 12-92 00-00'            11903   	l	er2,	NEAR _MotorSpeedChange
-00:00F6 28-80                   11904   	sub	r0,	r2
-00:00F8 39-81                   11905   	subc	r1,	r3
-00:00FA 13-90 62-F9             11906   	st	er0,	0f962h
-                                11907   
-                                11908   ;;			PWED = StepTestNominal;
-                                11909   CLINEA 0000H 0001H 0EBBH 0004H 001AH
-00:00FE 5A 00                   11910   	mov	r0,	#05ah
-00:0100 23 01                   11911   	mov	r1,	#023h
-00:0102 13-90 32-F9             11912   	st	er0,	0f932h
-                                11913   
-                                11914   ;;			PWDD = StepTestNominal;
-                                11915   CLINEA 0000H 0001H 0EBCH 0004H 001AH
-00:0106 13-90 22-F9             11916   	st	er0,	0f922h
-                                11917   
-                                11918   ;;			PWCD = StepTestNominal-MotorSpeedChange;	
-                                11919   CLINEA 0000H 0001H 0EBDH 0004H 002CH
-00:010A 28-80                   11920   	sub	r0,	r2
-00:010C 39-81                   11921   	subc	r1,	r3
-00:010E 13-90 12-F9             11922   	st	er0,	0f912h
-                                11923   
-                                11924   ;;			PWF0D = StepTestNominal; 						//Can't be running to change (Only this variable)
-                                11925   CLINEA 0000H 0001H 0EC0H 0004H 0053H
-00:0112 5A 00                   11926   	mov	r0,	#05ah
-00:0114 23 01                   11927   	mov	r1,	#023h
-00:0116 13-90 62-F9             11928   	st	er0,	0f962h
-                                11929   
-                                11930   ;;			PWED = StepTestNominal-MotorSpeedChange;
-                                11931   CLINEA 0000H 0001H 0EC1H 0004H 002BH
-00:011A 28-80                   11932   	sub	r0,	r2
-00:011C 39-81                   11933   	subc	r1,	r3
-00:011E 13-90 32-F9             11934   	st	er0,	0f932h
-                                11935   
-                                11936   ;;			PWDD = StepTestNominal-MotorSpeedChange;
-                                11937   CLINEA 0000H 0001H 0EC2H 0004H 002BH
-00:0122 5A 00                   11938   	mov	r0,	#05ah
-00:0124 23 01                   11939   	mov	r1,	#023h
-00:0126 28-80                   11940   	sub	r0,	r2
-00:0128 39-81                   11941   	subc	r1,	r3
-00:012A 13-90 22-F9             11942   	st	er0,	0f922h
-                                11943   
-                                11944   ;;			PWCD = StepTestNominal;	
-                                11945   CLINEA 0000H 0001H 0EC3H 0004H 001BH
-00:012E 5A 00                   11946   	mov	r0,	#05ah
-00:0130 23 01                   11947   	mov	r1,	#023h
-00:0132 13-90 12-F9             11948   	st	er0,	0f912h
-                                11949   
-                                11950   ;;			PWF0D = StepTestNominal-MotorSpeedChange; 		//Can't be running to change (Only this variable)
-                                11951   CLINEA 0000H 0001H 0EC6H 0004H 0060H
-00:0136 28-80                   11952   	sub	r0,	r2
-00:0138 39-81                   11953   	subc	r1,	r3
-00:013A 13-90 62-F9             11954   	st	er0,	0f962h
-                                11955   
-                                11956   ;;			PWED = StepTestNominal-MotorSpeedChange;
-                                11957   CLINEA 0000H 0001H 0EC7H 0004H 002BH
-00:013E 5A 00                   11958   	mov	r0,	#05ah
-00:0140 23 01                   11959   	mov	r1,	#023h
-00:0142 28-80                   11960   	sub	r0,	r2
-00:0144 39-81                   11961   	subc	r1,	r3
-00:0146 13-90 32-F9             11962   	st	er0,	0f932h
-                                11963   
-                                11964   ;;			PWDD = StepTestNominal;
-                                11965   CLINEA 0000H 0001H 0EC8H 0004H 001AH
-00:014A 5A 00                   11966   	mov	r0,	#05ah
-00:014C 23 01                   11967   	mov	r1,	#023h
-00:014E 13-90 22-F9             11968   	st	er0,	0f922h
-                                11969   
-                                11970   ;;			PWCD = StepTestNominal;	
-                                11971   CLINEA 0000H 0001H 0EC9H 0004H 001BH
-00:0152 13-90 12-F9             11972   	st	er0,	0f912h
-                                11973   
-                                11974   ;;			PWF0D = StepTestNominal; 						//Can't be running to change (Only this variable)
-                                11975   CLINEA 0000H 0001H 0ECCH 0004H 0053H
-00:0156 13-90 62-F9             11976   	st	er0,	0f962h
-                                11977   
-                                11978   ;;			PWED = StepTestNominal;
-                                11979   CLINEA 0000H 0001H 0ECDH 0004H 001AH
-00:015A 13-90 32-F9             11980   	st	er0,	0f932h
-                                11981   
-                                11982   ;;			PWDD = StepTestNominal-MotorSpeedChange;
-                                11983   CLINEA 0000H 0001H 0ECEH 0004H 002BH
-00:015E 28-80                   11984   	sub	r0,	r2
-00:0160 39-81                   11985   	subc	r1,	r3
-00:0162 13-90 22-F9             11986   	st	er0,	0f922h
-                                11987   
-                                11988   ;;			PWCD = StepTestNominal-MotorSpeedChange;	
-                                11989   CLINEA 0000H 0001H 0ECFH 0004H 002CH
-00:0166 5A 00                   11990   	mov	r0,	#05ah
-00:0168 23 01                   11991   	mov	r1,	#023h
-00:016A 28-80                   11992   	sub	r0,	r2
-00:016C 39-81                   11993   	subc	r1,	r3
-00:016E 13-90 12-F9             11994   	st	er0,	0f912h
-                                11995   
-                                11996   ;;			CheckSafetyLimit();
-                                11997   CLINEA 0000H 0001H 0ED2H 0004H 0016H
-00:0172 01-F0'00-00'            11998   	bl	_CheckSafetyLimit
-                                11999   
-                                12000   ;;			PFRUN = 1;	//Turn ON PWM
-                                12001   CLINEA 0000H 0001H 0ED3H 0004H 001BH
-00:0176 80-A0 73-F9             12002   	sb	0f973h.0
-                                12003   
-                                12004   ;;			PERUN = 1;
-                                12005   CLINEA 0000H 0001H 0ED4H 0004H 000DH
-00:017A 80-A0 37-F9             12006   	sb	0f937h.0
-                                12007   
-                                12008   ;;			PDRUN = 1;
-                                12009   CLINEA 0000H 0001H 0ED5H 0004H 000DH
-00:017E 80-A0 27-F9             12010   	sb	0f927h.0
-                                12011   
-                                12012   ;;			PCRUN = 1;
-                                12013   CLINEA 0000H 0001H 0ED6H 0004H 000DH
-00:0182 80-A0 17-F9             12014   	sb	0f917h.0
-                                12015   
-                                12016   ;;			MotorSpeedUT = StepTestNominal-MotorSpeedChange;
-                                12017   CLINEA 0000H 0001H 0ED7H 0004H 0033H
-00:0186 5A 00                   12018   	mov	r0,	#05ah
-00:0188 23 01                   12019   	mov	r1,	#023h
-00:018A 12-92 00-00'            12020   	l	er2,	NEAR _MotorSpeedChange
-00:018E 28-80                   12021   	sub	r0,	r2
-00:0190 39-81                   12022   	subc	r1,	r3
-                                12023   CBLOCKEND 256 5 3800
-                                12024   
-                                12025   ;;		}
-                                12026   CLINEA 0000H 0000H 0ED8H 0003H 0003H
-00:0192                         12027   _$L753 :
-00:0192 13-90 00-00'            12028   	st	er0,	NEAR _MotorSpeedUT
-                                12029   
-                                12030   ;;		MotorStepUpDnFlg ^= 1;
-                                12031   CLINEA 0000H 0001H 0ED9H 0003H 0018H
-00:0196 10-90 00-00'            12032   	l	r0,	NEAR _MotorStepUpDnFlg
-00:019A 01 40                   12033   	xor	r0,	#01h
-00:019C 11-90 00-00'            12034   	st	r0,	NEAR _MotorStepUpDnFlg
-                                12035   
-                                12036   ;;	else{
-                                12037   CLINEA 0000H 0001H 0EDBH 0002H 0006H
-00:01A0 2C CE                   12038   	bal	_$L757
-00:01A2                         12039   _$L749 :
-                                12040   CBLOCK 256 6 3803
-                                12041   
-                                12042   ;;		MotorStepCount++;
-                                12043   CLINEA 0000H 0000H 0EDCH 0003H 0013H
-00:01A2 01 10                   12044   	add	r0,	#01h
-00:01A4 11-90 00-00'            12045   	st	r0,	NEAR _MotorStepCount
-                                12046   
-                                12047   ;;		if(MotorStepCount == 9){
-                                12048   CLINEA 0000H 0001H 0EDDH 0003H 001AH
-00:01A8 09 70                   12049   	cmp	r0,	#09h
-00:01AA 20 C8                   12050   	bne	_$L755
-                                12051   CBLOCK 256 7 3805
-                                12052   
-                                12053   ;;			PFRUN = 0;	//Turn OFF PWM
-                                12054   CLINEA 0000H 0001H 0EDEH 0004H 001CH
-00:01AC 82-A0 73-F9             12055   	rb	0f973h.0
-                                12056   
-                                12057   ;;			PERUN = 0;
-                                12058   CLINEA 0000H 0001H 0EDFH 0004H 000DH
-00:01B0 82-A0 37-F9             12059   	rb	0f937h.0
-                                12060   
-                                12061   ;;			PDRUN = 0;
-                                12062   CLINEA 0000H 0001H 0EE0H 0004H 000DH
-00:01B4 82-A0 27-F9             12063   	rb	0f927h.0
+                                11870   ;;			MotorSpeedUT = StepTestNominal-MotorSpeedChange;
+                                11871   CLINEA 0000H 0001H 0ED7H 0004H 0033H
+00:00B4 86 00                   11872   	mov	r0,	#086h
+00:00B6 24 01                   11873   	mov	r1,	#024h
+00:00B8 12-92 00-00'            11874   	l	er2,	NEAR _MotorSpeedChange
+00:00BC 28-80                   11875   	sub	r0,	r2
+00:00BE 39-81                   11876   	subc	r1,	r3
+                                11877   CBLOCKEND 256 5 3800
+                                11878   
+                                11879   ;;		}
+                                11880   CLINEA 0000H 0000H 0ED8H 0003H 0003H
+00:00C0                         11881   _$L753 :
+00:00C0 13-90 00-00'            11882   	st	er0,	NEAR _MotorSpeedUT
+                                11883   
+                                11884   ;;		MotorStepUpDnFlg ^= 1;
+                                11885   CLINEA 0000H 0001H 0ED9H 0003H 0018H
+00:00C4 10-90 00-00'            11886   	l	r0,	NEAR _MotorStepUpDnFlg
+00:00C8 01 40                   11887   	xor	r0,	#01h
+00:00CA 11-90 00-00'            11888   	st	r0,	NEAR _MotorStepUpDnFlg
+                                11889   
+                                11890   ;;	else{
+                                11891   CLINEA 0000H 0001H 0EDBH 0002H 0006H
+00:00CE 2C CE                   11892   	bal	_$L757
+00:00D0                         11893   _$L749 :
+                                11894   CBLOCK 256 6 3803
+                                11895   
+                                11896   ;;		MotorStepCount++;
+                                11897   CLINEA 0000H 0000H 0EDCH 0003H 0013H
+00:00D0 01 10                   11898   	add	r0,	#01h
+00:00D2 11-90 00-00'            11899   	st	r0,	NEAR _MotorStepCount
+                                11900   
+                                11901   ;;		if(MotorStepCount == 9){
+                                11902   CLINEA 0000H 0001H 0EDDH 0003H 001AH
+00:00D6 09 70                   11903   	cmp	r0,	#09h
+00:00D8 20 C8                   11904   	bne	_$L755
+                                11905   CBLOCK 256 7 3805
+                                11906   
+                                11907   ;;			PFRUN = 0;	//Turn OFF PWM
+                                11908   CLINEA 0000H 0001H 0EDEH 0004H 001CH
+00:00DA 82-A0 73-F9             11909   	rb	0f973h.0
+                                11910   
+                                11911   ;;			PERUN = 0;
+                                11912   CLINEA 0000H 0001H 0EDFH 0004H 000DH
+00:00DE 82-A0 37-F9             11913   	rb	0f937h.0
+                                11914   
+                                11915   ;;			PDRUN = 0;
+                                11916   CLINEA 0000H 0001H 0EE0H 0004H 000DH
+00:00E2 82-A0 27-F9             11917   	rb	0f927h.0
+                                11918   
+                                11919   ;;			PCRUN = 0;
+                                11920   CLINEA 0000H 0001H 0EE1H 0004H 000DH
+00:00E6 82-A0 17-F9             11921   	rb	0f917h.0
+                                11922   
+                                11923   ;;			PWF0D = StepTestNominal; 		//Can't be running to change (Only this variable)
+                                11924   CLINEA 0000H 0001H 0EE2H 0004H 004FH
+00:00EA 86 00                   11925   	mov	r0,	#086h
+00:00EC 24 01                   11926   	mov	r1,	#024h
+00:00EE 13-90 62-F9             11927   	st	er0,	0f962h
+                                11928   
+                                11929   ;;			PWED = StepTestNominal;
+                                11930   CLINEA 0000H 0001H 0EE3H 0004H 001AH
+00:00F2 13-90 32-F9             11931   	st	er0,	0f932h
+                                11932   
+                                11933   ;;			PWDD = StepTestNominal;
+                                11934   CLINEA 0000H 0001H 0EE4H 0004H 001AH
+00:00F6 13-90 22-F9             11935   	st	er0,	0f922h
+                                11936   
+                                11937   ;;			PWCD = StepTestNominal;	
+                                11938   CLINEA 0000H 0001H 0EE5H 0004H 001BH
+00:00FA 13-90 12-F9             11939   	st	er0,	0f912h
+                                11940   
+                                11941   ;;			CheckSafetyLimit();
+                                11942   CLINEA 0000H 0001H 0EE6H 0004H 0016H
+00:00FE 01-F0'00-00'            11943   	bl	_CheckSafetyLimit
+                                11944   
+                                11945   ;;			PFRUN = 1;	//Turn ON PWM
+                                11946   CLINEA 0000H 0001H 0EE7H 0004H 001BH
+00:0102 80-A0 73-F9             11947   	sb	0f973h.0
+                                11948   
+                                11949   ;;			PERUN = 1;
+                                11950   CLINEA 0000H 0001H 0EE8H 0004H 000DH
+00:0106 80-A0 37-F9             11951   	sb	0f937h.0
+                                11952   
+                                11953   ;;			PDRUN = 1;
+                                11954   CLINEA 0000H 0001H 0EE9H 0004H 000DH
+00:010A 80-A0 27-F9             11955   	sb	0f927h.0
+                                11956   
+                                11957   ;;			PCRUN = 1;
+                                11958   CLINEA 0000H 0001H 0EEAH 0004H 000DH
+00:010E 80-A0 17-F9             11959   	sb	0f917h.0
+                                11960   
+                                11961   ;;			MotorSpeedUT = StepTestNominal;
+                                11962   CLINEA 0000H 0001H 0EEBH 0004H 0022H
+00:0112 86 00                   11963   	mov	r0,	#086h
+00:0114 24 01                   11964   	mov	r1,	#024h
+00:0116 13-90 00-00'            11965   	st	er0,	NEAR _MotorSpeedUT
+                                11966   CBLOCKEND 256 7 3820
+                                11967   
+                                11968   ;;		}
+                                11969   CLINEA 0000H 0000H 0EECH 0003H 0003H
+00:011A                         11970   _$L755 :
+                                11971   
+                                11972   ;;		if(MotorStepCount == 18){
+                                11973   CLINEA 0000H 0001H 0EEDH 0003H 001BH
+00:011A 10-90 00-00'            11974   	l	r0,	NEAR _MotorStepCount
+00:011E 12 70                   11975   	cmp	r0,	#012h
+00:0120 03 C8                   11976   	bne	_$L757
+                                11977   CBLOCK 256 8 3821
+                                11978   
+                                11979   ;;			MotorStepCount = 0;
+                                11980   CLINEA 0000H 0001H 0EEEH 0004H 0016H
+00:0122 00 00                   11981   	mov	r0,	#00h
+00:0124 11-90 00-00'            11982   	st	r0,	NEAR _MotorStepCount
+                                11983   CBLOCKEND 256 8 3823
+                                11984   
+                                11985   ;;		}
+                                11986   CLINEA 0000H 0000H 0EEFH 0003H 0003H
+00:0128                         11987   _$L757 :
+                                11988   CBLOCKEND 256 6 3824
+                                11989   
+                                11990   ;;	main_clrWDT();
+                                11991   CLINEA 0000H 0001H 0EF2H 0002H 000FH
+00:0128 01-F0'00-00'            11992   	bl	_main_clrWDT
+                                11993   CBLOCKEND 256 3 3843
+                                11994   
+                                11995   ;;	for(i = 0; i<200; i++)
+                                11996   CLINEA 0000H 0001H 0EF3H 0002H 0017H
+00:012C 00 E0                   11997   	mov	er0,	#0 
+00:012E                         11998   _$L761 :
+                                11999   CBLOCK 256 9 3828
+                                12000   
+                                12001   ;;		SensorReturn[i] = 0x20;
+                                12002   CLINEA 0000H 0001H 0EF5H 0003H 0019H
+00:012E 20 02                   12003   	mov	r2,	#020h
+00:0130 09-92 00-00'            12004   	st	r2,	NEAR _SensorReturn[er0]
+                                12005   CBLOCKEND 256 9 3830
+                                12006   
+                                12007   ;;	for(i = 0; i<200; i++)
+                                12008   CLINEA 0000H 0000H 0EF3H 0002H 0017H
+00:0134 81 E0                   12009   	add	er0,	#1 
+                                12010   
+                                12011   ;;	for(i = 0; i<200; i++)
+                                12012   CLINEA 0000H 0000H 0EF3H 000EH 0013H
+00:0136 C8 70                   12013   	cmp	r0,	#0c8h
+00:0138 00 51                   12014   	cmpc	r1,	#00h
+00:013A F9 C5                   12015   	blts	_$L761
+                                12016   
+                                12017   ;;	MotorIndex++;
+                                12018   CLINEA 0000H 0000H 0EF7H 0002H 000EH
+00:013C 12-90 00-00'            12019   	l	er0,	NEAR _MotorIndex
+00:0140 81 E0                   12020   	add	er0,	#1 
+00:0142 13-90 00-00'            12021   	st	er0,	NEAR _MotorIndex
+                                12022   
+                                12023   ;;	sprintf(SensorReturn, "%u,%f,%f,%u,%u", MotorIndex,CF_XRoll,CF_YPitch,MotorTimerUT,MotorSpeedUT);
+                                12024   CLINEA 0000H 0001H 0EF8H 0002H 0062H
+00:0146 12-90 00-00'            12025   	l	er0,	NEAR _MotorSpeedUT
+00:014A 5E-F0                   12026   	push	er0
+00:014C 12-90 00-00'            12027   	l	er0,	NEAR _MotorTimerUT
+00:0150 5E-F0                   12028   	push	er0
+00:0152 12-90 00-00'            12029   	l	er0,	NEAR _CF_YPitch
+00:0156 12-92 00-00'            12030   	l	er2,	NEAR _CF_YPitch+02h
+00:015A 6E-F0                   12031   	push	xr0
+00:015C FC E1                   12032   	add	sp,	#-4
+00:015E 01-F0'00-00'            12033   	bl	__ftodu8sw
+00:0162 12-90 00-00'            12034   	l	er0,	NEAR _CF_XRoll
+00:0166 12-92 00-00'            12035   	l	er2,	NEAR _CF_XRoll+02h
+00:016A 6E-F0                   12036   	push	xr0
+00:016C FC E1                   12037   	add	sp,	#-4
+00:016E 01-F0'00-00'            12038   	bl	__ftodu8sw
+00:0172 12-90 00-00'            12039   	l	er0,	NEAR _MotorIndex
+00:0176 5E-F0                   12040   	push	er0
+00:0178 00'00                   12041   	mov	r0,	#BYTE1 OFFSET $$S765
+00:017A 00'01                   12042   	mov	r1,	#BYTE2 OFFSET $$S765
+00:017C 5E-F0                   12043   	push	er0
+00:017E 00'00                   12044   	mov	r0,	#BYTE1 OFFSET _SensorReturn
+00:0180 00'01                   12045   	mov	r1,	#BYTE2 OFFSET _SensorReturn
+00:0182 5E-F0                   12046   	push	er0
+00:0184 01-F0'00-00'            12047   	bl	_sprintf_nn
+00:0188 1A E1                   12048   	add	sp,	#26
+                                12049   
+                                12050   ;;	SensorReturn[198] = 0x0D;
+                                12051   CLINEA 0000H 0001H 0EF9H 0002H 001AH
+00:018A 0D 00                   12052   	mov	r0,	#0dh
+00:018C 11-90 00-00'            12053   	st	r0,	NEAR _SensorReturn+0c6h
+                                12054   
+                                12055   ;;	SensorReturn[199] = 0x0A;
+                                12056   CLINEA 0000H 0001H 0EFAH 0002H 001AH
+00:0190 0A 00                   12057   	mov	r0,	#0ah
+00:0192 11-90 00-00'            12058   	st	r0,	NEAR _SensorReturn+0c7h
+                                12059   
+                                12060   ;;	_flgUartFin = 0;
+                                12061   CLINEA 0000H 0001H 0EFCH 0002H 0011H
+00:0196 00 00                   12062   	mov	r0,	#00h
+00:0198 11-90 00-00'            12063   	st	r0,	NEAR __flgUartFin
                                 12064   
-                                12065   ;;			PCRUN = 0;
-                                12066   CLINEA 0000H 0001H 0EE1H 0004H 000DH
-00:01B8 82-A0 17-F9             12067   	rb	0f917h.0
+                                12065   ;;	uart_stop();
+                                12066   CLINEA 0000H 0001H 0EFDH 0002H 000DH
+00:019C 01-F0'00-00'            12067   	bl	_uart_stop
                                 12068   
-                                12069   ;;			PWF0D = StepTestNominal; 		//Can't be running to change (Only this variable)
-                                12070   CLINEA 0000H 0001H 0EE2H 0004H 004FH
-00:01BC 5A 00                   12071   	mov	r0,	#05ah
-00:01BE 23 01                   12072   	mov	r1,	#023h
-00:01C0 13-90 62-F9             12073   	st	er0,	0f962h
-                                12074   
-                                12075   ;;			PWED = StepTestNominal;
-                                12076   CLINEA 0000H 0001H 0EE3H 0004H 001AH
-00:01C4 13-90 32-F9             12077   	st	er0,	0f932h
-                                12078   
-                                12079   ;;			PWDD = StepTestNominal;
-                                12080   CLINEA 0000H 0001H 0EE4H 0004H 001AH
-00:01C8 13-90 22-F9             12081   	st	er0,	0f922h
-                                12082   
-                                12083   ;;			PWCD = StepTestNominal;	
-                                12084   CLINEA 0000H 0001H 0EE5H 0004H 001BH
-00:01CC 13-90 12-F9             12085   	st	er0,	0f912h
+                                12069   ;;	uart_startSend(SensorReturn, 200, _funcUartFin);
+                                12070   CLINEA 0000H 0001H 0EFEH 0002H 0031H
+00:01A0 00'00                   12071   	mov	r0,	#BYTE1 OFFSET __funcUartFin
+00:01A2 00'01                   12072   	mov	r1,	#BYTE2 OFFSET __funcUartFin
+00:01A4 5E-F0                   12073   	push	er0
+00:01A6 C8 02                   12074   	mov	r2,	#0c8h
+00:01A8 00 03                   12075   	mov	r3,	#00h
+00:01AA 00'00                   12076   	mov	r0,	#BYTE1 OFFSET _SensorReturn
+00:01AC 00'01                   12077   	mov	r1,	#BYTE2 OFFSET _SensorReturn
+00:01AE 01-F0'00-00'            12078   	bl	_uart_startSend
+00:01B2 02 E1                   12079   	add	sp,	#2 
+                                12080   
+                                12081   ;;	while(_flgUartFin != 1){
+                                12082   CLINEA 0000H 0000H 0EFFH 0002H 0019H
+00:01B4                         12083   _$L768 :
+                                12084   CBLOCK 256 10 3839
+                                12085   CBLOCKEND 256 10 3841
                                 12086   
-                                12087   ;;			CheckSafetyLimit();
-                                12088   CLINEA 0000H 0001H 0EE6H 0004H 0016H
-00:01D0 01-F0'00-00'            12089   	bl	_CheckSafetyLimit
-                                12090   
-                                12091   ;;			PFRUN = 1;	//Turn ON PWM
-                                12092   CLINEA 0000H 0001H 0EE7H 0004H 001BH
-00:01D4 80-A0 73-F9             12093   	sb	0f973h.0
-                                12094   
-                                12095   ;;			PERUN = 1;
-                                12096   CLINEA 0000H 0001H 0EE8H 0004H 000DH
-00:01D8 80-A0 37-F9             12097   	sb	0f937h.0
-                                12098   
-                                12099   ;;			PDRUN = 1;
-                                12100   CLINEA 0000H 0001H 0EE9H 0004H 000DH
-00:01DC 80-A0 27-F9             12101   	sb	0f927h.0
-                                12102   
-                                12103   ;;			PCRUN = 1;
-                                12104   CLINEA 0000H 0001H 0EEAH 0004H 000DH
-00:01E0 80-A0 17-F9             12105   	sb	0f917h.0
-                                12106   
-                                12107   ;;			MotorSpeedUT = StepTestNominal;
-                                12108   CLINEA 0000H 0001H 0EEBH 0004H 0022H
-00:01E4 5A 00                   12109   	mov	r0,	#05ah
-00:01E6 23 01                   12110   	mov	r1,	#023h
-00:01E8 13-90 00-00'            12111   	st	er0,	NEAR _MotorSpeedUT
-                                12112   CBLOCKEND 256 7 3820
-                                12113   
-                                12114   ;;		}
-                                12115   CLINEA 0000H 0000H 0EECH 0003H 0003H
-00:01EC                         12116   _$L755 :
-                                12117   
-                                12118   ;;		if(MotorStepCount == 18){
-                                12119   CLINEA 0000H 0001H 0EEDH 0003H 001BH
-00:01EC 10-90 00-00'            12120   	l	r0,	NEAR _MotorStepCount
-00:01F0 12 70                   12121   	cmp	r0,	#012h
-00:01F2 03 C8                   12122   	bne	_$L757
-                                12123   CBLOCK 256 8 3821
-                                12124   
-                                12125   ;;			MotorStepCount = 0;
-                                12126   CLINEA 0000H 0001H 0EEEH 0004H 0016H
-00:01F4 00 00                   12127   	mov	r0,	#00h
-00:01F6 11-90 00-00'            12128   	st	r0,	NEAR _MotorStepCount
-                                12129   CBLOCKEND 256 8 3823
-                                12130   
-                                12131   ;;		}
-                                12132   CLINEA 0000H 0000H 0EEFH 0003H 0003H
-00:01FA                         12133   _$L757 :
-                                12134   CBLOCKEND 256 6 3824
-                                12135   
-                                12136   ;;	main_clrWDT();
-                                12137   CLINEA 0000H 0001H 0EF2H 0002H 000FH
-00:01FA 01-F0'00-00'            12138   	bl	_main_clrWDT
-                                12139   CBLOCKEND 256 3 3843
-                                12140   
-                                12141   ;;	for(i = 0; i<200; i++)
-                                12142   CLINEA 0000H 0001H 0EF3H 0002H 0017H
-00:01FE 00 E0                   12143   	mov	er0,	#0 
-00:0200                         12144   _$L761 :
-                                12145   CBLOCK 256 9 3828
-                                12146   
-                                12147   ;;		SensorReturn[i] = 0x20;
-                                12148   CLINEA 0000H 0001H 0EF5H 0003H 0019H
-00:0200 20 02                   12149   	mov	r2,	#020h
-00:0202 09-92 00-00'            12150   	st	r2,	NEAR _SensorReturn[er0]
-                                12151   CBLOCKEND 256 9 3830
-                                12152   
-                                12153   ;;	for(i = 0; i<200; i++)
-                                12154   CLINEA 0000H 0000H 0EF3H 0002H 0017H
-00:0206 81 E0                   12155   	add	er0,	#1 
-                                12156   
-                                12157   ;;	for(i = 0; i<200; i++)
-                                12158   CLINEA 0000H 0000H 0EF3H 000EH 0013H
-00:0208 C8 70                   12159   	cmp	r0,	#0c8h
-00:020A 00 51                   12160   	cmpc	r1,	#00h
-00:020C F9 C5                   12161   	blts	_$L761
-                                12162   
-                                12163   ;;	MotorIndex++;
-                                12164   CLINEA 0000H 0000H 0EF7H 0002H 000EH
-00:020E 12-90 00-00'            12165   	l	er0,	NEAR _MotorIndex
-00:0212 81 E0                   12166   	add	er0,	#1 
-00:0214 13-90 00-00'            12167   	st	er0,	NEAR _MotorIndex
-                                12168   
-                                12169   ;;	sprintf(SensorReturn, "%u,%f,%f,%u,%u", MotorIndex,CF_XRoll,CF_YPitch,MotorTimerUT,MotorSpeedUT);
-                                12170   CLINEA 0000H 0001H 0EF8H 0002H 0062H
-00:0218 12-90 00-00'            12171   	l	er0,	NEAR _MotorSpeedUT
-00:021C 5E-F0                   12172   	push	er0
-00:021E 12-90 00-00'            12173   	l	er0,	NEAR _MotorTimerUT
-00:0222 5E-F0                   12174   	push	er0
-00:0224 12-90 00-00'            12175   	l	er0,	NEAR _CF_YPitch
-00:0228 12-92 00-00'            12176   	l	er2,	NEAR _CF_YPitch+02h
-00:022C 6E-F0                   12177   	push	xr0
-00:022E FC E1                   12178   	add	sp,	#-4
-00:0230 01-F0'00-00'            12179   	bl	__ftodu8sw
-00:0234 12-90 00-00'            12180   	l	er0,	NEAR _CF_XRoll
-00:0238 12-92 00-00'            12181   	l	er2,	NEAR _CF_XRoll+02h
-00:023C 6E-F0                   12182   	push	xr0
-00:023E FC E1                   12183   	add	sp,	#-4
-00:0240 01-F0'00-00'            12184   	bl	__ftodu8sw
-00:0244 12-90 00-00'            12185   	l	er0,	NEAR _MotorIndex
-00:0248 5E-F0                   12186   	push	er0
-00:024A 00'00                   12187   	mov	r0,	#BYTE1 OFFSET $$S765
-00:024C 00'01                   12188   	mov	r1,	#BYTE2 OFFSET $$S765
-00:024E 5E-F0                   12189   	push	er0
-00:0250 00'00                   12190   	mov	r0,	#BYTE1 OFFSET _SensorReturn
-00:0252 00'01                   12191   	mov	r1,	#BYTE2 OFFSET _SensorReturn
-00:0254 5E-F0                   12192   	push	er0
-00:0256 01-F0'00-00'            12193   	bl	_sprintf_nn
-00:025A 1A E1                   12194   	add	sp,	#26
-                                12195   
-                                12196   ;;	SensorReturn[198] = 0x0D;
-                                12197   CLINEA 0000H 0001H 0EF9H 0002H 001AH
-00:025C 0D 00                   12198   	mov	r0,	#0dh
-00:025E 11-90 00-00'            12199   	st	r0,	NEAR _SensorReturn+0c6h
-                                12200   
-                                12201   ;;	SensorReturn[199] = 0x0A;
-                                12202   CLINEA 0000H 0001H 0EFAH 0002H 001AH
-00:0262 0A 00                   12203   	mov	r0,	#0ah
-00:0264 11-90 00-00'            12204   	st	r0,	NEAR _SensorReturn+0c7h
-                                12205   
-                                12206   ;;	_flgUartFin = 0;
-                                12207   CLINEA 0000H 0001H 0EFCH 0002H 0011H
-00:0268 00 00                   12208   	mov	r0,	#00h
-00:026A 11-90 00-00'            12209   	st	r0,	NEAR __flgUartFin
-                                12210   
-                                12211   ;;	uart_stop();
-                                12212   CLINEA 0000H 0001H 0EFDH 0002H 000DH
-00:026E 01-F0'00-00'            12213   	bl	_uart_stop
-                                12214   
-                                12215   ;;	uart_startSend(SensorReturn, 200, _funcUartFin);
-                                12216   CLINEA 0000H 0001H 0EFEH 0002H 0031H
-00:0272 00'00                   12217   	mov	r0,	#BYTE1 OFFSET __funcUartFin
-00:0274 00'01                   12218   	mov	r1,	#BYTE2 OFFSET __funcUartFin
-00:0276 5E-F0                   12219   	push	er0
-00:0278 C8 02                   12220   	mov	r2,	#0c8h
-00:027A 00 03                   12221   	mov	r3,	#00h
-00:027C 00'00                   12222   	mov	r0,	#BYTE1 OFFSET _SensorReturn
-00:027E 00'01                   12223   	mov	r1,	#BYTE2 OFFSET _SensorReturn
-00:0280 01-F0'00-00'            12224   	bl	_uart_startSend
-00:0284 02 E1                   12225   	add	sp,	#2 
-                                12226   
-                                12227   ;;	while(_flgUartFin != 1){
-                                12228   CLINEA 0000H 0000H 0EFFH 0002H 0019H
-00:0286                         12229   _$L768 :
-                                12230   CBLOCK 256 10 3839
-                                12231   CBLOCKEND 256 10 3841
-                                12232   
-                                12233   ;;	while(_flgUartFin != 1){
-                                12234   CLINEA 0000H 0000H 0EFFH 000EH 0013H
-00:0286 10-90 00-00'            12235   	l	r0,	NEAR __flgUartFin
-00:028A 01 70                   12236   	cmp	r0,	#01h
-00:028C FC C8                   12237   	bne	_$L768
-                                12238   CBLOCKEND 256 2 3843
-                                12239   
-                                12240   ;;}
-                                12241   CLINEA 0000H 0001H 0F03H 0001H 0001H
-00:028E 8E-F2                   12242   	pop	pc
-                                12243   CBLOCKEND 256 1 3843
-                                12244   CFUNCTIONEND 256
-                                12245   
-                                12246   	public _Shutdown
-                                12247   	public _NOPms
-                                12248   	public _NOPus
-                                12249   	public _approx_arctan2
-                                12250   	public _checkI2C
-                                12251   	public _main_clrWDT
-                                12252   	public _Accel_PID_XYChangeFlag
-                                12253   	public _main_reqNotHalt
-                                12254   	public _ReturnMagData
-                                12255   	public _DistanceSensorControl
-                                12256   	public _AccelSensorControlPID
-                                12257   	public _RangeSensorControlPID
-                                12258   	public _PortA_Digital_Inputs
-                                12259   	public _MagSensorControl
-                                12260   	public _ESC2_PWM
-                                12261   	public _Get_AccGyroData
-                                12262   	public _main
-                                12263   	public _MagSensorControlPID
-                                12264   	public _ClearVariables
-                                12265   	public _PortD_Low
-                                12266   	public _NOP1000
-                                12267   	public _ESC1_PWM
-                                12268   	public _CheckSafetyLimitUnscaled
-                                12269   	public _CalibrateAccel
-                                12270   	public _Get_RangeData
-                                12271   	public _PortC_Low
-                                12272   	public _CheckSafetyLimit
-                                12273   	public _ESC4_PWM
-                                12274   	public _Get_MagData
-                                12275   	public _UARTTunePID
-                                12276   	public _Get_PingData
-                                12277   	public _SerialOutCoefficients
-                                12278   	public _PortB_Low
-                                12279   	public _CalibrateMotors
-                                12280   	public _ReturnAccelData
-                                12281   	public _ESC3_PWM
-                                12282   	public _CalibrateGyro
-                                12283   	public _RampUpMotorTest
-                                12284   	public _NOP
-                                12285   	public _PortA_Low
-                                12286   	public _analog_comparator
-                                12287   	public _Run_AccGyroCF
-                                12288   	public _SoftStart
-                                12289   	public _ReturnSensorData
-                                12290   	public _Debug_STEPTest
-                                12291   	__flgUartFin comm data 01h #00h
-                                12292   	__flgI2CFin comm data 01h #00h
-                                12293   	__reqNotHalt comm data 01h #00h
-                                12294   	extrn code near : _abs
-                                12295   	extrn code near : _irq_init
-                                12296   	extrn code near : _uart_PortSet
-                                12297   	extrn code near : _i2c_stop
-                                12298   	extrn code near : _i2c_startReceive
-                                12299   	extrn code near : _uart_startReceive
-                                12300   	extrn code near : _pow
-                                12301   	extrn code near : _atan
-                                12302   	extrn code near : _uart_init
-                                12303   	extrn code near : _i2c_continue
-                                12304   	extrn code near : _irq_di
-                                12305   	extrn code near : _irq_ei
-                                12306   	extrn code near : _sscanf_nn
-                                12307   	extrn code near : _irq_setHdr
-                                12308   	extrn code near : _sprintf_nn
-                                12309   	extrn code near : _uart_stop
-                                12310   	extrn code near : _uart_startSend
-                                12311   	extrn code near : _i2c_startSend
-                                12312   	extrn code near : _uart_continue
-                                12313   	extrn code near : _atan2
-                                12314   	extrn code near : _i2c_init
-                                12315   	extrn code near : _tm_init
-                                12316   	extrn code : $$start_up
-                                12317   
-  --------------------------    12318   	cseg #00h at 02h
-00:0002 00-00'                  12319   	dw	$$start_up
-                                12320   
-  --------------------------    12321   	rseg $$NINITTAB
-??:0000 68                      12322   	db	068h
-??:0001 6B                      12323   	db	06bh
-??:0002 00                      12324   	db	00h
-??:0003 1C                      12325   	db	01ch
-??:0004 00                      12326   	db	00h
-??:0005 00                      12327   	align
-??:0006 00-00                   12328   	dw	00h
-??:0008 80-46                   12329   	dw	04680h
-??:000A 1B                      12330   	db	01bh
-??:000B 08                      12331   	db	08h
-??:000C 6F-12                   12332   	dw	0126fh
-??:000E 83-42                   12333   	dw	04283h
-??:0010 1A                      12334   	db	01ah
-??:0011 04                      12335   	db	04h
-??:0012 19                      12336   	db	019h
-??:0013 0B                      12337   	db	0bh
-??:0014 38                      12338   	db	038h
-??:0015 01                      12339   	db	01h
-??:0016 00                      12340   	db	00h
-??:0017 00                      12341   	db	00h
-??:0018 00-00                   12342   	dw	00h
-??:001A 3B                      12343   	db	03bh
-??:001B 00                      12344   	align
-??:001C 00-00                   12345   	dw	00h
-??:001E 00-00                   12346   	dw	00h
-??:0020 00                      12347   	db	00h
-??:0021 00                      12348   	db	00h
-??:0022 00                      12349   	db	00h
-??:0023 00                      12350   	align
-??:0024 00-00                   12351   	dw	00h
-??:0026 00-00                   12352   	dw	00h
-??:0028 00-00                   12353   	dw	00h
-??:002A 00-00                   12354   	dw	00h
-??:002C 00-00                   12355   	dw	00h
-??:002E 00-00                   12356   	dw	00h
-??:0030 00-00                   12357   	dw	00h
-??:0032 00-00                   12358   	dw	00h
-??:0034 00-00                   12359   	dw	00h
-??:0036 00-00                   12360   	dw	00h
-??:0038 00-00                   12361   	dw	00h
-??:003A 00-00                   12362   	dw	00h
-??:003C 00-00                   12363   	dw	00h
-??:003E 00-00                   12364   	dw	00h
-??:0040 00-00                   12365   	dw	00h
-??:0042 00-00                   12366   	dw	00h
-??:0044 00-00                   12367   	dw	00h
-??:0046 00-00                   12368   	dw	00h
-??:0048 1E                      12369   	db	01eh
-??:0049 00                      12370   	db	00h
-??:004A 78                      12371   	db	078h
-??:004B 01                      12372   	db	01h
-??:004C 60                      12373   	db	060h
-??:004D 02                      12374   	db	02h
-??:004E 01                      12375   	db	01h
-??:004F 03                      12376   	db	03h
-??:0050 09                      12377   	db	09h
-??:0051 00                      12378   	align
-??:0052 00-00                   12379   	dw	00h
-??:0054 00-00                   12380   	dw	00h
-??:0056 00-00                   12381   	dw	00h
-??:0058 00-00                   12382   	dw	00h
-??:005A 00-00                   12383   	dw	00h
-??:005C 00-00                   12384   	dw	00h
-??:005E 00-00                   12385   	dw	00h
-??:0060 00-00                   12386   	dw	00h
-??:0062 5C-8F                   12387   	dw	08f5ch
-??:0064 C2-3F                   12388   	dw	03fc2h
-??:0066 6F-12                   12389   	dw	0126fh
-??:0068 03-BE                   12390   	dw	0be03h
-??:006A 00-00                   12391   	dw	00h
-??:006C 00-00                   12392   	dw	00h
-??:006E 00-00                   12393   	dw	00h
-??:0070 00-00                   12394   	dw	00h
-??:0072 70                      12395   	db	070h
-??:0073 51                      12396   	db	051h
-??:0074 00-00                   12397   	dw	00h
-??:0076 0A-00                   12398   	dw	0ah
-??:0078 0A-00                   12399   	dw	0ah
-??:007A 00-00                   12400   	dw	00h
-??:007C 8C-42                   12401   	dw	0428ch
-??:007E 00-00                   12402   	dw	00h
-??:0080 48-42                   12403   	dw	04248h
-??:0082 00-00                   12404   	dw	00h
-??:0084 70-43                   12405   	dw	04370h
-??:0086 AE-47                   12406   	dw	047aeh
-??:0088 E1-BD                   12407   	dw	0bde1h
-??:008A AE-47                   12408   	dw	047aeh
-??:008C E1-3D                   12409   	dw	03de1h
-??:008E AE-47                   12410   	dw	047aeh
-??:0090 E1-BD                   12411   	dw	0bde1h
-??:0092 AE-47                   12412   	dw	047aeh
-??:0094 E1-3D                   12413   	dw	03de1h
-??:0096 00-00                   12414   	dw	00h
-??:0098 80-3F                   12415   	dw	03f80h
-??:009A 00-80                   12416   	dw	08000h
-??:009C B3-43                   12417   	dw	043b3h
-??:009E 00-00                   12418   	dw	00h
-??:00A0 34-43                   12419   	dw	04334h
-??:00A2 00-00                   12420   	dw	00h
-??:00A4 00-00                   12421   	dw	00h
-??:00A6 00-00                   12422   	dw	00h
-??:00A8 00-00                   12423   	dw	00h
-??:00AA 00-00                   12424   	dw	00h
-??:00AC 00-00                   12425   	dw	00h
-??:00AE 00-00                   12426   	dw	00h
-??:00B0 00-00                   12427   	dw	00h
-??:00B2 00-00                   12428   	dw	00h
-??:00B4 00-00                   12429   	dw	00h
-??:00B6 00-00                   12430   	dw	00h
-??:00B8 00-00                   12431   	dw	00h
-??:00BA 00-00                   12432   	dw	00h
-??:00BC 00-00                   12433   	dw	00h
-??:00BE 00-00                   12434   	dw	00h
-??:00C0 00-00                   12435   	dw	00h
-??:00C2 00-00                   12436   	dw	00h
-??:00C4 00-00                   12437   	dw	00h
-??:00C6 C0-3E                   12438   	dw	03ec0h
-??:00C8 00-00                   12439   	dw	00h
-??:00CA 00-00                   12440   	dw	00h
-??:00CC 9A-99                   12441   	dw	0999ah
-??:00CE 59-3F                   12442   	dw	03f59h
-??:00D0 00-00                   12443   	dw	00h
-??:00D2 00-00                   12444   	dw	00h
-??:00D4 00-00                   12445   	dw	00h
-??:00D6 00-00                   12446   	dw	00h
-??:00D8 00-00                   12447   	dw	00h
-??:00DA 00-00                   12448   	dw	00h
-??:00DC 00-00                   12449   	dw	00h
-??:00DE 00-00                   12450   	dw	00h
-??:00E0 EC-51                   12451   	dw	051ech
-??:00E2 78-3F                   12452   	dw	03f78h
-??:00E4 8F-C2                   12453   	dw	0c28fh
-??:00E6 F5-3C                   12454   	dw	03cf5h
-??:00E8 00                      12455   	db	00h
-??:00E9 00                      12456   	db	00h
-??:00EA 00-00                   12457   	dw	00h
-??:00EC 00-00                   12458   	dw	00h
-??:00EE 00-00                   12459   	dw	00h
-??:00F0 00-00                   12460   	dw	00h
-??:00F2 01                      12461   	db	01h
-??:00F3 00                      12462   	align
-??:00F4 00-00                   12463   	dw	00h
-??:00F6 00-00                   12464   	dw	00h
-??:00F8 00-00                   12465   	dw	00h
-??:00FA 00-00                   12466   	dw	00h
-??:00FC 00-00                   12467   	dw	00h
-??:00FE 00-00                   12468   	dw	00h
-??:0100 00-00                   12469   	dw	00h
-??:0102 00-00                   12470   	dw	00h
-??:0104 00-00                   12471   	dw	00h
-??:0106 00-00                   12472   	dw	00h
-??:0108 00-00                   12473   	dw	00h
-??:010A 00-00                   12474   	dw	00h
-??:010C 00-00                   12475   	dw	00h
-??:010E 00-00                   12476   	dw	00h
-??:0110 00-00                   12477   	dw	00h
-??:0112 00-00                   12478   	dw	00h
-??:0114 00-00                   12479   	dw	00h
-??:0116 00-00                   12480   	dw	00h
-??:0118 00-00                   12481   	dw	00h
-??:011A 00-00                   12482   	dw	00h
-??:011C 00-00                   12483   	dw	00h
-??:011E 00-00                   12484   	dw	00h
-??:0120 00-00                   12485   	dw	00h
-??:0122 80-3F                   12486   	dw	03f80h
-??:0124 00-00                   12487   	dw	00h
-??:0126 00-00                   12488   	dw	00h
-??:0128 00-00                   12489   	dw	00h
-??:012A 00-00                   12490   	dw	00h
-??:012C 00-00                   12491   	dw	00h
-??:012E 00-00                   12492   	dw	00h
-??:0130 00-00                   12493   	dw	00h
-??:0132 00-00                   12494   	dw	00h
-??:0134 00-00                   12495   	dw	00h
-??:0136 00-00                   12496   	dw	00h
-??:0138 00-00                   12497   	dw	00h
-??:013A A0-40                   12498   	dw	040a0h
-??:013C 00-00                   12499   	dw	00h
-??:013E 00-00                   12500   	dw	00h
-??:0140 00-00                   12501   	dw	00h
-??:0142 00-00                   12502   	dw	00h
-??:0144 00-00                   12503   	dw	00h
-??:0146 A0-40                   12504   	dw	040a0h
-??:0148 00-00                   12505   	dw	00h
-??:014A 00-00                   12506   	dw	00h
-??:014C 00-00                   12507   	dw	00h
-??:014E 00-00                   12508   	dw	00h
-??:0150 00                      12509   	db	00h
-??:0151 00                      12510   	align
-??:0152 00-00                   12511   	dw	00h
-??:0154 FF-3F                   12512   	dw	03fffh
-??:0156 FF-3F                   12513   	dw	03fffh
-??:0158 FF-3F                   12514   	dw	03fffh
-??:015A FF-3F                   12515   	dw	03fffh
-??:015C 00                      12516   	db	00h
-??:015D 00                      12517   	align
-??:015E 00-00                   12518   	dw	00h
-??:0160 8C-42                   12519   	dw	0428ch
-??:0162 00-00                   12520   	dw	00h
-??:0164 00-00                   12521   	dw	00h
-??:0166 00-00                   12522   	dw	00h
-??:0168 00-00                   12523   	dw	00h
-??:016A 00-00                   12524   	dw	00h
-??:016C 00-00                   12525   	dw	00h
-??:016E 00-00                   12526   	dw	00h
-??:0170 00-00                   12527   	dw	00h
-??:0172 00-00                   12528   	dw	00h
-??:0174 00-00                   12529   	dw	00h
-??:0176 00-00                   12530   	dw	00h
-??:0178 00-00                   12531   	dw	00h
-??:017A 00-00                   12532   	dw	00h
-??:017C 00-00                   12533   	dw	00h
-??:017E 00-00                   12534   	dw	00h
-??:0180 00-00                   12535   	dw	00h
-??:0182 00-00                   12536   	dw	00h
-??:0184 00-00                   12537   	dw	00h
-??:0186 00-00                   12538   	dw	00h
-??:0188 00-00                   12539   	dw	00h
-??:018A 00-00                   12540   	dw	00h
-??:018C 00                      12541   	db	00h
-??:018D 00                      12542   	align
-??:018E 00-00                   12543   	dw	00h
-??:0190 F4-01                   12544   	dw	01f4h
-??:0192 00-00                   12545   	dw	00h
-??:0194 00-00                   12546   	dw	00h
-??:0196 00                      12547   	db	00h
-??:0197 00                      12548   	db	00h
-??:0198 98-3A                   12549   	dw	03a98h
-??:019A 40-1F                   12550   	dw	01f40h
-??:019C 02-21                   12551   	dw	02102h
-??:019E 68-42                   12552   	dw	04268h
-??:01A0 00                      12553   	db	00h
-??:01A1 00                      12554   	db	00h
-??:01A2 00-00                   12555   	dw	00h
-??:01A4 04-29                   12556   	dw	02904h
-??:01A6 40-1F                   12557   	dw	01f40h
-??:01A8 00-00                   12558   	dw	00h
-??:01AA 00                      12559   	db	00h
-??:01AB 00                      12560   	align
-??:01AC 00-00                   12561   	dw	00h
-??:01AE 00-00                   12562   	dw	00h
-??:01B0 00-00                   12563   	dw	00h
-??:01B2 00-00                   12564   	dw	00h
-??:01B4 00-00                   12565   	dw	00h
-??:01B6 00-00                   12566   	dw	00h
-??:01B8 00-00                   12567   	dw	00h
-??:01BA 00-00                   12568   	dw	00h
-??:01BC 00-00                   12569   	dw	00h
-??:01BE 00-00                   12570   	dw	00h
-??:01C0 00-00                   12571   	dw	00h
-??:01C2 00-00                   12572   	dw	00h
-??:01C4 00-00                   12573   	dw	00h
-??:01C6 00-00                   12574   	dw	00h
-??:01C8 00-00                   12575   	dw	00h
-??:01CA 00-00                   12576   	dw	00h
-??:01CC 00-00                   12577   	dw	00h
-??:01CE 00-00                   12578   	dw	00h
-??:01D0 00-00                   12579   	dw	00h
-??:01D2 00-00                   12580   	dw	00h
-??:01D4 00-00                   12581   	dw	00h
-??:01D6 00-00                   12582   	dw	00h
-??:01D8 00-00                   12583   	dw	00h
-??:01DA 00-00                   12584   	dw	00h
-??:01DC 00-00                   12585   	dw	00h
-??:01DE 00-00                   12586   	dw	00h
-??:01E0 00-00                   12587   	dw	00h
-??:01E2 00-00                   12588   	dw	00h
-??:01E4 00-00                   12589   	dw	00h
-??:01E6 00-00                   12590   	dw	00h
-??:01E8 00-00                   12591   	dw	00h
-??:01EA 00-00                   12592   	dw	00h
-                                12593   
-  --------------------------    12594   	rseg $$TAB_uartSetParam$main
-00:0000                         12595   __uartSetParam :
-00:0000 00-E8                   12596   	dw	0e800h
-00:0002 03-00                   12597   	dw	03h
-00:0004 00                      12598   	db	00h
-00:0005 02                      12599   	db	02h
-00:0006 00                      12600   	db	00h
-00:0007 00                      12601   	db	00h
-00:0008 00                      12602   	db	00h
-00:0009 00                      12603   	align
-                                12604   
-  --------------------------    12605   	rseg $$TAB$$S44$main
-00:0000                         12606   $$S44 :
-00:0000 49 6E 64 65 78 2C 43 46 12607   	DB	"Index,CFx,CFy,Timer,MotSpeed"
+                                12087   ;;	while(_flgUartFin != 1){
+                                12088   CLINEA 0000H 0000H 0EFFH 000EH 0013H
+00:01B4 10-90 00-00'            12089   	l	r0,	NEAR __flgUartFin
+00:01B8 01 70                   12090   	cmp	r0,	#01h
+00:01BA FC C8                   12091   	bne	_$L768
+                                12092   CBLOCKEND 256 2 3843
+                                12093   
+                                12094   ;;}
+                                12095   CLINEA 0000H 0001H 0F03H 0001H 0001H
+00:01BC 8E-F2                   12096   	pop	pc
+                                12097   CBLOCKEND 256 1 3843
+                                12098   CFUNCTIONEND 256
+                                12099   
+                                12100   	public _Shutdown
+                                12101   	public _NOPms
+                                12102   	public _NOPus
+                                12103   	public _approx_arctan2
+                                12104   	public _checkI2C
+                                12105   	public _main_clrWDT
+                                12106   	public _Accel_PID_XYChangeFlag
+                                12107   	public _main_reqNotHalt
+                                12108   	public _ReturnMagData
+                                12109   	public _DistanceSensorControl
+                                12110   	public _AccelSensorControlPID
+                                12111   	public _RangeSensorControlPID
+                                12112   	public _PortA_Digital_Inputs
+                                12113   	public _MagSensorControl
+                                12114   	public _ESC2_PWM
+                                12115   	public _Get_AccGyroData
+                                12116   	public _main
+                                12117   	public _MagSensorControlPID
+                                12118   	public _ClearVariables
+                                12119   	public _PortD_Low
+                                12120   	public _NOP1000
+                                12121   	public _ESC1_PWM
+                                12122   	public _CheckSafetyLimitUnscaled
+                                12123   	public _CalibrateAccel
+                                12124   	public _Get_RangeData
+                                12125   	public _PortC_Low
+                                12126   	public _CheckSafetyLimit
+                                12127   	public _ESC4_PWM
+                                12128   	public _Get_MagData
+                                12129   	public _UARTTunePID
+                                12130   	public _Get_PingData
+                                12131   	public _SerialOutCoefficients
+                                12132   	public _PortB_Low
+                                12133   	public _CalibrateMotors
+                                12134   	public _ReturnAccelData
+                                12135   	public _ESC3_PWM
+                                12136   	public _CalibrateGyro
+                                12137   	public _RampUpMotorTest
+                                12138   	public _NOP
+                                12139   	public _PortA_Low
+                                12140   	public _analog_comparator
+                                12141   	public _Run_AccGyroCF
+                                12142   	public _SoftStart
+                                12143   	public _ReturnSensorData
+                                12144   	public _Debug_STEPTest
+                                12145   	__flgUartFin comm data 01h #00h
+                                12146   	__flgI2CFin comm data 01h #00h
+                                12147   	__reqNotHalt comm data 01h #00h
+                                12148   	extrn code near : _abs
+                                12149   	extrn code near : _irq_init
+                                12150   	extrn code near : _uart_PortSet
+                                12151   	extrn code near : _i2c_stop
+                                12152   	extrn code near : _i2c_startReceive
+                                12153   	extrn code near : _uart_startReceive
+                                12154   	extrn code near : _pow
+                                12155   	extrn code near : _atan
+                                12156   	extrn code near : _uart_init
+                                12157   	extrn code near : _i2c_continue
+                                12158   	extrn code near : _irq_di
+                                12159   	extrn code near : _irq_ei
+                                12160   	extrn code near : _sscanf_nn
+                                12161   	extrn code near : _irq_setHdr
+                                12162   	extrn code near : _sprintf_nn
+                                12163   	extrn code near : _uart_stop
+                                12164   	extrn code near : _uart_startSend
+                                12165   	extrn code near : _i2c_startSend
+                                12166   	extrn code near : _uart_continue
+                                12167   	extrn code near : _atan2
+                                12168   	extrn code near : _i2c_init
+                                12169   	extrn code near : _tm_init
+                                12170   	extrn code : $$start_up
+                                12171   
+  --------------------------    12172   	cseg #00h at 02h
+00:0002 00-00'                  12173   	dw	$$start_up
+                                12174   
+  --------------------------    12175   	rseg $$NINITTAB
+??:0000 68                      12176   	db	068h
+??:0001 6B                      12177   	db	06bh
+??:0002 00                      12178   	db	00h
+??:0003 1C                      12179   	db	01ch
+??:0004 00                      12180   	db	00h
+??:0005 00                      12181   	align
+??:0006 00-00                   12182   	dw	00h
+??:0008 80-46                   12183   	dw	04680h
+??:000A 1B                      12184   	db	01bh
+??:000B 08                      12185   	db	08h
+??:000C 6F-12                   12186   	dw	0126fh
+??:000E 83-42                   12187   	dw	04283h
+??:0010 1A                      12188   	db	01ah
+??:0011 04                      12189   	db	04h
+??:0012 19                      12190   	db	019h
+??:0013 0B                      12191   	db	0bh
+??:0014 38                      12192   	db	038h
+??:0015 01                      12193   	db	01h
+??:0016 00                      12194   	db	00h
+??:0017 00                      12195   	db	00h
+??:0018 00-00                   12196   	dw	00h
+??:001A 3B                      12197   	db	03bh
+??:001B 00                      12198   	align
+??:001C 00-00                   12199   	dw	00h
+??:001E 00-00                   12200   	dw	00h
+??:0020 00                      12201   	db	00h
+??:0021 00                      12202   	db	00h
+??:0022 00                      12203   	db	00h
+??:0023 00                      12204   	align
+??:0024 00-00                   12205   	dw	00h
+??:0026 00-00                   12206   	dw	00h
+??:0028 00-00                   12207   	dw	00h
+??:002A 00-00                   12208   	dw	00h
+??:002C 00-00                   12209   	dw	00h
+??:002E 00-00                   12210   	dw	00h
+??:0030 00-00                   12211   	dw	00h
+??:0032 00-00                   12212   	dw	00h
+??:0034 00-00                   12213   	dw	00h
+??:0036 00-00                   12214   	dw	00h
+??:0038 00-00                   12215   	dw	00h
+??:003A 00-00                   12216   	dw	00h
+??:003C 00-00                   12217   	dw	00h
+??:003E 00-00                   12218   	dw	00h
+??:0040 00-00                   12219   	dw	00h
+??:0042 00-00                   12220   	dw	00h
+??:0044 00-00                   12221   	dw	00h
+??:0046 00-00                   12222   	dw	00h
+??:0048 1E                      12223   	db	01eh
+??:0049 00                      12224   	db	00h
+??:004A 78                      12225   	db	078h
+??:004B 01                      12226   	db	01h
+??:004C 60                      12227   	db	060h
+??:004D 02                      12228   	db	02h
+??:004E 01                      12229   	db	01h
+??:004F 03                      12230   	db	03h
+??:0050 09                      12231   	db	09h
+??:0051 00                      12232   	align
+??:0052 00-00                   12233   	dw	00h
+??:0054 00-00                   12234   	dw	00h
+??:0056 00-00                   12235   	dw	00h
+??:0058 00-00                   12236   	dw	00h
+??:005A 00-00                   12237   	dw	00h
+??:005C 00-00                   12238   	dw	00h
+??:005E 00-00                   12239   	dw	00h
+??:0060 00-00                   12240   	dw	00h
+??:0062 5C-8F                   12241   	dw	08f5ch
+??:0064 C2-3F                   12242   	dw	03fc2h
+??:0066 6F-12                   12243   	dw	0126fh
+??:0068 03-BE                   12244   	dw	0be03h
+??:006A 00-00                   12245   	dw	00h
+??:006C 00-00                   12246   	dw	00h
+??:006E 00-00                   12247   	dw	00h
+??:0070 00-00                   12248   	dw	00h
+??:0072 70                      12249   	db	070h
+??:0073 51                      12250   	db	051h
+??:0074 00-00                   12251   	dw	00h
+??:0076 0A-00                   12252   	dw	0ah
+??:0078 0A-00                   12253   	dw	0ah
+??:007A 00-00                   12254   	dw	00h
+??:007C 8C-42                   12255   	dw	0428ch
+??:007E 00-00                   12256   	dw	00h
+??:0080 48-42                   12257   	dw	04248h
+??:0082 00-00                   12258   	dw	00h
+??:0084 70-43                   12259   	dw	04370h
+??:0086 AE-47                   12260   	dw	047aeh
+??:0088 E1-BD                   12261   	dw	0bde1h
+??:008A AE-47                   12262   	dw	047aeh
+??:008C E1-3D                   12263   	dw	03de1h
+??:008E AE-47                   12264   	dw	047aeh
+??:0090 E1-BD                   12265   	dw	0bde1h
+??:0092 AE-47                   12266   	dw	047aeh
+??:0094 E1-3D                   12267   	dw	03de1h
+??:0096 00-00                   12268   	dw	00h
+??:0098 80-3F                   12269   	dw	03f80h
+??:009A 00-80                   12270   	dw	08000h
+??:009C B3-43                   12271   	dw	043b3h
+??:009E 00-00                   12272   	dw	00h
+??:00A0 34-43                   12273   	dw	04334h
+??:00A2 00-00                   12274   	dw	00h
+??:00A4 00-00                   12275   	dw	00h
+??:00A6 00-00                   12276   	dw	00h
+??:00A8 00-00                   12277   	dw	00h
+??:00AA 00-00                   12278   	dw	00h
+??:00AC 00-00                   12279   	dw	00h
+??:00AE 00-00                   12280   	dw	00h
+??:00B0 00-00                   12281   	dw	00h
+??:00B2 00-00                   12282   	dw	00h
+??:00B4 00-00                   12283   	dw	00h
+??:00B6 00-00                   12284   	dw	00h
+??:00B8 00-00                   12285   	dw	00h
+??:00BA 00-00                   12286   	dw	00h
+??:00BC 00-00                   12287   	dw	00h
+??:00BE 00-00                   12288   	dw	00h
+??:00C0 00-00                   12289   	dw	00h
+??:00C2 00-00                   12290   	dw	00h
+??:00C4 00-00                   12291   	dw	00h
+??:00C6 C0-3E                   12292   	dw	03ec0h
+??:00C8 00-00                   12293   	dw	00h
+??:00CA 00-00                   12294   	dw	00h
+??:00CC 9A-99                   12295   	dw	0999ah
+??:00CE 59-3F                   12296   	dw	03f59h
+??:00D0 00-00                   12297   	dw	00h
+??:00D2 00-00                   12298   	dw	00h
+??:00D4 00-00                   12299   	dw	00h
+??:00D6 00-00                   12300   	dw	00h
+??:00D8 00-00                   12301   	dw	00h
+??:00DA 00-00                   12302   	dw	00h
+??:00DC 00-00                   12303   	dw	00h
+??:00DE 00-00                   12304   	dw	00h
+??:00E0 EC-51                   12305   	dw	051ech
+??:00E2 78-3F                   12306   	dw	03f78h
+??:00E4 8F-C2                   12307   	dw	0c28fh
+??:00E6 F5-3C                   12308   	dw	03cf5h
+??:00E8 00                      12309   	db	00h
+??:00E9 00                      12310   	db	00h
+??:00EA 00-00                   12311   	dw	00h
+??:00EC 00-00                   12312   	dw	00h
+??:00EE 00-00                   12313   	dw	00h
+??:00F0 00-00                   12314   	dw	00h
+??:00F2 01                      12315   	db	01h
+??:00F3 00                      12316   	align
+??:00F4 00-00                   12317   	dw	00h
+??:00F6 00-00                   12318   	dw	00h
+??:00F8 00-00                   12319   	dw	00h
+??:00FA 00-00                   12320   	dw	00h
+??:00FC 00-00                   12321   	dw	00h
+??:00FE 00-00                   12322   	dw	00h
+??:0100 00-00                   12323   	dw	00h
+??:0102 00-00                   12324   	dw	00h
+??:0104 00-00                   12325   	dw	00h
+??:0106 00-00                   12326   	dw	00h
+??:0108 00-00                   12327   	dw	00h
+??:010A 00-00                   12328   	dw	00h
+??:010C 00-00                   12329   	dw	00h
+??:010E 00-00                   12330   	dw	00h
+??:0110 00-00                   12331   	dw	00h
+??:0112 00-00                   12332   	dw	00h
+??:0114 00-00                   12333   	dw	00h
+??:0116 00-00                   12334   	dw	00h
+??:0118 00-00                   12335   	dw	00h
+??:011A 00-00                   12336   	dw	00h
+??:011C 00-00                   12337   	dw	00h
+??:011E 00-00                   12338   	dw	00h
+??:0120 00-00                   12339   	dw	00h
+??:0122 80-3F                   12340   	dw	03f80h
+??:0124 00-00                   12341   	dw	00h
+??:0126 00-00                   12342   	dw	00h
+??:0128 00-00                   12343   	dw	00h
+??:012A 00-00                   12344   	dw	00h
+??:012C 00-00                   12345   	dw	00h
+??:012E 00-00                   12346   	dw	00h
+??:0130 00-00                   12347   	dw	00h
+??:0132 00-00                   12348   	dw	00h
+??:0134 00-00                   12349   	dw	00h
+??:0136 00-00                   12350   	dw	00h
+??:0138 00-00                   12351   	dw	00h
+??:013A A0-40                   12352   	dw	040a0h
+??:013C 00-00                   12353   	dw	00h
+??:013E 00-00                   12354   	dw	00h
+??:0140 00-00                   12355   	dw	00h
+??:0142 00-00                   12356   	dw	00h
+??:0144 00-00                   12357   	dw	00h
+??:0146 A0-40                   12358   	dw	040a0h
+??:0148 00-00                   12359   	dw	00h
+??:014A 00-00                   12360   	dw	00h
+??:014C 00-00                   12361   	dw	00h
+??:014E 00-00                   12362   	dw	00h
+??:0150 00                      12363   	db	00h
+??:0151 00                      12364   	align
+??:0152 00-00                   12365   	dw	00h
+??:0154 FF-3F                   12366   	dw	03fffh
+??:0156 FF-3F                   12367   	dw	03fffh
+??:0158 FF-3F                   12368   	dw	03fffh
+??:015A FF-3F                   12369   	dw	03fffh
+??:015C 00                      12370   	db	00h
+??:015D 00                      12371   	align
+??:015E 00-00                   12372   	dw	00h
+??:0160 8C-42                   12373   	dw	0428ch
+??:0162 00-00                   12374   	dw	00h
+??:0164 00-00                   12375   	dw	00h
+??:0166 00-00                   12376   	dw	00h
+??:0168 00-00                   12377   	dw	00h
+??:016A 00-00                   12378   	dw	00h
+??:016C 00-00                   12379   	dw	00h
+??:016E 00-00                   12380   	dw	00h
+??:0170 00-00                   12381   	dw	00h
+??:0172 00-00                   12382   	dw	00h
+??:0174 00-00                   12383   	dw	00h
+??:0176 00-00                   12384   	dw	00h
+??:0178 00-00                   12385   	dw	00h
+??:017A 00-00                   12386   	dw	00h
+??:017C 00-00                   12387   	dw	00h
+??:017E 00-00                   12388   	dw	00h
+??:0180 00-00                   12389   	dw	00h
+??:0182 00-00                   12390   	dw	00h
+??:0184 00-00                   12391   	dw	00h
+??:0186 00-00                   12392   	dw	00h
+??:0188 00-00                   12393   	dw	00h
+??:018A 00-00                   12394   	dw	00h
+??:018C 00                      12395   	db	00h
+??:018D 00                      12396   	align
+??:018E 00-00                   12397   	dw	00h
+??:0190 20-03                   12398   	dw	0320h
+??:0192 00-00                   12399   	dw	00h
+??:0194 00-00                   12400   	dw	00h
+??:0196 00                      12401   	db	00h
+??:0197 00                      12402   	db	00h
+??:0198 98-3A                   12403   	dw	03a98h
+??:019A 40-1F                   12404   	dw	01f40h
+??:019C 02-21                   12405   	dw	02102h
+??:019E 68-42                   12406   	dw	04268h
+??:01A0 00                      12407   	db	00h
+??:01A1 00                      12408   	db	00h
+??:01A2 00-00                   12409   	dw	00h
+??:01A4 04-29                   12410   	dw	02904h
+??:01A6 40-1F                   12411   	dw	01f40h
+??:01A8 00-00                   12412   	dw	00h
+??:01AA 00                      12413   	db	00h
+??:01AB 00                      12414   	align
+??:01AC 00-00                   12415   	dw	00h
+??:01AE 00-00                   12416   	dw	00h
+??:01B0 00-00                   12417   	dw	00h
+??:01B2 00-00                   12418   	dw	00h
+??:01B4 00-00                   12419   	dw	00h
+??:01B6 00-00                   12420   	dw	00h
+??:01B8 00-00                   12421   	dw	00h
+??:01BA 00-00                   12422   	dw	00h
+??:01BC 00-00                   12423   	dw	00h
+??:01BE 00-00                   12424   	dw	00h
+??:01C0 00-00                   12425   	dw	00h
+??:01C2 00-00                   12426   	dw	00h
+??:01C4 00-00                   12427   	dw	00h
+??:01C6 00-00                   12428   	dw	00h
+??:01C8 00-00                   12429   	dw	00h
+??:01CA 00-00                   12430   	dw	00h
+??:01CC 00-00                   12431   	dw	00h
+??:01CE 00-00                   12432   	dw	00h
+??:01D0 00-00                   12433   	dw	00h
+??:01D2 00-00                   12434   	dw	00h
+??:01D4 00-00                   12435   	dw	00h
+??:01D6 00-00                   12436   	dw	00h
+??:01D8 00-00                   12437   	dw	00h
+??:01DA 00-00                   12438   	dw	00h
+??:01DC 00-00                   12439   	dw	00h
+??:01DE 00-00                   12440   	dw	00h
+??:01E0 00-00                   12441   	dw	00h
+??:01E2 00-00                   12442   	dw	00h
+??:01E4 00-00                   12443   	dw	00h
+??:01E6 00-00                   12444   	dw	00h
+??:01E8 00-00                   12445   	dw	00h
+??:01EA 00-00                   12446   	dw	00h
+                                12447   
+  --------------------------    12448   	rseg $$TAB_uartSetParam$main
+00:0000                         12449   __uartSetParam :
+00:0000 00-E8                   12450   	dw	0e800h
+00:0002 03-00                   12451   	dw	03h
+00:0004 00                      12452   	db	00h
+00:0005 02                      12453   	db	02h
+00:0006 00                      12454   	db	00h
+00:0007 00                      12455   	db	00h
+00:0008 00                      12456   	db	00h
+00:0009 00                      12457   	align
+                                12458   
+  --------------------------    12459   	rseg $$TAB$$S44$main
+00:0000                         12460   $$S44 :
+00:0000 49 6E 64 65 78 2C 43 46 12461   	DB	"Index,CFx,CFy,Timer,MotSpeed"
 00:0008 78 2C 43 46 79 2C 54 69   >>>   
 00:0010 6D 65 72 2C 4D 6F 74 53   >>>   
 00:0018 70 65 65 64 00            >>>   , 00H
-                                12608   
-  --------------------------    12609   	rseg $$TAB$$S190$main
-00:0000                         12610   $$S190 :
-00:0000 25 66 2C 25 66 2C 25 66 12611   	DB	"%f,%f,%f,%f,%f,%f,%f,%u"
+                                12462   
+  --------------------------    12463   	rseg $$TAB$$S190$main
+00:0000                         12464   $$S190 :
+00:0000 25 66 2C 25 66 2C 25 66 12465   	DB	"%f,%f,%f,%f,%f,%f,%f,%u"
 00:0008 2C 25 66 2C 25 66 2C 25   >>>   
 00:0010 66 2C 25 66 2C 25 75 00   >>>   , 00H
-                                12612   
-  --------------------------    12613   	rseg $$TAB$$S203$main
-00:0000                         12614   $$S203 :
-00:0000 25 66 2C 25 66 2C 25 66 12615   	DB	"%f,%f,%f",
+                                12466   
+  --------------------------    12467   	rseg $$TAB$$S203$main
+00:0000                         12468   $$S203 :
+00:0000 25 66 2C 25 66 2C 25 66 12469   	DB	"%f,%f,%f",
 00:0008 00                        >>>    00H
-                                12616   
-  --------------------------    12617   	rseg $$TAB$$S216$main
-00:0000                         12618   $$S216 :
-00:0000 25 66 00                12619   	DB	"%f", 00H
-                                12620   
-  --------------------------    12621   	rseg $$TAB$$S229$main
-00:0000                         12622   $$S229 :
-00:0000 4D 6F 74 6F 72 20 43 61 12623   	DB	"Motor Calibration Started!"
+                                12470   
+  --------------------------    12471   	rseg $$TAB$$S216$main
+00:0000                         12472   $$S216 :
+00:0000 25 66 00                12473   	DB	"%f", 00H
+                                12474   
+  --------------------------    12475   	rseg $$TAB$$S229$main
+00:0000                         12476   $$S229 :
+00:0000 4D 6F 74 6F 72 20 43 61 12477   	DB	"Motor Calibration Started!"
 00:0008 6C 69 62 72 61 74 69 6F   >>>   
 00:0010 6E 20 53 74 61 72 74 65   >>>   
 00:0018 64 21 00                  >>>   , 00H
-                                12624   
-  --------------------------    12625   	rseg $$TAB$$S240$main
-00:0000                         12626   $$S240 :
-00:0000 4D 6F 74 6F 72 20 43 61 12627   	DB	"Motor Calibration Complete!"
+                                12478   
+  --------------------------    12479   	rseg $$TAB$$S240$main
+00:0000                         12480   $$S240 :
+00:0000 4D 6F 74 6F 72 20 43 61 12481   	DB	"Motor Calibration Complete!"
 00:0008 6C 69 62 72 61 74 69 6F   >>>   
 00:0010 6E 20 43 6F 6D 70 6C 65   >>>   
 00:0018 74 65 21 00               >>>   , 00H
-                                12628   
-  --------------------------    12629   	rseg $$TAB$$S254$main
-00:0000                         12630   $$S254 :
-00:0000 47 79 72 6F 20 43 61 6C 12631   	DB	"Gyro Calibration: Please Keep the Quad Flat and Return Any 2 chars to Start"
+                                12482   
+  --------------------------    12483   	rseg $$TAB$$S254$main
+00:0000                         12484   $$S254 :
+00:0000 47 79 72 6F 20 43 61 6C 12485   	DB	"Gyro Calibration: Please Keep the Quad Flat and Return Any 2 chars to Start"
 00:0008 69 62 72 61 74 69 6F 6E   >>>   
 00:0010 3A 20 50 6C 65 61 73 65   >>>   
 00:0018 20 4B 65 65 70 20 74 68   >>>   
@@ -12657,17 +12511,17 @@ RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1
 00:0038 6E 79 20 32 20 63 68 61   >>>   
 00:0040 72 73 20 74 6F 20 53 74   >>>   
 00:0048 61 72 74 00               >>>   , 00H
-                                12632   
-  --------------------------    12633   	rseg $$TAB$$S279$main
-00:0000                         12634   $$S279 :
-00:0000 47 79 72 6F 20 43 61 6C 12635   	DB	"Gyro Calibration Complete!"
+                                12486   
+  --------------------------    12487   	rseg $$TAB$$S279$main
+00:0000                         12488   $$S279 :
+00:0000 47 79 72 6F 20 43 61 6C 12489   	DB	"Gyro Calibration Complete!"
 00:0008 69 62 72 61 74 69 6F 6E   >>>   
 00:0010 20 43 6F 6D 70 6C 65 74   >>>   
 00:0018 65 21 00                  >>>   , 00H
-                                12636   
-  --------------------------    12637   	rseg $$TAB$$S295$main
-00:0000                         12638   $$S295 :
-00:0000 41 63 63 65 6C 20 43 61 12639   	DB	"Accel Calibration: Keep Quad Flat! Return any 2 chars to Start"
+                                12490   
+  --------------------------    12491   	rseg $$TAB$$S295$main
+00:0000                         12492   $$S295 :
+00:0000 41 63 63 65 6C 20 43 61 12493   	DB	"Accel Calibration: Keep Quad Flat! Return any 2 chars to Start"
 00:0008 6C 69 62 72 61 74 69 6F   >>>   
 00:0010 6E 3A 20 4B 65 65 70 20   >>>   
 00:0018 51 75 61 64 20 46 6C 61   >>>   
@@ -12675,10 +12529,10 @@ RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1
 00:0028 6E 20 61 6E 79 20 32 20   >>>   
 00:0030 63 68 61 72 73 20 74 6F   >>>   
 00:0038 20 53 74 61 72 74 00      >>>   , 00H
-                                12640   
-  --------------------------    12641   	rseg $$TAB$$S326$main
-00:0000                         12642   $$S326 :
-00:0000 41 63 63 65 6C 20 43 61 12643   	DB	"Accel Calibration: Tilt the Quad 90deg in the ROLL Direction! Return any 2 chars to Start"
+                                12494   
+  --------------------------    12495   	rseg $$TAB$$S326$main
+00:0000                         12496   $$S326 :
+00:0000 41 63 63 65 6C 20 43 61 12497   	DB	"Accel Calibration: Tilt the Quad 90deg in the ROLL Direction! Return any 2 chars to Start"
 00:0008 6C 69 62 72 61 74 69 6F   >>>   
 00:0010 6E 3A 20 54 69 6C 74 20   >>>   
 00:0018 74 68 65 20 51 75 61 64   >>>   
@@ -12690,10 +12544,10 @@ RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1
 00:0048 20 32 20 63 68 61 72 73   >>>   
 00:0050 20 74 6F 20 53 74 61 72   >>>   
 00:0058 74 00                     >>>   , 00H
-                                12644   
-  --------------------------    12645   	rseg $$TAB$$S351$main
-00:0000                         12646   $$S351 :
-00:0000 41 63 63 65 6C 20 43 61 12647   	DB	"Accel Calibration: Tilt the Quad 90deg in the PITCH direction! Return any 2 chars to Start"
+                                12498   
+  --------------------------    12499   	rseg $$TAB$$S351$main
+00:0000                         12500   $$S351 :
+00:0000 41 63 63 65 6C 20 43 61 12501   	DB	"Accel Calibration: Tilt the Quad 90deg in the PITCH direction! Return any 2 chars to Start"
 00:0008 6C 69 62 72 61 74 69 6F   >>>   
 00:0010 6E 3A 20 54 69 6C 74 20   >>>   
 00:0018 74 68 65 20 51 75 61 64   >>>   
@@ -12705,437 +12559,437 @@ RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1
 00:0048 79 20 32 20 63 68 61 72   >>>   
 00:0050 73 20 74 6F 20 53 74 61   >>>   
 00:0058 72 74 00                  >>>   , 00H
-                                12648   
-  --------------------------    12649   	rseg $$TAB$$S376$main
-00:0000                         12650   $$S376 :
-00:0000 41 63 63 65 6C 20 43 61 12651   	DB	"Accel Calibration Complete!"
+                                12502   
+  --------------------------    12503   	rseg $$TAB$$S376$main
+00:0000                         12504   $$S376 :
+00:0000 41 63 63 65 6C 20 43 61 12505   	DB	"Accel Calibration Complete!"
 00:0008 6C 69 62 72 61 74 69 6F   >>>   
 00:0010 6E 20 43 6F 6D 70 6C 65   >>>   
 00:0018 74 65 21 00               >>>   , 00H
-                                12652   
-  --------------------------    12653   	rseg $$TAB$$S398$main
-00:0000                         12654   $$S398 :
-00:0000 43 75 72 72 65 6E 74 20 12655   	DB	"Current Settings: kp=%f,ki=%f,kd=%f,a1=%f,a2=%f"
+                                12506   
+  --------------------------    12507   	rseg $$TAB$$S398$main
+00:0000                         12508   $$S398 :
+00:0000 43 75 72 72 65 6E 74 20 12509   	DB	"Current Settings: kp=%f,ki=%f,kd=%f,a1=%f,a2=%f"
 00:0008 53 65 74 74 69 6E 67 73   >>>   
 00:0010 3A 20 6B 70 3D 25 66 2C   >>>   
 00:0018 6B 69 3D 25 66 2C 6B 64   >>>   
 00:0020 3D 25 66 2C 61 31 3D 25   >>>   
 00:0028 66 2C 61 32 3D 25 66 00   >>>   , 00H
-                                12656   
-  --------------------------    12657   	rseg $$TAB$$S442$main
-00:0000                         12658   $$S442 :
-00:0000 4E 65 77 20 53 65 74 74 12659   	DB	"New Settings: kp=%f,ki=%f,kd=%f,a1=%f,a2=%f"
+                                12510   
+  --------------------------    12511   	rseg $$TAB$$S442$main
+00:0000                         12512   $$S442 :
+00:0000 4E 65 77 20 53 65 74 74 12513   	DB	"New Settings: kp=%f,ki=%f,kd=%f,a1=%f,a2=%f"
 00:0008 69 6E 67 73 3A 20 6B 70   >>>   
 00:0010 3D 25 66 2C 6B 69 3D 25   >>>   
 00:0018 66 2C 6B 64 3D 25 66 2C   >>>   
 00:0020 61 31 3D 25 66 2C 61 32   >>>   
 00:0028 3D 25 66 00               >>>   , 00H
-                                12660   
-  --------------------------    12661   	rseg $$TAB$$S509$main
-00:0000                         12662   $$S509 :
-00:0000 25 66 2C 25 66 2C 25 66 12663   	DB	"%f,%f,%f,%f"
+                                12514   
+  --------------------------    12515   	rseg $$TAB$$S509$main
+00:0000                         12516   $$S509 :
+00:0000 25 66 2C 25 66 2C 25 66 12517   	DB	"%f,%f,%f,%f"
 00:0008 2C 25 66 00               >>>   , 00H
-                                12664   
-  --------------------------    12665   	rseg $$TAB$$S765$main
-00:0000                         12666   $$S765 :
-00:0000 25 75 2C 25 66 2C 25 66 12667   	DB	"%u,%f,%f,%u,%u"
+                                12518   
+  --------------------------    12519   	rseg $$TAB$$S765$main
+00:0000                         12520   $$S765 :
+00:0000 25 75 2C 25 66 2C 25 66 12521   	DB	"%u,%f,%f,%u,%u"
 00:0008 2C 25 75 2C 25 75 00      >>>   , 00H
-                                12668   
-  --------------------------    12669   	rseg $$NINITVAR
-00:0000                         12670   _MPU6050Address :
-00:0000                         12671   	ds	01h
-00:0001                         12672   _AccGyro_PWRMGMT1REG :
-00:0001                         12673   	ds	01h
-00:0002                         12674   _AccGyro_PWRMGMT1REG_Contents :
-00:0002                         12675   	ds	01h
-00:0003                         12676   _AccGyro_AccelConfig :
-00:0003                         12677   	ds	01h
-00:0004                         12678   _AccGyro_AccelConfig_Contents :
-00:0004                         12679   	ds	01h
-00:0005                         12680   	align
-00:0006                         12681   _AccGyro_AccelScaling :
-00:0006                         12682   	ds	04h
-00:000A                         12683   _AccGyro_GyroConfig :
-00:000A                         12684   	ds	01h
-00:000B                         12685   _AccGyro_GyroConfig_Contents :
-00:000B                         12686   	ds	01h
-00:000C                         12687   _AccGyro_GyroScaling :
-00:000C                         12688   	ds	04h
-00:0010                         12689   _AccGyro_GyroAccelLPF :
-00:0010                         12690   	ds	01h
-00:0011                         12691   _AccGyro_GyroAccelLPF_Contents :
-00:0011                         12692   	ds	01h
-00:0012                         12693   _AccGyro_GyroAccel_SMPRTDIV :
-00:0012                         12694   	ds	01h
-00:0013                         12695   _AccGyro_GyroAccelLPF_SMPRTDIVCo :
-00:0013                         12696   	ds	01h
-00:0014                         12697   _AccGyro_INTENABLEReg :
-00:0014                         12698   	ds	01h
-00:0015                         12699   _AccGyro_INTENABLEReg_contents :
-00:0015                         12700   	ds	01h
-00:0016                         12701   _AccGYRO_Test :
-00:0016                         12702   	ds	01h
-00:0017                         12703   _AccGyro_ReadFlag :
-00:0017                         12704   	ds	01h
-00:0018                         12705   _AccGyro_MissedIntCount :
-00:0018                         12706   	ds	02h
-00:001A                         12707   _AccGyro_ReadData :
-00:001A                         12708   	ds	01h
-00:001B                         12709   	align
-00:001C                         12710   _Temp_out :
-00:001C                         12711   	ds	04h
-00:0020                         12712   _Accel_SavIndex :
-00:0020                         12713   	ds	01h
-00:0021                         12714   _Accel_RetIndex :
-00:0021                         12715   	ds	01h
-00:0022                         12716   _AccGyro_CF_FlagCounter :
-00:0022                         12717   	ds	01h
-00:0023                         12718   	align
-00:0024                         12719   _CF_Accel_XRoll :
-00:0024                         12720   	ds	04h
-00:0028                         12721   _CF_Accel_YPitch :
-00:0028                         12722   	ds	04h
-00:002C                         12723   _CF_Gyro_XRoll :
-00:002C                         12724   	ds	04h
-00:0030                         12725   _CF_Gyro_YPitch :
-00:0030                         12726   	ds	04h
-00:0034                         12727   _CF_Accel_ForceMagApprox :
-00:0034                         12728   	ds	04h
-00:0038                         12729   _CF_Gyro_CurrentCount :
-00:0038                         12730   	ds	04h
-00:003C                         12731   _Gyro_Xcal :
-00:003C                         12732   	ds	04h
-00:0040                         12733   _Gyro_Ycal :
-00:0040                         12734   	ds	04h
-00:0044                         12735   _Gyro_Zcal :
-00:0044                         12736   	ds	04h
-00:0048                         12737   _HMC5883Address :
-00:0048                         12738   	ds	01h
-00:0049                         12739   _Mag_ConfigA :
-00:0049                         12740   	ds	01h
-00:004A                         12741   _Mag_ConfigA_Contents :
-00:004A                         12742   	ds	01h
-00:004B                         12743   _Mag_ConfigB :
-00:004B                         12744   	ds	01h
-00:004C                         12745   _Mag_ConfigB_Contents :
-00:004C                         12746   	ds	01h
-00:004D                         12747   _Mag_ModeReg :
-00:004D                         12748   	ds	01h
-00:004E                         12749   _Mag_ModeReg_Contents :
-00:004E                         12750   	ds	01h
-00:004F                         12751   _Mag_ReadData :
-00:004F                         12752   	ds	01h
-00:0050                         12753   _Mag_Status :
-00:0050                         12754   	ds	01h
-00:0051                         12755   	align
-00:0052                         12756   _Mag_Xout :
-00:0052                         12757   	ds	04h
-00:0056                         12758   _Mag_Yout :
-00:0056                         12759   	ds	04h
-00:005A                         12760   _Mag_Zout :
-00:005A                         12761   	ds	04h
-00:005E                         12762   _Mag_Angle :
-00:005E                         12763   	ds	04h
-00:0062                         12764   _Mag_GainFactor :
-00:0062                         12765   	ds	04h
-00:0066                         12766   _Mag_DeclinationAngle :
-00:0066                         12767   	ds	04h
-00:006A                         12768   _timer_us :
-00:006A                         12769   	ds	02h
-00:006C                         12770   _Ping_timer :
-00:006C                         12771   	ds	02h
-00:006E                         12772   _Ping_out :
-00:006E                         12773   	ds	04h
-00:0072                         12774   _Range_Address :
-00:0072                         12775   	ds	01h
-00:0073                         12776   _Range_TakeRangeReading :
-00:0073                         12777   	ds	01h
-00:0074                         12778   _Range_out :
-00:0074                         12779   	ds	02h
-00:0076                         12780   _MotorStep :
-00:0076                         12781   	ds	02h
-00:0078                         12782   _Mag_MotorStep :
-00:0078                         12783   	ds	02h
-00:007A                         12784   _Range_ZHiThres :
-00:007A                         12785   	ds	04h
-00:007E                         12786   _Range_ZLoThres :
-00:007E                         12787   	ds	04h
-00:0082                         12788   _Range_Ceiling :
-00:0082                         12789   	ds	04h
-00:0086                         12790   _Accel_XLoThres :
-00:0086                         12791   	ds	04h
-00:008A                         12792   _Accel_XHiThres :
-00:008A                         12793   	ds	04h
-00:008E                         12794   _Accel_YLoThres :
-00:008E                         12795   	ds	04h
-00:0092                         12796   _Accel_YHiThres :
-00:0092                         12797   	ds	04h
-00:0096                         12798   _Mag_CWThres :
-00:0096                         12799   	ds	04h
-00:009A                         12800   _Mag_CCWThres :
-00:009A                         12801   	ds	04h
-00:009E                         12802   _Mag_OpposingPole :
-00:009E                         12803   	ds	04h
-00:00A2                         12804   _Mag_PIDSetpoint :
-00:00A2                         12805   	ds	04h
-00:00A6                         12806   _Mag_PIDCorrectionFactor :
-00:00A6                         12807   	ds	04h
-00:00AA                         12808   _Mag_PIDAngleScaled :
-00:00AA                         12809   	ds	04h
-00:00AE                         12810   _Mag_PIDError :
-00:00AE                         12811   	ds	04h
-00:00B2                         12812   _Mag_PIDCounter :
-00:00B2                         12813   	ds	02h
-00:00B4                         12814   _Mag_PIDCurrentCount :
-00:00B4                         12815   	ds	04h
-00:00B8                         12816   _Mag_PIDErrSum :
-00:00B8                         12817   	ds	04h
-00:00BC                         12818   _Mag_PIDdErr :
-00:00BC                         12819   	ds	04h
-00:00C0                         12820   _Mag_PIDErrPrev :
-00:00C0                         12821   	ds	04h
-00:00C4                         12822   _Mag_PID_kp :
-00:00C4                         12823   	ds	04h
-00:00C8                         12824   _Mag_PID_ki :
-00:00C8                         12825   	ds	04h
-00:00CC                         12826   _Mag_PID_kd :
-00:00CC                         12827   	ds	04h
-00:00D0                         12828   _Mag_PIDOutput :
-00:00D0                         12829   	ds	04h
-00:00D4                         12830   _CF_Gyro_Counter :
-00:00D4                         12831   	ds	04h
-00:00D8                         12832   _CF_YPitch :
-00:00D8                         12833   	ds	04h
-00:00DC                         12834   _CF_XRoll :
-00:00DC                         12835   	ds	04h
-00:00E0                         12836   _CF_HPF :
-00:00E0                         12837   	ds	04h
-00:00E4                         12838   _CF_LPF :
-00:00E4                         12839   	ds	04h
-00:00E8                         12840   _CF_UseFlag :
-00:00E8                         12841   	ds	01h
-00:00E9                         12842   _CF_Counter :
-00:00E9                         12843   	ds	01h
-00:00EA                         12844   _CF_YPitch_avg :
-00:00EA                         12845   	ds	04h
-00:00EE                         12846   _CF_XRoll_avg :
-00:00EE                         12847   	ds	04h
-00:00F2                         12848   _CF_highlow_flag :
-00:00F2                         12849   	ds	01h
-00:00F3                         12850   	align
-00:00F4                         12851   _CF_YPitch_high :
-00:00F4                         12852   	ds	04h
-00:00F8                         12853   _CF_XRoll_high :
-00:00F8                         12854   	ds	04h
-00:00FC                         12855   _CF_YPitch_low :
-00:00FC                         12856   	ds	04h
-00:0100                         12857   _CF_XRoll_low :
-00:0100                         12858   	ds	04h
-00:0104                         12859   _CF_avgCnt :
-00:0104                         12860   	ds	04h
-00:0108                         12861   _CF_StdDev_M_X :
-00:0108                         12862   	ds	04h
-00:010C                         12863   _CF_StdDev_M_Y :
-00:010C                         12864   	ds	04h
-00:0110                         12865   _CF_StdDev_Mtmp_X :
-00:0110                         12866   	ds	04h
-00:0114                         12867   _CF_StdDev_Mtmp_Y :
-00:0114                         12868   	ds	04h
-00:0118                         12869   _CF_StdDev_S_X :
-00:0118                         12870   	ds	04h
-00:011C                         12871   _CF_StdDev_S_Y :
-00:011C                         12872   	ds	04h
-00:0120                         12873   _CF_StdDev_K :
-00:0120                         12874   	ds	04h
-00:0124                         12875   _Accel_PID_XRollCounter :
-00:0124                         12876   	ds	02h
-00:0126                         12877   _Accel_PID_XRollErrSum :
+                                12522   
+  --------------------------    12523   	rseg $$NINITVAR
+00:0000                         12524   _MPU6050Address :
+00:0000                         12525   	ds	01h
+00:0001                         12526   _AccGyro_PWRMGMT1REG :
+00:0001                         12527   	ds	01h
+00:0002                         12528   _AccGyro_PWRMGMT1REG_Contents :
+00:0002                         12529   	ds	01h
+00:0003                         12530   _AccGyro_AccelConfig :
+00:0003                         12531   	ds	01h
+00:0004                         12532   _AccGyro_AccelConfig_Contents :
+00:0004                         12533   	ds	01h
+00:0005                         12534   	align
+00:0006                         12535   _AccGyro_AccelScaling :
+00:0006                         12536   	ds	04h
+00:000A                         12537   _AccGyro_GyroConfig :
+00:000A                         12538   	ds	01h
+00:000B                         12539   _AccGyro_GyroConfig_Contents :
+00:000B                         12540   	ds	01h
+00:000C                         12541   _AccGyro_GyroScaling :
+00:000C                         12542   	ds	04h
+00:0010                         12543   _AccGyro_GyroAccelLPF :
+00:0010                         12544   	ds	01h
+00:0011                         12545   _AccGyro_GyroAccelLPF_Contents :
+00:0011                         12546   	ds	01h
+00:0012                         12547   _AccGyro_GyroAccel_SMPRTDIV :
+00:0012                         12548   	ds	01h
+00:0013                         12549   _AccGyro_GyroAccelLPF_SMPRTDIVCo :
+00:0013                         12550   	ds	01h
+00:0014                         12551   _AccGyro_INTENABLEReg :
+00:0014                         12552   	ds	01h
+00:0015                         12553   _AccGyro_INTENABLEReg_contents :
+00:0015                         12554   	ds	01h
+00:0016                         12555   _AccGYRO_Test :
+00:0016                         12556   	ds	01h
+00:0017                         12557   _AccGyro_ReadFlag :
+00:0017                         12558   	ds	01h
+00:0018                         12559   _AccGyro_MissedIntCount :
+00:0018                         12560   	ds	02h
+00:001A                         12561   _AccGyro_ReadData :
+00:001A                         12562   	ds	01h
+00:001B                         12563   	align
+00:001C                         12564   _Temp_out :
+00:001C                         12565   	ds	04h
+00:0020                         12566   _Accel_SavIndex :
+00:0020                         12567   	ds	01h
+00:0021                         12568   _Accel_RetIndex :
+00:0021                         12569   	ds	01h
+00:0022                         12570   _AccGyro_CF_FlagCounter :
+00:0022                         12571   	ds	01h
+00:0023                         12572   	align
+00:0024                         12573   _CF_Accel_XRoll :
+00:0024                         12574   	ds	04h
+00:0028                         12575   _CF_Accel_YPitch :
+00:0028                         12576   	ds	04h
+00:002C                         12577   _CF_Gyro_XRoll :
+00:002C                         12578   	ds	04h
+00:0030                         12579   _CF_Gyro_YPitch :
+00:0030                         12580   	ds	04h
+00:0034                         12581   _CF_Accel_ForceMagApprox :
+00:0034                         12582   	ds	04h
+00:0038                         12583   _CF_Gyro_CurrentCount :
+00:0038                         12584   	ds	04h
+00:003C                         12585   _Gyro_Xcal :
+00:003C                         12586   	ds	04h
+00:0040                         12587   _Gyro_Ycal :
+00:0040                         12588   	ds	04h
+00:0044                         12589   _Gyro_Zcal :
+00:0044                         12590   	ds	04h
+00:0048                         12591   _HMC5883Address :
+00:0048                         12592   	ds	01h
+00:0049                         12593   _Mag_ConfigA :
+00:0049                         12594   	ds	01h
+00:004A                         12595   _Mag_ConfigA_Contents :
+00:004A                         12596   	ds	01h
+00:004B                         12597   _Mag_ConfigB :
+00:004B                         12598   	ds	01h
+00:004C                         12599   _Mag_ConfigB_Contents :
+00:004C                         12600   	ds	01h
+00:004D                         12601   _Mag_ModeReg :
+00:004D                         12602   	ds	01h
+00:004E                         12603   _Mag_ModeReg_Contents :
+00:004E                         12604   	ds	01h
+00:004F                         12605   _Mag_ReadData :
+00:004F                         12606   	ds	01h
+00:0050                         12607   _Mag_Status :
+00:0050                         12608   	ds	01h
+00:0051                         12609   	align
+00:0052                         12610   _Mag_Xout :
+00:0052                         12611   	ds	04h
+00:0056                         12612   _Mag_Yout :
+00:0056                         12613   	ds	04h
+00:005A                         12614   _Mag_Zout :
+00:005A                         12615   	ds	04h
+00:005E                         12616   _Mag_Angle :
+00:005E                         12617   	ds	04h
+00:0062                         12618   _Mag_GainFactor :
+00:0062                         12619   	ds	04h
+00:0066                         12620   _Mag_DeclinationAngle :
+00:0066                         12621   	ds	04h
+00:006A                         12622   _timer_us :
+00:006A                         12623   	ds	02h
+00:006C                         12624   _Ping_timer :
+00:006C                         12625   	ds	02h
+00:006E                         12626   _Ping_out :
+00:006E                         12627   	ds	04h
+00:0072                         12628   _Range_Address :
+00:0072                         12629   	ds	01h
+00:0073                         12630   _Range_TakeRangeReading :
+00:0073                         12631   	ds	01h
+00:0074                         12632   _Range_out :
+00:0074                         12633   	ds	02h
+00:0076                         12634   _MotorStep :
+00:0076                         12635   	ds	02h
+00:0078                         12636   _Mag_MotorStep :
+00:0078                         12637   	ds	02h
+00:007A                         12638   _Range_ZHiThres :
+00:007A                         12639   	ds	04h
+00:007E                         12640   _Range_ZLoThres :
+00:007E                         12641   	ds	04h
+00:0082                         12642   _Range_Ceiling :
+00:0082                         12643   	ds	04h
+00:0086                         12644   _Accel_XLoThres :
+00:0086                         12645   	ds	04h
+00:008A                         12646   _Accel_XHiThres :
+00:008A                         12647   	ds	04h
+00:008E                         12648   _Accel_YLoThres :
+00:008E                         12649   	ds	04h
+00:0092                         12650   _Accel_YHiThres :
+00:0092                         12651   	ds	04h
+00:0096                         12652   _Mag_CWThres :
+00:0096                         12653   	ds	04h
+00:009A                         12654   _Mag_CCWThres :
+00:009A                         12655   	ds	04h
+00:009E                         12656   _Mag_OpposingPole :
+00:009E                         12657   	ds	04h
+00:00A2                         12658   _Mag_PIDSetpoint :
+00:00A2                         12659   	ds	04h
+00:00A6                         12660   _Mag_PIDCorrectionFactor :
+00:00A6                         12661   	ds	04h
+00:00AA                         12662   _Mag_PIDAngleScaled :
+00:00AA                         12663   	ds	04h
+00:00AE                         12664   _Mag_PIDError :
+00:00AE                         12665   	ds	04h
+00:00B2                         12666   _Mag_PIDCounter :
+00:00B2                         12667   	ds	02h
+00:00B4                         12668   _Mag_PIDCurrentCount :
+00:00B4                         12669   	ds	04h
+00:00B8                         12670   _Mag_PIDErrSum :
+00:00B8                         12671   	ds	04h
+00:00BC                         12672   _Mag_PIDdErr :
+00:00BC                         12673   	ds	04h
+00:00C0                         12674   _Mag_PIDErrPrev :
+00:00C0                         12675   	ds	04h
+00:00C4                         12676   _Mag_PID_kp :
+00:00C4                         12677   	ds	04h
+00:00C8                         12678   _Mag_PID_ki :
+00:00C8                         12679   	ds	04h
+00:00CC                         12680   _Mag_PID_kd :
+00:00CC                         12681   	ds	04h
+00:00D0                         12682   _Mag_PIDOutput :
+00:00D0                         12683   	ds	04h
+00:00D4                         12684   _CF_Gyro_Counter :
+00:00D4                         12685   	ds	04h
+00:00D8                         12686   _CF_YPitch :
+00:00D8                         12687   	ds	04h
+00:00DC                         12688   _CF_XRoll :
+00:00DC                         12689   	ds	04h
+00:00E0                         12690   _CF_HPF :
+00:00E0                         12691   	ds	04h
+00:00E4                         12692   _CF_LPF :
+00:00E4                         12693   	ds	04h
+00:00E8                         12694   _CF_UseFlag :
+00:00E8                         12695   	ds	01h
+00:00E9                         12696   _CF_Counter :
+00:00E9                         12697   	ds	01h
+00:00EA                         12698   _CF_YPitch_avg :
+00:00EA                         12699   	ds	04h
+00:00EE                         12700   _CF_XRoll_avg :
+00:00EE                         12701   	ds	04h
+00:00F2                         12702   _CF_highlow_flag :
+00:00F2                         12703   	ds	01h
+00:00F3                         12704   	align
+00:00F4                         12705   _CF_YPitch_high :
+00:00F4                         12706   	ds	04h
+00:00F8                         12707   _CF_XRoll_high :
+00:00F8                         12708   	ds	04h
+00:00FC                         12709   _CF_YPitch_low :
+00:00FC                         12710   	ds	04h
+00:0100                         12711   _CF_XRoll_low :
+00:0100                         12712   	ds	04h
+00:0104                         12713   _CF_avgCnt :
+00:0104                         12714   	ds	04h
+00:0108                         12715   _CF_StdDev_M_X :
+00:0108                         12716   	ds	04h
+00:010C                         12717   _CF_StdDev_M_Y :
+00:010C                         12718   	ds	04h
+00:0110                         12719   _CF_StdDev_Mtmp_X :
+00:0110                         12720   	ds	04h
+00:0114                         12721   _CF_StdDev_Mtmp_Y :
+00:0114                         12722   	ds	04h
+00:0118                         12723   _CF_StdDev_S_X :
+00:0118                         12724   	ds	04h
+00:011C                         12725   _CF_StdDev_S_Y :
+00:011C                         12726   	ds	04h
+00:0120                         12727   _CF_StdDev_K :
+00:0120                         12728   	ds	04h
+00:0124                         12729   _Accel_PID_XRollCounter :
+00:0124                         12730   	ds	02h
+00:0126                         12731   _Accel_PID_XRollErrSum :
+00:0126                         12732   	ds	04h
+00:012A                         12733   _Accel_PID_XRollErrPrev :
+00:012A                         12734   	ds	04h
+00:012E                         12735   _Accel_PID_YPitchCounter :
+00:012E                         12736   	ds	02h
+00:0130                         12737   _Accel_PID_YPitchErrSum :
+00:0130                         12738   	ds	04h
+00:0134                         12739   _Accel_PID_YPitchErrPrev :
+00:0134                         12740   	ds	04h
+00:0138                         12741   _Accel_PID_XRoll_kp :
+00:0138                         12742   	ds	04h
+00:013C                         12743   _Accel_PID_XRoll_ki :
+00:013C                         12744   	ds	04h
+00:0140                         12745   _Accel_PID_XRoll_kd :
+00:0140                         12746   	ds	04h
+00:0144                         12747   _Accel_PID_YPitch_kp :
+00:0144                         12748   	ds	04h
+00:0148                         12749   _Accel_PID_YPitch_ki :
+00:0148                         12750   	ds	04h
+00:014C                         12751   _Accel_PID_YPitch_kd :
+00:014C                         12752   	ds	04h
+00:0150                         12753   _Accel_PID_XYChangeFlag :
+00:0150                         12754   	ds	01h
+00:0151                         12755   	align
+00:0152                         12756   _Accel_PID_Counter :
+00:0152                         12757   	ds	02h
+00:0154                         12758   _Accel_PID_Motor1 :
+00:0154                         12759   	ds	02h
+00:0156                         12760   _Accel_PID_Motor2 :
+00:0156                         12761   	ds	02h
+00:0158                         12762   _Accel_PID_Motor3 :
+00:0158                         12763   	ds	02h
+00:015A                         12764   _Accel_PID_Motor4 :
+00:015A                         12765   	ds	02h
+00:015C                         12766   _Accel_PID_GoCounter :
+00:015C                         12767   	ds	01h
+00:015D                         12768   	align
+00:015E                         12769   _Range_PIDSetpoint :
+00:015E                         12770   	ds	04h
+00:0162                         12771   _Range_PIDError :
+00:0162                         12772   	ds	04h
+00:0166                         12773   _Range_PIDCounter :
+00:0166                         12774   	ds	02h
+00:0168                         12775   _Range_PIDCurrentCount :
+00:0168                         12776   	ds	04h
+00:016C                         12777   _Range_PIDErrSum :
+00:016C                         12778   	ds	04h
+00:0170                         12779   _Range_PIDdErr :
+00:0170                         12780   	ds	04h
+00:0174                         12781   _Range_PIDErrPrev :
+00:0174                         12782   	ds	04h
+00:0178                         12783   _Range_PIDOutput :
+00:0178                         12784   	ds	04h
+00:017C                         12785   _Range_PID_kp :
+00:017C                         12786   	ds	04h
+00:0180                         12787   _Range_PID_ki :
+00:0180                         12788   	ds	04h
+00:0184                         12789   _Range_PID_kd :
+00:0184                         12790   	ds	04h
+00:0188                         12791   _TestingEndTimer :
+00:0188                         12792   	ds	02h
+00:018A                         12793   _Timer8Counter :
+00:018A                         12794   	ds	02h
+00:018C                         12795   _MotorStepCount :
+00:018C                         12796   	ds	01h
+00:018D                         12797   	align
+00:018E                         12798   _MotorSpeedUT :
+00:018E                         12799   	ds	02h
+00:0190                         12800   _MotorSpeedChange :
+00:0190                         12801   	ds	02h
+00:0192                         12802   _MotorIndex :
+00:0192                         12803   	ds	02h
+00:0194                         12804   _MotorTimerUT :
+00:0194                         12805   	ds	02h
+00:0196                         12806   _MotorStepUpDnFlg :
+00:0196                         12807   	ds	01h
+00:0197                         12808   _PWMflag :
+00:0197                         12809   	ds	01h
+00:0198                         12810   _PWMUpperDutyLimitCalib :
+00:0198                         12811   	ds	02h
+00:019A                         12812   _PWMLowerDutyLimitCalib :
+00:019A                         12813   	ds	02h
+00:019C                         12814   _PWMSafeDuty :
+00:019C                         12815   	ds	02h
+00:019E                         12816   _PWMPeriod :
+00:019E                         12817   	ds	02h
+00:01A0                         12818   _PWMCounter :
+00:01A0                         12819   	ds	01h
+00:01A1                         12820   _PWMSensorResPerInc :
+00:01A1                         12821   	ds	01h
+00:01A2                         12822   _PWMUpperLowerDiff :
+00:01A2                         12823   	ds	02h
+00:01A4                         12824   _PWMUpperDutyLimitRun :
+00:01A4                         12825   	ds	02h
+00:01A6                         12826   _PWMLowerDutyLimitRun :
+00:01A6                         12827   	ds	02h
+00:01A8                         12828   _$ST0 :
+00:01A8                         12829   	ds	02h
+00:01AA                         12830   _$ST1 :
+00:01AA                         12831   	ds	01h
+00:01AB                         12832   	align
+00:01AC                         12833   _$ST2 :
+00:01AC                         12834   	ds	04h
+00:01B0                         12835   _$ST3 :
+00:01B0                         12836   	ds	04h
+00:01B4                         12837   _$ST4 :
+00:01B4                         12838   	ds	04h
+00:01B8                         12839   _$ST5 :
+00:01B8                         12840   	ds	04h
+00:01BC                         12841   _$ST6 :
+00:01BC                         12842   	ds	04h
+00:01C0                         12843   _$ST7 :
+00:01C0                         12844   	ds	04h
+00:01C4                         12845   _$ST8 :
+00:01C4                         12846   	ds	04h
+00:01C8                         12847   _$ST9 :
+00:01C8                         12848   	ds	04h
+00:01CC                         12849   _$ST10 :
+00:01CC                         12850   	ds	04h
+00:01D0                         12851   _$ST11 :
+00:01D0                         12852   	ds	04h
+00:01D4                         12853   _$ST12 :
+00:01D4                         12854   	ds	04h
+00:01D8                         12855   _$ST13 :
+00:01D8                         12856   	ds	04h
+00:01DC                         12857   _$ST14 :
+00:01DC                         12858   	ds	04h
+00:01E0                         12859   _$ST15 :
+00:01E0                         12860   	ds	04h
+00:01E4                         12861   _$ST16 :
+00:01E4                         12862   	ds	04h
+00:01E8                         12863   _$ST17 :
+00:01E8                         12864   	ds	04h
+                                12865   
+  --------------------------    12866   	rseg $$NVARmain
+00:0000                         12867   _RecWorld :
+00:0000                         12868   	ds	08h
+00:0008                         12869   _SensorReturn :
+00:0008                         12870   	ds	0c8h
+00:00D0                         12871   _Gyro_Zout :
+00:00D0                         12872   	ds	028h
+00:00F8                         12873   _Gyro_Yout :
+00:00F8                         12874   	ds	028h
+00:0120                         12875   _NewVar_Str :
+00:0120                         12876   	ds	06h
+00:0126                         12877   _NewVar :
 00:0126                         12878   	ds	04h
-00:012A                         12879   _Accel_PID_XRollErrPrev :
-00:012A                         12880   	ds	04h
-00:012E                         12881   _Accel_PID_YPitchCounter :
-00:012E                         12882   	ds	02h
-00:0130                         12883   _Accel_PID_YPitchErrSum :
-00:0130                         12884   	ds	04h
-00:0134                         12885   _Accel_PID_YPitchErrPrev :
-00:0134                         12886   	ds	04h
-00:0138                         12887   _Accel_PID_XRoll_kp :
-00:0138                         12888   	ds	04h
-00:013C                         12889   _Accel_PID_XRoll_ki :
-00:013C                         12890   	ds	04h
-00:0140                         12891   _Accel_PID_XRoll_kd :
-00:0140                         12892   	ds	04h
-00:0144                         12893   _Accel_PID_YPitch_kp :
-00:0144                         12894   	ds	04h
-00:0148                         12895   _Accel_PID_YPitch_ki :
-00:0148                         12896   	ds	04h
-00:014C                         12897   _Accel_PID_YPitch_kd :
-00:014C                         12898   	ds	04h
-00:0150                         12899   _Accel_PID_XYChangeFlag :
-00:0150                         12900   	ds	01h
-00:0151                         12901   	align
-00:0152                         12902   _Accel_PID_Counter :
-00:0152                         12903   	ds	02h
-00:0154                         12904   _Accel_PID_Motor1 :
-00:0154                         12905   	ds	02h
-00:0156                         12906   _Accel_PID_Motor2 :
-00:0156                         12907   	ds	02h
-00:0158                         12908   _Accel_PID_Motor3 :
-00:0158                         12909   	ds	02h
-00:015A                         12910   _Accel_PID_Motor4 :
-00:015A                         12911   	ds	02h
-00:015C                         12912   _Accel_PID_GoCounter :
-00:015C                         12913   	ds	01h
-00:015D                         12914   	align
-00:015E                         12915   _Range_PIDSetpoint :
-00:015E                         12916   	ds	04h
-00:0162                         12917   _Range_PIDError :
-00:0162                         12918   	ds	04h
-00:0166                         12919   _Range_PIDCounter :
-00:0166                         12920   	ds	02h
-00:0168                         12921   _Range_PIDCurrentCount :
-00:0168                         12922   	ds	04h
-00:016C                         12923   _Range_PIDErrSum :
-00:016C                         12924   	ds	04h
-00:0170                         12925   _Range_PIDdErr :
-00:0170                         12926   	ds	04h
-00:0174                         12927   _Range_PIDErrPrev :
-00:0174                         12928   	ds	04h
-00:0178                         12929   _Range_PIDOutput :
-00:0178                         12930   	ds	04h
-00:017C                         12931   _Range_PID_kp :
-00:017C                         12932   	ds	04h
-00:0180                         12933   _Range_PID_ki :
-00:0180                         12934   	ds	04h
-00:0184                         12935   _Range_PID_kd :
-00:0184                         12936   	ds	04h
-00:0188                         12937   _TestingEndTimer :
-00:0188                         12938   	ds	02h
-00:018A                         12939   _Timer8Counter :
-00:018A                         12940   	ds	02h
-00:018C                         12941   _MotorStepCount :
-00:018C                         12942   	ds	01h
-00:018D                         12943   	align
-00:018E                         12944   _MotorSpeedUT :
-00:018E                         12945   	ds	02h
-00:0190                         12946   _MotorSpeedChange :
-00:0190                         12947   	ds	02h
-00:0192                         12948   _MotorIndex :
-00:0192                         12949   	ds	02h
-00:0194                         12950   _MotorTimerUT :
-00:0194                         12951   	ds	02h
-00:0196                         12952   _MotorStepUpDnFlg :
-00:0196                         12953   	ds	01h
-00:0197                         12954   _PWMflag :
-00:0197                         12955   	ds	01h
-00:0198                         12956   _PWMUpperDutyLimitCalib :
-00:0198                         12957   	ds	02h
-00:019A                         12958   _PWMLowerDutyLimitCalib :
-00:019A                         12959   	ds	02h
-00:019C                         12960   _PWMSafeDuty :
-00:019C                         12961   	ds	02h
-00:019E                         12962   _PWMPeriod :
-00:019E                         12963   	ds	02h
-00:01A0                         12964   _PWMCounter :
-00:01A0                         12965   	ds	01h
-00:01A1                         12966   _PWMSensorResPerInc :
-00:01A1                         12967   	ds	01h
-00:01A2                         12968   _PWMUpperLowerDiff :
-00:01A2                         12969   	ds	02h
-00:01A4                         12970   _PWMUpperDutyLimitRun :
-00:01A4                         12971   	ds	02h
-00:01A6                         12972   _PWMLowerDutyLimitRun :
-00:01A6                         12973   	ds	02h
-00:01A8                         12974   _$ST0 :
-00:01A8                         12975   	ds	02h
-00:01AA                         12976   _$ST1 :
-00:01AA                         12977   	ds	01h
-00:01AB                         12978   	align
-00:01AC                         12979   _$ST2 :
-00:01AC                         12980   	ds	04h
-00:01B0                         12981   _$ST3 :
-00:01B0                         12982   	ds	04h
-00:01B4                         12983   _$ST4 :
-00:01B4                         12984   	ds	04h
-00:01B8                         12985   _$ST5 :
-00:01B8                         12986   	ds	04h
-00:01BC                         12987   _$ST6 :
-00:01BC                         12988   	ds	04h
-00:01C0                         12989   _$ST7 :
-00:01C0                         12990   	ds	04h
-00:01C4                         12991   _$ST8 :
-00:01C4                         12992   	ds	04h
-00:01C8                         12993   _$ST9 :
-00:01C8                         12994   	ds	04h
-00:01CC                         12995   _$ST10 :
-00:01CC                         12996   	ds	04h
-00:01D0                         12997   _$ST11 :
-00:01D0                         12998   	ds	04h
-00:01D4                         12999   _$ST12 :
-00:01D4                         13000   	ds	04h
-00:01D8                         13001   _$ST13 :
-00:01D8                         13002   	ds	04h
-00:01DC                         13003   _$ST14 :
-00:01DC                         13004   	ds	04h
-00:01E0                         13005   _$ST15 :
-00:01E0                         13006   	ds	04h
-00:01E4                         13007   _$ST16 :
-00:01E4                         13008   	ds	04h
-00:01E8                         13009   _$ST17 :
-00:01E8                         13010   	ds	04h
-                                13011   
-  --------------------------    13012   	rseg $$NVARmain
-00:0000                         13013   _RecWorld :
-00:0000                         13014   	ds	08h
-00:0008                         13015   _SensorReturn :
-00:0008                         13016   	ds	0c8h
-00:00D0                         13017   _Gyro_Zout :
-00:00D0                         13018   	ds	028h
-00:00F8                         13019   _Gyro_Yout :
-00:00F8                         13020   	ds	028h
-00:0120                         13021   _NewVar_Str :
-00:0120                         13022   	ds	06h
-00:0126                         13023   _NewVar :
-00:0126                         13024   	ds	04h
-00:012A                         13025   _AccGyro_Data :
-00:012A                         13026   	ds	0eh
-00:0138                         13027   _Range_Output :
-00:0138                         13028   	ds	02h
-00:013A                         13029   _Accel_Zcal :
-00:013A                         13030   	ds	0ch
-00:0146                         13031   _Accel_Xcal :
-00:0146                         13032   	ds	0ch
-00:0152                         13033   _Mag_Data :
-00:0152                         13034   	ds	06h
-00:0158                         13035   _Accel_Xout :
-00:0158                         13036   	ds	028h
-00:0180                         13037   _Accel_Ycal :
-00:0180                         13038   	ds	0ch
-00:018C                         13039   _SensorReturnSM :
-00:018C                         13040   	ds	032h
-00:01BE                         13041   _Accel_Yout :
-00:01BE                         13042   	ds	028h
-00:01E6                         13043   _Accel_Zout :
-00:01E6                         13044   	ds	028h
-00:020E                         13045   _Gyro_Xout :
-00:020E                         13046   	ds	028h
-                                13047   	extrn code : __faddu8sw
-                                13048   	extrn code : __fsubu8sw
-                                13049   	extrn code : __fnegu8sw
-                                13050   	extrn code : __fcmpu8sw
-                                13051   	extrn code : __fmulu8sw
-                                13052   	extrn code : __fdivu8sw
-                                13053   	extrn code : __fildu8sw
-                                13054   	extrn code : __ftolu8sw
-                                13055   	extrn code : __ftodu8sw
-                                13056   	extrn code : __daddu8sw
-                                13057   	extrn code : __dsubu8sw
-                                13058   	extrn code : __dmulu8sw
-                                13059   	extrn code : __dildu8sw
-                                13060   	extrn code : __dtofu8sw
-                                13061   	extrn code : __fuldu8sw
-                                13062   
-                                13063   	end
+00:012A                         12879   _AccGyro_Data :
+00:012A                         12880   	ds	0eh
+00:0138                         12881   _Range_Output :
+00:0138                         12882   	ds	02h
+00:013A                         12883   _Accel_Zcal :
+00:013A                         12884   	ds	0ch
+00:0146                         12885   _Accel_Xcal :
+00:0146                         12886   	ds	0ch
+00:0152                         12887   _Mag_Data :
+00:0152                         12888   	ds	06h
+00:0158                         12889   _Accel_Xout :
+00:0158                         12890   	ds	028h
+00:0180                         12891   _Accel_Ycal :
+00:0180                         12892   	ds	0ch
+00:018C                         12893   _SensorReturnSM :
+00:018C                         12894   	ds	032h
+00:01BE                         12895   _Accel_Yout :
+00:01BE                         12896   	ds	028h
+00:01E6                         12897   _Accel_Zout :
+00:01E6                         12898   	ds	028h
+00:020E                         12899   _Gyro_Xout :
+00:020E                         12900   	ds	028h
+                                12901   	extrn code : __faddu8sw
+                                12902   	extrn code : __fsubu8sw
+                                12903   	extrn code : __fnegu8sw
+                                12904   	extrn code : __fcmpu8sw
+                                12905   	extrn code : __fmulu8sw
+                                12906   	extrn code : __fdivu8sw
+                                12907   	extrn code : __fildu8sw
+                                12908   	extrn code : __ftolu8sw
+                                12909   	extrn code : __ftodu8sw
+                                12910   	extrn code : __daddu8sw
+                                12911   	extrn code : __dsubu8sw
+                                12912   	extrn code : __dmulu8sw
+                                12913   	extrn code : __dildu8sw
+                                12914   	extrn code : __dtofu8sw
+                                12915   	extrn code : __fuldu8sw
+                                12916   
+                                12917   	end
 
 
 
@@ -13147,4 +13001,4 @@ RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1
 
   Errors   : 0
   Warnings : 0  (/Wrpeast)
-  Lines    : 13063
+  Lines    : 12917

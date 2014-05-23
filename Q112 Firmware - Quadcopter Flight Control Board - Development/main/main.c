@@ -15,17 +15,17 @@
 //#define	DEBUG_DD			( 0x00u )
 #define	DEBUG_STEP				( 0x01u )
 #define DEBUG_STEP_TESTX		( 0x01u )	//This is for X Test...
-#define DEBUG_STEP_TESTY		( 0x01u )	//This is for Y Test...
-#define DEBUG_STEP_TESTX_Inv	( 0x01u )	//This is for X Test flipping fixed and step motors...
-#define DEBUG_STEP_TESTY_Inv	( 0x01u )	//This is for Y Test flipping fixed and step motors...
-#define StepTestNominal			( 9050 )
-#define StepTestChange			( 500 )		
+//#define DEBUG_STEP_TESTY		( 0x01u )	//This is for Y Test...
+//#define DEBUG_STEP_TESTX_Inv	( 0x01u )	//This is for X Test flipping fixed and step motors...
+//#define DEBUG_STEP_TESTY_Inv	( 0x01u )	//This is for Y Test flipping fixed and step motors...
+#define StepTestNominal			( 9350 )
+#define StepTestChange			( 800 )		
 
 /*// ------------- Step Testing to complete tomorrow -------------
 1. Run Base Test with Nominal Motor Speed of 9050 and 500delta
 	1. Need to Run for all motor variants X, Y, Xinv, Yinv
-2. Same Tests again, but also see it at a higher setpoint, same 500 delta
-3. Same Tests again, but also see it at a the same setpoint (9050) and higher delta... is a lower delta test required?
+2. Same Tests again, but also see it at a higher setpoint, same 500 delta (does the relationship stay the same? is the Quadmotor change linear with PWM?)
+3. Same Tests again, but also see it at a the same setpoint (9050) and higher delta... (Does the rate of deg change Increase proportionally during this test?)
 */
 
 //*****************************************************************************
@@ -669,7 +669,7 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 		//MagSensorControl();		//First order control loop for working with the Mag sensor
 		
 		//Motor Run Time...
-		if(TestingEndTimer < 100){		//50 == 3secs = 250 = 15 seconds
+		if(TestingEndTimer < 10000){		//50 == 3secs = 250 = 15 seconds
 			//TestingEndTimer++;			//Comment this out to always loop (i.e.: no shut-down...)
 			goto Fast_Loop;
 		}
@@ -3802,7 +3802,7 @@ int i;
 	}
 	else{
 		MotorStepCount++;
-		if(MotorStepCount == 9){
+		if(MotorStepCount == 18){
 			PFRUN = 0;	//Turn OFF PWM
 			PERUN = 0;
 			PDRUN = 0;
@@ -3818,7 +3818,7 @@ int i;
 			PCRUN = 1;
 			MotorSpeedUT = StepTestNominal;
 		}
-		if(MotorStepCount == 18){
+		if(MotorStepCount == 36){
 			MotorStepCount = 0;
 		}
 	}

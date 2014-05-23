@@ -1,5 +1,5 @@
 RLU8 Object Linker, Ver.1.51.2 Linkage Information
-[Wed May 21 18:22:24 2014]
+[Thu May 22 19:54:28 2014]
 
 
                          ------------------
@@ -327,31 +327,31 @@ Link Map - Program memory space #0 ( ROMWINDOW: 0000 - 7FFF )
       S CODE   00:5A14    00:5A7F    006C(108)         $$XNCODsprintf_nn
       S CODE   00:5A80    00:5AB9    003A(58)          $$nfdivu8sw
       S CODE   00:5ABA    00:5E11    0358(856)         $$XNCODxgetfld_n
-      S CODE   00:5E12    00:60A1    0290(656)         $$Debug_STEPTest$main
-      S CODE   00:60A2    00:60E3    0042(66)          $$uart_startReceive$uart
-      S CODE   00:60E4    00:60FF    001C(28)          $$_intSADINT$irq
-      S CODE   00:6100    00:611B    001C(28)          $$_intT128HINT$irq
-      S CODE   00:611C    00:65B5    049A(1178)        $$XNCODxputfld
-      S CODE   00:65B6    00:664D    0098(152)         $$NOP$main
-      S CODE   00:664E    00:6667    001A(26)          $$_intWDTINT$irq
-      S CODE   00:6668    00:671B    00B4(180)         $$dstoru8sw
-      S CODE   00:671C    00:689F    0184(388)         $$CalibrateMotors$main
-      S CODE   00:68A0    00:68BB    001C(28)          $$_intTMFINT$irq
-      S CODE   00:68BC    00:68D7    001C(28)          $$_intTMBINT$irq
-      S CODE   00:68D8    00:6985    00AE(174)         $$XNCODstrtol_n
-      S CODE   00:6986    00:6DC9    0444(1092)        $$XNCODxgetint
-      S CODE   00:6DCA    00:6DE5    001C(28)          $$_intI2CSINT$irq
-      S CODE   00:6DE6    00:6F25    0140(320)         $$ddivu8sw
-      S CODE   00:6F26    00:6F41    001C(28)          $$_intSIO0INT$irq
-      S CODE   00:6F42    00:6F5D    001C(28)          $$cmpfu8sw
-      S CODE   00:6F5E    00:6F8B    002E(46)          $$div32u8sw
-      S CODE   00:6F8C    00:6FA7    001C(28)          $$_intI2CMINT$irq
-      S CODE   00:6FA8    00:71E9    0242(578)         $$CalibrateGyro$main
-      S CODE   00:71EA    00:7279    0090(144)         $$NCODml610112sw
-      S CODE   00:727A    00:72B7    003E(62)          $$XNCODmemcpy_nf
-      S CODE   00:72B8    00:732D    0076(118)         $$i2c_startSend$i2c
-      S TABLE  00:732E    00:7432    0105(261)         $$XFTABxctype
->GAP<          00:7433    00:7FDF    0BAD(2989)        (ROM)
+      S CODE   00:5E12    00:5FCF    01BE(446)         $$Debug_STEPTest$main
+      S CODE   00:5FD0    00:6011    0042(66)          $$uart_startReceive$uart
+      S CODE   00:6012    00:602D    001C(28)          $$_intSADINT$irq
+      S CODE   00:602E    00:6049    001C(28)          $$_intT128HINT$irq
+      S CODE   00:604A    00:64E3    049A(1178)        $$XNCODxputfld
+      S CODE   00:64E4    00:657B    0098(152)         $$NOP$main
+      S CODE   00:657C    00:6595    001A(26)          $$_intWDTINT$irq
+      S CODE   00:6596    00:6649    00B4(180)         $$dstoru8sw
+      S CODE   00:664A    00:67CD    0184(388)         $$CalibrateMotors$main
+      S CODE   00:67CE    00:67E9    001C(28)          $$_intTMFINT$irq
+      S CODE   00:67EA    00:6805    001C(28)          $$_intTMBINT$irq
+      S CODE   00:6806    00:68B3    00AE(174)         $$XNCODstrtol_n
+      S CODE   00:68B4    00:6CF7    0444(1092)        $$XNCODxgetint
+      S CODE   00:6CF8    00:6D13    001C(28)          $$_intI2CSINT$irq
+      S CODE   00:6D14    00:6E53    0140(320)         $$ddivu8sw
+      S CODE   00:6E54    00:6E6F    001C(28)          $$_intSIO0INT$irq
+      S CODE   00:6E70    00:6E8B    001C(28)          $$cmpfu8sw
+      S CODE   00:6E8C    00:6EB9    002E(46)          $$div32u8sw
+      S CODE   00:6EBA    00:6ED5    001C(28)          $$_intI2CMINT$irq
+      S CODE   00:6ED6    00:7117    0242(578)         $$CalibrateGyro$main
+      S CODE   00:7118    00:71A7    0090(144)         $$NCODml610112sw
+      S CODE   00:71A8    00:71E5    003E(62)          $$XNCODmemcpy_nf
+      S CODE   00:71E6    00:725B    0076(118)         $$i2c_startSend$i2c
+      S TABLE  00:725C    00:7360    0105(261)         $$XFTABxctype
+>GAP<          00:7361    00:7FDF    0C7F(3199)        (ROM)
       S CODE   00:7FE0    00:7FFF    0020(32)          (absolute)
 
 
@@ -466,7 +466,7 @@ Not Linked segments:
      --------------------------------------------------------------
 
 
-Total size (CODE  ) = 06D08   (27912)
+Total size (CODE  ) = 06C36   (27702)
 Total size (DATA  ) = 006A8   (1704)
 Total size (BIT   ) = 00000.0 (0.0)
 Total size (NVDATA) = 00000   (0)
@@ -483,7 +483,7 @@ i2c
                00:366C   Pub CODE     _i2c_stop
                00:10DC   Pub CODE     _i2c_startReceive
                00:5466   Pub CODE     _i2c_continue
-               00:72B8   Pub CODE     _i2c_startSend
+               00:71E6   Pub CODE     _i2c_startSend
                00:2CC4   Pub CODE     _i2c_init
                00:EDA4   Loc DATA     __gsCtrlParam
 
@@ -495,24 +495,24 @@ irq
                00:0916   Loc CODE     __intCMP0INT
                00:0C28   Loc CODE     __intTM8INT
                00:0C44   Loc CODE     __intTM9INT
-               00:6100   Loc CODE     __intT128HINT
+               00:602E   Loc CODE     __intT128HINT
                00:1D40   Loc CODE     __intT2HINT
-               00:6F8C   Loc CODE     __intI2CMINT
-               00:664E   Loc CODE     __intWDTINT
+               00:6EBA   Loc CODE     __intI2CMINT
+               00:657C   Loc CODE     __intWDTINT
                00:087E   Loc CODE     __intPA0INT
                00:0CF0   Loc CODE     __intTMAINT
                00:08DE   Loc CODE     __intPA1INT
-               00:6F26   Loc CODE     __intSIO0INT
-               00:6DCA   Loc CODE     __intI2CSINT
-               00:60E4   Loc CODE     __intSADINT
+               00:6E54   Loc CODE     __intSIO0INT
+               00:6CF8   Loc CODE     __intI2CSINT
+               00:6012   Loc CODE     __intSADINT
                00:0704   Loc CODE     __intPB0INT
                00:3B90   Loc CODE     __branchHdr
                00:0C80   Loc CODE     __intTMEINT
                00:0720   Loc CODE     __intPB1INT
-               00:68BC   Loc CODE     __intTMBINT
+               00:67EA   Loc CODE     __intTMBINT
                00:57A2   Loc CODE     __intPA2INT
                00:06E8   Loc CODE     __intT16HINT
-               00:68A0   Loc CODE     __intTMFINT
+               00:67CE   Loc CODE     __intTMFINT
                00:56E2   Loc CODE     __intPB2INT
                00:56FE   Loc CODE     __intPB3INT
                00:2DEA   Loc CODE     __intPWDINT
@@ -685,10 +685,10 @@ main
                00:EDCA   Loc DATA     _AccGYRO_Test
                00:ECFA   Loc DATA     _SensorReturnSM
                00:EDEC   Loc DATA     _CF_Gyro_CurrentCount
-               00:671C   Pub CODE     _CalibrateMotors
+               00:664A   Pub CODE     _CalibrateMotors
                00:53F6   Pub CODE     _ESC3_PWM
-               00:6FA8   Pub CODE     _CalibrateGyro
-               00:65B6   Pub CODE     _NOP
+               00:6ED6   Pub CODE     _CalibrateGyro
+               00:64E4   Pub CODE     _NOP
                00:35CC   Pub CODE     _PortA_Low
                00:2318   Pub CODE     _Run_AccGyroCF
                00:5E12   Pub CODE     _Debug_STEPTest
@@ -736,19 +736,19 @@ Module         Value     Type         Symbol
 ml610112
               0000EFFF   Loc NUMBER   NEAR_RAM_END
               0000E000   Loc NUMBER   NEAR_RAM_START
-               00:720C   Loc CODE     __wdtcounter_clear
+               00:713A   Loc CODE     __wdtcounter_clear
               000000FF   Loc NUMBER   _$$WINVAL
                00:7FFF   Loc TABLE    _$$ROMWINEND
-               00:71EE   Loc CODE     $begin
+               00:711C   Loc CODE     $begin
                00:0000   Loc TABLE    _$$ROMWINSTART
-               00:7220   Loc CODE     __init_loop
-               00:726C   Loc CODE     __init_end
-               00:71EC   Loc CODE     $$brk_reset
-               00:722C   Loc CODE     __skip
-               00:7248   Loc CODE     __init_loop2
-               00:725A   Loc CODE     __loop_by_byte
-               00:71FC   Loc CODE     __near_ram_loop
-               00:71EA   Pub CODE     $$start_up
+               00:714E   Loc CODE     __init_loop
+               00:719A   Loc CODE     __init_end
+               00:711A   Loc CODE     $$brk_reset
+               00:715A   Loc CODE     __skip
+               00:7176   Loc CODE     __init_loop2
+               00:7188   Loc CODE     __loop_by_byte
+               00:712A   Loc CODE     __near_ram_loop
+               00:7118   Pub CODE     $$start_up
 
 
 Module         Value     Type         Symbol
@@ -764,7 +764,7 @@ Module         Value     Type         Symbol
 ------         -----     ----------   ------
 uart
                00:06BE   Pub CODE     _uart_PortSet
-               00:60A2   Pub CODE     _uart_startReceive
+               00:5FD0   Pub CODE     _uart_startReceive
                00:1EFC   Pub CODE     _uart_init
                00:0C1A   Pub CODE     _uart_ErrSet
                00:4202   Pub CODE     _uart_stop

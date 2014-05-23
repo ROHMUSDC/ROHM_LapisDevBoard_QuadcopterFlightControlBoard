@@ -698,11 +698,11 @@ _$L56 :
 CBLOCK 257 10 658
 CBLOCKEND 257 10 662
 
-;;		if(TestingEndTimer < 100){		//50 == 3secs = 250 = 15 seconds
-CLINEA 0000H 0001H 02A0H 0003H 003EH
+;;		if(TestingEndTimer < 10000){		//50 == 3secs = 250 = 15 seconds
+CLINEA 0000H 0001H 02A0H 0003H 0040H
 	l	er0,	NEAR _TestingEndTimer
-	cmp	r0,	#064h
-	cmpc	r1,	#00h
+	cmp	r0,	#010h
+	cmpc	r1,	#027h
 	blt	_$L46
 
 ;;		else{
@@ -11730,9 +11730,7 @@ CLINEA 0000H 0000H 0E8CH 0003H 0013H
 ;;		if(MotorStepUpDnFlg == 0){
 CLINEA 0000H 0001H 0E8DH 0003H 001CH
 	l	r0,	NEAR _MotorStepUpDnFlg
-	beq	_$M75
-	b	_$L751
-_$M75 :
+	bne	_$L751
 CBLOCK 256 4 3725
 
 ;;			PFRUN = 0;	//Turn OFF PWM
@@ -11754,14 +11752,14 @@ CLINEA 0000H 0001H 0E91H 0004H 000DH
 ;;			PWF0D = StepTestNominal+MotorSpeedChange; 		//Can't be running to change (Only this variable)
 CLINEA 0000H 0001H 0E94H 0004H 0060H
 	l	er0,	NEAR _MotorSpeedChange
-	add	r0,	#05ah
-	addc	r1,	#023h
+	add	r0,	#086h
+	addc	r1,	#024h
 	st	er0,	0f962h
 
 ;;			PWED = StepTestNominal;
 CLINEA 0000H 0001H 0E95H 0004H 001AH
-	mov	r0,	#05ah
-	mov	r1,	#023h
+	mov	r0,	#086h
+	mov	r1,	#024h
 	st	er0,	0f932h
 
 ;;			PWDD = StepTestNominal;
@@ -11771,80 +11769,8 @@ CLINEA 0000H 0001H 0E96H 0004H 001AH
 ;;			PWCD = StepTestNominal+MotorSpeedChange;	
 CLINEA 0000H 0001H 0E97H 0004H 002CH
 	l	er0,	NEAR _MotorSpeedChange
-	add	r0,	#05ah
-	addc	r1,	#023h
-	st	er0,	0f912h
-
-;;			PWF0D = StepTestNominal; 						//Can't be running to change (Only this variable)
-CLINEA 0000H 0001H 0E9AH 0004H 0053H
-	mov	r0,	#05ah
-	mov	r1,	#023h
-	st	er0,	0f962h
-
-;;			PWED = StepTestNominal+MotorSpeedChange;
-CLINEA 0000H 0001H 0E9BH 0004H 002BH
-	l	er0,	NEAR _MotorSpeedChange
-	add	r0,	#05ah
-	addc	r1,	#023h
-	st	er0,	0f932h
-
-;;			PWDD = StepTestNominal+MotorSpeedChange;
-CLINEA 0000H 0001H 0E9CH 0004H 002BH
-	l	er0,	NEAR _MotorSpeedChange
-	add	r0,	#05ah
-	addc	r1,	#023h
-	st	er0,	0f922h
-
-;;			PWCD = StepTestNominal;	
-CLINEA 0000H 0001H 0E9DH 0004H 001BH
-	mov	r0,	#05ah
-	mov	r1,	#023h
-	st	er0,	0f912h
-
-;;			PWF0D = StepTestNominal+MotorSpeedChange; 		//Can't be running to change (Only this variable)
-CLINEA 0000H 0001H 0EA0H 0004H 0060H
-	l	er0,	NEAR _MotorSpeedChange
-	add	r0,	#05ah
-	addc	r1,	#023h
-	st	er0,	0f962h
-
-;;			PWED = StepTestNominal+MotorSpeedChange;
-CLINEA 0000H 0001H 0EA1H 0004H 002BH
-	l	er0,	NEAR _MotorSpeedChange
-	add	r0,	#05ah
-	addc	r1,	#023h
-	st	er0,	0f932h
-
-;;			PWDD = StepTestNominal;
-CLINEA 0000H 0001H 0EA2H 0004H 001AH
-	mov	r0,	#05ah
-	mov	r1,	#023h
-	st	er0,	0f922h
-
-;;			PWCD = StepTestNominal;	
-CLINEA 0000H 0001H 0EA3H 0004H 001BH
-	st	er0,	0f912h
-
-;;			PWF0D = StepTestNominal; 						//Can't be running to change (Only this variable)
-CLINEA 0000H 0001H 0EA6H 0004H 0053H
-	st	er0,	0f962h
-
-;;			PWED = StepTestNominal;
-CLINEA 0000H 0001H 0EA7H 0004H 001AH
-	st	er0,	0f932h
-
-;;			PWDD = StepTestNominal+MotorSpeedChange;
-CLINEA 0000H 0001H 0EA8H 0004H 002BH
-	l	er0,	NEAR _MotorSpeedChange
-	add	r0,	#05ah
-	addc	r1,	#023h
-	st	er0,	0f922h
-
-;;			PWCD = StepTestNominal+MotorSpeedChange;	
-CLINEA 0000H 0001H 0EA9H 0004H 002CH
-	l	er0,	NEAR _MotorSpeedChange
-	add	r0,	#05ah
-	addc	r1,	#023h
+	add	r0,	#086h
+	addc	r1,	#024h
 	st	er0,	0f912h
 
 ;;			CheckSafetyLimit();
@@ -11870,13 +11796,13 @@ CLINEA 0000H 0001H 0EB0H 0004H 000DH
 ;;			MotorSpeedUT = StepTestNominal+MotorSpeedChange;
 CLINEA 0000H 0001H 0EB1H 0004H 0033H
 	l	er0,	NEAR _MotorSpeedChange
-	add	r0,	#05ah
-	addc	r1,	#023h
+	add	r0,	#086h
+	addc	r1,	#024h
 CBLOCKEND 256 4 3762
 
 ;;		else{
 CLINEA 0000H 0001H 0EB3H 0003H 0007H
-	b	_$L753
+	bal	_$L753
 _$L751 :
 CBLOCK 256 5 3763
 
@@ -11898,8 +11824,8 @@ CLINEA 0000H 0001H 0EB7H 0004H 000DH
 
 ;;			PWF0D = StepTestNominal-MotorSpeedChange; 		//Can't be running to change (Only this variable)
 CLINEA 0000H 0001H 0EBAH 0004H 0060H
-	mov	r0,	#05ah
-	mov	r1,	#023h
+	mov	r0,	#086h
+	mov	r1,	#024h
 	l	er2,	NEAR _MotorSpeedChange
 	sub	r0,	r2
 	subc	r1,	r3
@@ -11907,8 +11833,8 @@ CLINEA 0000H 0001H 0EBAH 0004H 0060H
 
 ;;			PWED = StepTestNominal;
 CLINEA 0000H 0001H 0EBBH 0004H 001AH
-	mov	r0,	#05ah
-	mov	r1,	#023h
+	mov	r0,	#086h
+	mov	r1,	#024h
 	st	er0,	0f932h
 
 ;;			PWDD = StepTestNominal;
@@ -11917,78 +11843,6 @@ CLINEA 0000H 0001H 0EBCH 0004H 001AH
 
 ;;			PWCD = StepTestNominal-MotorSpeedChange;	
 CLINEA 0000H 0001H 0EBDH 0004H 002CH
-	sub	r0,	r2
-	subc	r1,	r3
-	st	er0,	0f912h
-
-;;			PWF0D = StepTestNominal; 						//Can't be running to change (Only this variable)
-CLINEA 0000H 0001H 0EC0H 0004H 0053H
-	mov	r0,	#05ah
-	mov	r1,	#023h
-	st	er0,	0f962h
-
-;;			PWED = StepTestNominal-MotorSpeedChange;
-CLINEA 0000H 0001H 0EC1H 0004H 002BH
-	sub	r0,	r2
-	subc	r1,	r3
-	st	er0,	0f932h
-
-;;			PWDD = StepTestNominal-MotorSpeedChange;
-CLINEA 0000H 0001H 0EC2H 0004H 002BH
-	mov	r0,	#05ah
-	mov	r1,	#023h
-	sub	r0,	r2
-	subc	r1,	r3
-	st	er0,	0f922h
-
-;;			PWCD = StepTestNominal;	
-CLINEA 0000H 0001H 0EC3H 0004H 001BH
-	mov	r0,	#05ah
-	mov	r1,	#023h
-	st	er0,	0f912h
-
-;;			PWF0D = StepTestNominal-MotorSpeedChange; 		//Can't be running to change (Only this variable)
-CLINEA 0000H 0001H 0EC6H 0004H 0060H
-	sub	r0,	r2
-	subc	r1,	r3
-	st	er0,	0f962h
-
-;;			PWED = StepTestNominal-MotorSpeedChange;
-CLINEA 0000H 0001H 0EC7H 0004H 002BH
-	mov	r0,	#05ah
-	mov	r1,	#023h
-	sub	r0,	r2
-	subc	r1,	r3
-	st	er0,	0f932h
-
-;;			PWDD = StepTestNominal;
-CLINEA 0000H 0001H 0EC8H 0004H 001AH
-	mov	r0,	#05ah
-	mov	r1,	#023h
-	st	er0,	0f922h
-
-;;			PWCD = StepTestNominal;	
-CLINEA 0000H 0001H 0EC9H 0004H 001BH
-	st	er0,	0f912h
-
-;;			PWF0D = StepTestNominal; 						//Can't be running to change (Only this variable)
-CLINEA 0000H 0001H 0ECCH 0004H 0053H
-	st	er0,	0f962h
-
-;;			PWED = StepTestNominal;
-CLINEA 0000H 0001H 0ECDH 0004H 001AH
-	st	er0,	0f932h
-
-;;			PWDD = StepTestNominal-MotorSpeedChange;
-CLINEA 0000H 0001H 0ECEH 0004H 002BH
-	sub	r0,	r2
-	subc	r1,	r3
-	st	er0,	0f922h
-
-;;			PWCD = StepTestNominal-MotorSpeedChange;	
-CLINEA 0000H 0001H 0ECFH 0004H 002CH
-	mov	r0,	#05ah
-	mov	r1,	#023h
 	sub	r0,	r2
 	subc	r1,	r3
 	st	er0,	0f912h
@@ -12015,8 +11869,8 @@ CLINEA 0000H 0001H 0ED6H 0004H 000DH
 
 ;;			MotorSpeedUT = StepTestNominal-MotorSpeedChange;
 CLINEA 0000H 0001H 0ED7H 0004H 0033H
-	mov	r0,	#05ah
-	mov	r1,	#023h
+	mov	r0,	#086h
+	mov	r1,	#024h
 	l	er2,	NEAR _MotorSpeedChange
 	sub	r0,	r2
 	subc	r1,	r3
@@ -12068,8 +11922,8 @@ CLINEA 0000H 0001H 0EE1H 0004H 000DH
 
 ;;			PWF0D = StepTestNominal; 		//Can't be running to change (Only this variable)
 CLINEA 0000H 0001H 0EE2H 0004H 004FH
-	mov	r0,	#05ah
-	mov	r1,	#023h
+	mov	r0,	#086h
+	mov	r1,	#024h
 	st	er0,	0f962h
 
 ;;			PWED = StepTestNominal;
@@ -12106,8 +11960,8 @@ CLINEA 0000H 0001H 0EEAH 0004H 000DH
 
 ;;			MotorSpeedUT = StepTestNominal;
 CLINEA 0000H 0001H 0EEBH 0004H 0022H
-	mov	r0,	#05ah
-	mov	r1,	#023h
+	mov	r0,	#086h
+	mov	r1,	#024h
 	st	er0,	NEAR _MotorSpeedUT
 CBLOCKEND 256 7 3820
 
@@ -12541,7 +12395,7 @@ CFUNCTIONEND 256
 	db	00h
 	align
 	dw	00h
-	dw	01f4h
+	dw	0320h
 	dw	00h
 	dw	00h
 	db	00h
