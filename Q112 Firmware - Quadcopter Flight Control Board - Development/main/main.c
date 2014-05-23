@@ -10,7 +10,7 @@
 //		 	 US Design Center
 //
 // STARTED:  DECEMBER 4th, 2013
-// UPDATED:	 APRIL 11, 2014
+// UPDATED:	 MAY 22, 2014
 //*****************************************************************************
 
 //*****************************************************************************
@@ -26,6 +26,7 @@
 //  	3-Axis Accel. & Gyro (InvenSense MPU-6050) 	=> I2C Pins SDA: B.6; SCL B.5
 //  	Magnetometer (Honeywell HMC5883L)	   		=> I2C Pins SDA: B.6; SCL B.5 
 //  	Ultrasonic Range Finder (MaxBotix MB1242)	=> I2C Pins SDA: B.6; SCL B.5
+//  	Pressure Sensor (BOSCH BMP180)				=> I2C Pins SDA: B.6; SCL B.5
 //
 // Bluetooth Low Energy Module:
 //		LAPIS ML7105 (SPI) - Connected to Q111 mcu, and communicating to Q112 via UART
@@ -372,6 +373,33 @@ static unsigned char			Range_Address = 0x70;
 static unsigned char			Range_Output[2];
 static unsigned char			Range_TakeRangeReading = 0x51;
 static unsigned int				Range_out = 0;
+
+//BOSCH Pressure Sensor (BMP180) Variables
+static unsigned char			Pressure_Address = 0x00;
+static short					Pressure_CalCoefficient_AC1 = 0x00;
+static short					Pressure_CalCoefficient_AC2 = 0x00;
+static short					Pressure_CalCoefficient_AC3 = 0x00;
+static unsigned short			Pressure_CalCoefficient_AC4 = 0x00;
+static unsigned short			Pressure_CalCoefficient_AC5 = 0x00;
+static unsigned short			Pressure_CalCoefficient_AC6 = 0x00;
+static short					Pressure_CalCoefficient_B1 = 0x00;
+static short					Pressure_CalCoefficient_B2 = 0x00;
+static short					Pressure_CalCoefficient_MB = 0x00;
+static short					Pressure_CalCoefficient_MC = 0x00;
+static short					Pressure_CalCoefficient_MD = 0x00;
+static long						Pressure_Over_Sampling_Setting = 0x00;
+static long						Pressure_Uncompensated_Temp = 0x00;
+static long						Pressure_Uncompensated_Pressure = 0x00;
+static long						Pressure_Compensated_X1 = 0x00;	
+static long						Pressure_Compensated_X2 = 0x00;
+static long						Pressure_Compensated_X3 = 0x00;
+static unsigned long			Pressure_Compensated_B4 = 0x00;
+static long						Pressure_Compensated_B5 = 0x00;	
+static long						Pressure_Compensated_B6 = 0x00;
+static unsigned long			Pressure_Compensated_B7 = 0x00;
+static long						Pressure_Compensated_Temperature = 0x00;	//Calculated Temperature in 0.1C Accuracy
+static long						Pressure_Compensated_Pressure = 0x00;		//Calculated Pressure in Pa
+
 
 //Variables for First Order Process Control Loops
 static unsigned int				MotorStep = 10;
