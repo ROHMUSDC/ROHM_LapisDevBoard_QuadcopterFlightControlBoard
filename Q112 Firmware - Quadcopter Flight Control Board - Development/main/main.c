@@ -1,4 +1,4 @@
-//*****************************************************************************
+r//*****************************************************************************
 // PROGRAM:	 LaPi Development Board Demo Code for LAPIS ML610Q112 micro
 // PROJECT:	 QUAD COPTER CONTROL BOARD with Sensor Fusion for Accel. & Gyro.
 //
@@ -435,7 +435,6 @@ static unsigned int 			KeyMOTData[4][105];
 static unsigned int				ArrayCounter = 0;
 
 //Accel-Gyro PID
-
 static unsigned int				Accel_PID_XRollCounter = 0;
 static float					Accel_PID_XRollErrSum = 0;		//Integral Error Portion of PID
 static float					Accel_PID_XRollErrPrev = 0;		//Derivative Error Portion of PID from last measurement	
@@ -515,6 +514,7 @@ unsigned char flag;
 Init:
 		Initialization(); 			//Ports, UART, Timers, Oscillator, Comparators, etc.
 		main_clrWDT();				//kick the dog...1.34uS duration
+		CalibrateMotors();			//Time-consuming ~6s
 		CalibrateGyro();			//Enter Calibration Sequence for Gyro
 		//CalibrateAccel();			//Enter Calibration Sequence for Accel
 									//*** Be Aware: The Below Values were found after "CalibrateAccel" was run.  Use Debugger to find and Hardcode Below...
@@ -530,7 +530,7 @@ Init:
 			Accel_Ycal[0] = ?
 			Accel_Zcal[0] = ?
 			*/
-		CalibrateMotors();			//Time-consuming ~6s
+
 	
 Main_Loop:
 		SerialOutCoefficients();	//~23ms when PID is Triggered as well..13.8ms otherwise
@@ -543,7 +543,7 @@ Main_Loop:
 		for(i=0; i<10; i++){
 			Accel_Xout[i] = 0;
 			Accel_Yout[i] = 0;
-			Accel_Zout[i] = 0;
+			Accel_Zout[i] = 0;r
 			Gyro_Xout[i] = 0;
 			Gyro_Yout[i] = 0;
 			Gyro_Zout[i] = 0;
@@ -555,11 +555,11 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 		main_clrWDT();				//kick the dog...1.34uS duration
 		ClearVariables();			//Fresh start each loop...
 		
-		if(Mag_PIDCounter>14){		//Counter++ @ 125us, need 14ms, thus 112*125us = 14ms //Counter Reset in Mag PID Loop and incremented in TMR89_ISR
+		//if(Mag_PIDCounter>14){		//Counter++ @ 125us, need 14ms, thus 112*125us = 14ms //Counter Reset in Mag PID Loop and incremented in TMR89_ISR
 			//Get_MagData();
 			//ReturnMagData();
 			//MagSensorControlPID();
-		}
+		//}
 		
 		//Get_AccGyroData();			//This Function takes 14ms (as of 3/30/2013)
 		/*		
@@ -586,17 +586,17 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 			AccGyro_CF_FlagCounter--;	//Decremented because this value is not a static 1/0... number shows number of items in buffer that have not gone though the CF yet
 		}
 		if(Accel_PID_GoCounter>=4){		//This increments in the Run_AccGyroCF()... I don't know if this is the best trigger.. but for now, it works.  Calls GetAccGyroData and AccGyroCF once within the routine.
-			//LED_3 = 1;		//C1, Pin 13
+			//LED_3 = 1;			//C1, Pin 13
 			AccelSensorControlPID(); // This Function takes 8.4ms loop (as of 3/30/2014)			
 			//LED_3 = 0;
 			Accel_PID_GoCounter = 0;
 		}
 		
-		if(Range_PIDCounter>63){	//Counter++ @ 125us, need 63ms, thus 504*125us = 63ms ///Counter Reset in Range PID Loop and incremented in TMR89_ISR
+		//if(Range_PIDCounter>63){	//Counter++ @ 125us, need 63ms, thus 504*125us = 63ms ///Counter Reset in Range PID Loop and incremented in TMR89_ISR
 			//Get_RangeData();
 			// Make a "Return Range Data" Func
 			//RangeSensorControlPID();
-		}
+		//}
 		
 		//----- Testing Variables/Functions -----
 		//ReturnSensorData();
@@ -606,8 +606,8 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 		//MagSensorControl();		//First order control loop for working with the Mag sensor
 		
 		//Motor Run Time...
-		if(TestingEndTimer < 500){		//50 == 3secs = 250 = 15 seconds
-			TestingEndTimer++;			//Comment this out to always loop (i.e.: no shut-down...)
+		if(TestingEndTimer < 30000){		//50 == 3secs = 250 = 15 seconds
+			//TestingEndTimer++;			//Comment this out to always loop (i.e.: no shut-down...)
 			goto Fast_Loop;
 		}
 		else{
@@ -2214,10 +2214,10 @@ void AccelSensorControlPID(void){
 	static float			Accel_PID_YPitchdErr = 0;			//Derivative Error Portion of PID
 	static float			Accel_PID_YPitchOutput = 0;	
 
-	static float				Accel_PID_Motor1_temp = 0;
-	static float				Accel_PID_Motor2_temp = 0;
-	static float				Accel_PID_Motor3_temp = 0;
-	static float				Accel_PID_Motor4_temp = 0;
+	static float			Accel_PID_Motor1_temp = 0;
+	static float			Accel_PID_Motor2_temp = 0;
+	static float			Accel_PID_Motor3_temp = 0;
+	static float			Accel_PID_Motor4_temp = 0;
 	
 	LED_3 = 1;		//C1, Pin 13
 	
@@ -2422,6 +2422,7 @@ void AccelSensorControlPID(void){
 		PCRUN = 1;
 		//Accel_PID_XYChangeFlag = 0;
 		
+		/*
 		//Stuff data into array to check validity... (3/31/2014)
 		if(ArrayCounter < 100) {
 			KeyCFData[0][ArrayCounter] = (unsigned int) CF_XRoll;	//X-Data
@@ -2429,11 +2430,12 @@ void AccelSensorControlPID(void){
 			
 			KeyMOTData[0][ArrayCounter] = Accel_PID_Motor1_temp;	//Motor 1
 			KeyMOTData[1][ArrayCounter] = Accel_PID_Motor2_temp;	//Motor 2
-			KeyMOTData[2][ArrayCounter] = Accel_PID_Motor3_temp;	//Motor 3
+			KeyMOTData[2][ArrayCounter]S = Accel_PID_Motor3_temp;	//Motor 3
 			KeyMOTData[3][ArrayCounter] = Accel_PID_Motor4_temp;	//Motor 4
 
 			ArrayCounter += 1;
 		}
+		*/
 	//}
 	
 	//SensorReturnSM
