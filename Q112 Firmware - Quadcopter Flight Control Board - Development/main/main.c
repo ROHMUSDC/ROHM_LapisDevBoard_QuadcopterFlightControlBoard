@@ -14,12 +14,13 @@
 //*****************************************************************************
 //#define	DEBUG_DD			( 0x00u )
 #define	DEBUG_STEP				( 0x01u )
-#define DEBUG_STEP_TESTX		( 0x01u )	//This is for X Test...
-//#define DEBUG_STEP_TESTY		( 0x01u )	//This is for Y Test...
+//define DEBUG_STEP_TESTX		( 0x01u )	//This is for X Test...
+#define DEBUG_STEP_TESTY		( 0x01u )	//This is for Y Test...
 //#define DEBUG_STEP_TESTX_Inv	( 0x01u )	//This is for X Test flipping fixed and step motors...
 //#define DEBUG_STEP_TESTY_Inv	( 0x01u )	//This is for Y Test flipping fixed and step motors...
-#define StepTestNominal			( 9350 )
-#define StepTestChange			( 800 )		
+#define StepTestNominal			( 9550 )
+#define StepTestChange			( 250 )		
+//This Revision contains the testing for multiple runs for each X, Y, Xinv, Yinv above...
 
 /*// ------------- Step Testing to complete tomorrow -------------
 1. Run Base Test with Nominal Motor Speed of 9050 and 500delta
@@ -506,9 +507,11 @@ static unsigned int				MotorSpeedUT = 0;
 static unsigned int				MotorSpeedChange = StepTestChange;		//PWM Hard Step Value
 static unsigned int				MotorIndex = 0;
 static unsigned int				MotorTimerUT = 0;
+static unsigned int				MotorTimerUT_Overflow = 0;
 static unsigned char			MotorStepUpDnFlg = 0;
+static unsigned char			MotorStepIncFlag1 = 0;
+static unsigned char			MotorStepIncFlag2 = 0;
 #endif
-
 
 //Motor Control
 static unsigned char 			PWMflag = 0;
@@ -669,7 +672,7 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 		//MagSensorControl();		//First order control loop for working with the Mag sensor
 		
 		//Motor Run Time...
-		if(TestingEndTimer < 10000){		//50 == 3secs = 250 = 15 seconds
+		if(TestingEndTimer < 15000){		//50 == 3secs = 250 = 15 seconds
 			//TestingEndTimer++;			//Comment this out to always loop (i.e.: no shut-down...)
 			goto Fast_Loop;
 		}
@@ -3031,6 +3034,7 @@ static void TMR89_ISR( void )
 	MotorTimerUT++;
 	if(MotorTimerUT >= 65535){
 		MotorTimerUT = 0;
+		MotorTimerUT_Overflow++;
 	}
 	#endif
 }
@@ -3759,6 +3763,7 @@ int i;
 			PDRUN = 1;
 			PCRUN = 1;
 			MotorSpeedUT = StepTestNominal+MotorSpeedChange;
+			MotorStepIncFlag1 = 1;
 		}
 		else{
 			PFRUN = 0;	//Turn OFF PWM
@@ -3797,12 +3802,13 @@ int i;
 			PDRUN = 1;
 			PCRUN = 1;
 			MotorSpeedUT = StepTestNominal-MotorSpeedChange;
+			MotorStepIncFlag2 = 1;
 		}
 		MotorStepUpDnFlg ^= 1;
 	}
 	else{
 		MotorStepCount++;
-		if(MotorStepCount == 18){
+		if(MotorStepCount == 25){
 			PFRUN = 0;	//Turn OFF PWM
 			PERUN = 0;
 			PDRUN = 0;
@@ -3817,8 +3823,18 @@ int i;
 			PDRUN = 1;
 			PCRUN = 1;
 			MotorSpeedUT = StepTestNominal;
+			if((MotorStepIncFlag1 == 1)&&(MotorStepIncFlag2 == 1)){
+				if(MotorSpeedChange < 800){
+					MotorSpeedChange += 20;
+				}
+				else{
+					MotorSpeedChange = 250;
+				}
+				MotorStepIncFlag1 = 0;
+				MotorStepIncFlag2 = 0;
+			}
 		}
-		if(MotorStepCount == 36){
+		if(MotorStepCount == 50){
 			MotorStepCount = 0;
 		}
 	}
@@ -3829,7 +3845,7 @@ int i;
 		SensorReturn[i] = 0x20;
 	}
 	MotorIndex++;
-	sprintf(SensorReturn, "%u,%f,%f,%u,%u", MotorIndex,CF_XRoll,CF_YPitch,MotorTimerUT,MotorSpeedUT);
+	sprintf(SensorReturn, "%u,%f,%f,%u,%u,%u", MotorIndex,CF_XRoll,CF_YPitch,MotorSpeedUT,MotorTimerUT_Overflow,MotorTimerUT);
 	SensorReturn[198] = 0x0D;
 	SensorReturn[199] = 0x0A;
 	//Send Returned Sensor Output to PC!
