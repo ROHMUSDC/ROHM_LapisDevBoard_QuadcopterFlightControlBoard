@@ -1,4 +1,4 @@
-r//*****************************************************************************
+//*****************************************************************************
 // PROGRAM:	 LaPi Development Board Demo Code for LAPIS ML610Q112 micro
 // PROJECT:	 QUAD COPTER CONTROL BOARD with Sensor Fusion for Accel. & Gyro.
 //
@@ -12,6 +12,8 @@ r//*****************************************************************************
 // STARTED:  DECEMBER 4th, 2013
 // UPDATED:	 APRIL 11, 2014
 //*****************************************************************************
+
+#define Accel_PID_PBounds  200
 
 //*****************************************************************************
 // Microcontroller's connections on the LaPi Development Board
@@ -66,10 +68,10 @@ r//*****************************************************************************
 // ================================ QUADCOPTER Pinout ======================== 
 // I/O PIN DATA ALIASES...
 	//ESC CONTROLLER PINS (PWM)
-		#define ESC_1		PC0D	// OUTPUT: ESC#1 => PortC.0 (PWMF0)
-		#define ESC_2		PB2D	// OUTPUT: ESC#2 => PortB.2 (PWME)	
-		#define ESC_3		PA0D	// OUTPUT: ESC#3 => PortA.0 (PWMC)
-		#define ESC_4		PA1D	// OUTPUT: ESC#4 => PortA.1 (PWMD)
+		#define ESC_1		PC0D	// 12 OUTPUT: ESC#1 => PortC.0 (PWMF0)
+		#define ESC_2		PB2D	// 6  OUTPUT: ESC#2 => PortB.2 (PWME)	
+		#define ESC_3		PA0D	// 1  OUTPUT: ESC#3 => PortA.0 (PWMC)
+		#define ESC_4		PA1D	// 2  OUTPUT: ESC#4 => PortA.1 (PWMD)
 
 	//USER DEFINED LED's	
 		#define LED_1		PA2D	// USER LED #1 => PortA.2
@@ -202,7 +204,7 @@ r//*****************************************************************************
 #define FLG_SET	    ( 0x01u ) 	
 
 // SET DESIRED UART SETTINGS HERE! (Options in UART.h)
-#define UART_BAUDRATE		( UART_BR_57600BPS) 	// Data Bits Per Second - Tested at rates from 2400bps to 512000bps!
+#define UART_BAUDRATE		( UART_BR_256000BPS) 	// Data Bits Per Second - Tested at rates from 2400bps to 512000bps!
 #define UART_DATA_LENGTH	( UART_LG_8BIT )		// x-Bit Data
 #define UART_PARITY_BIT		( UART_PT_NON )			// Parity
 #define UART_STOP_BIT		( UART_STP_1BIT )		// x Stop-Bits
@@ -313,7 +315,7 @@ static float					AccGyro_GyroScaling = 65.536;			//	0x00 = 131, 0x08 = 65.536, 0
 static unsigned char			AccGyro_GyroAccelLPF = 0x1A;			//	Address of Config for LPF for Gyro and Accel
 static unsigned char			AccGyro_GyroAccelLPF_Contents = 0x4;	//	6=5Hz, 5=10Hz, 4=21Hz (Config Low-Pass Filter for Gyro and Accel)
 static unsigned char			AccGyro_GyroAccel_SMPRTDIV = 0x19;			//	Address of Sample Rate Divider
-static unsigned char			AccGyro_GyroAccelLPF_SMPRTDIVContents = 0x0B;	//	Changing SMPRT to 11
+static unsigned char			AccGyro_GyroAccelLPF_SMPRTDIVContents = 0x31;	//	Changing SMPRT to 20Hz (decimal 49)
 static unsigned char			AccGyro_INTENABLEReg = 0x38;			//	
 static unsigned char			AccGyro_INTENABLEReg_contents = 0x01;	//	Turn on Data Ready Interrupt	//Output at 83Hz
 static unsigned char			AccGYRO_Test = 0;
@@ -430,11 +432,14 @@ static float					CF_StdDev_S_X = 0;
 static float					CF_StdDev_S_Y = 0;
 static float					CF_StdDev_K = 1;
 
+/*
 static unsigned int				KeyCFData[3][105];
 static unsigned int 			KeyMOTData[4][105];
 static unsigned int				ArrayCounter = 0;
+*/
 
 //Accel-Gyro PID
+
 static unsigned int				Accel_PID_XRollCounter = 0;
 static float					Accel_PID_XRollErrSum = 0;		//Integral Error Portion of PID
 static float					Accel_PID_XRollErrPrev = 0;		//Derivative Error Portion of PID from last measurement	
@@ -442,12 +447,12 @@ static unsigned int				Accel_PID_YPitchCounter = 0;
 static float					Accel_PID_YPitchErrSum = 0;		//Integral Error Portion of PID
 static float					Accel_PID_YPitchErrPrev = 0;	//Derivative Error Portion of PID from last measurement
 
-static float					Accel_PID_XRoll_kp = 5;			//Calibrated 3-30-2014	//0.8
-static float					Accel_PID_XRoll_ki = 0;							//0.001
-static float					Accel_PID_XRoll_kd = 0;							//0.5
-static float					Accel_PID_YPitch_kp = 5;
-static float					Accel_PID_YPitch_ki = 0;
-static float					Accel_PID_YPitch_kd = 0;
+static float					Accel_PID_XRoll_kp = 15;			//Calibrated 3-30-2014	//0.8
+static float					Accel_PID_XRoll_ki = 8;							//0.001
+static float					Accel_PID_XRoll_kd = 1.7;							//0.5
+static float					Accel_PID_YPitch_kp = 15;
+static float					Accel_PID_YPitch_ki = 8;
+static float					Accel_PID_YPitch_kd = 1.7;
 
 unsigned char					Accel_PID_XYChangeFlag = 0;
 static unsigned int				Accel_PID_Counter = 0;
@@ -491,8 +496,9 @@ static unsigned char 			PWMCounter = 0;
 static unsigned char 			PWMSensorResPerInc = 0;
 //static unsigned int			PWM_AccelMinHoverRPM = 10500;			//Unused as of 3/30/2014...
 static unsigned int				PWMUpperLowerDiff = 0;
-static unsigned int 			PWMUpperDutyLimitRun = 10500;			//Value for Maximum Duty	//18min flight = 11500
-static unsigned int 			PWMLowerDutyLimitRun = 9500;			//Value for Minimum Duty	//18min flight = 9500
+static unsigned int 			PWMUpperDutyLimitRun = 13000;			//Value for Maximum Duty	//18min flight = 11500
+static unsigned int				PWMIdleDutyRun = 10000;
+static unsigned int 			PWMLowerDutyLimitRun = 8500;			//Value for Minimum Duty	//18min flight = 9500
 																		//9000 duty 	=  	3040rpm
 																		//10000 duty 	= 	4580rpm
 																		//11000 duty	=	5820rpm
@@ -520,8 +526,8 @@ Init:
 									//*** Be Aware: The Below Values were found after "CalibrateAccel" was run.  Use Debugger to find and Hardcode Below...
 			
 			//--- Kris's Quad's Accel Calibration Settings ---
-			Accel_Xcal[0] = 75;
-			Accel_Ycal[0] = -675;
+			//Accel_Xcal[0] = 75;
+			//Accel_Ycal[0] = -675;
 			Accel_Zcal[0] = -162;
 			
 			//--- Carl's Quad's Accel Calibration Settings ---
@@ -530,7 +536,6 @@ Init:
 			Accel_Ycal[0] = ?
 			Accel_Zcal[0] = ?
 			*/
-
 	
 Main_Loop:
 		SerialOutCoefficients();	//~23ms when PID is Triggered as well..13.8ms otherwise
@@ -543,7 +548,7 @@ Main_Loop:
 		for(i=0; i<10; i++){
 			Accel_Xout[i] = 0;
 			Accel_Yout[i] = 0;
-			Accel_Zout[i] = 0;r
+			Accel_Zout[i] = 0;
 			Gyro_Xout[i] = 0;
 			Gyro_Yout[i] = 0;
 			Gyro_Zout[i] = 0;
@@ -555,11 +560,13 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 		main_clrWDT();				//kick the dog...1.34uS duration
 		ClearVariables();			//Fresh start each loop...
 		
-		//if(Mag_PIDCounter>14){		//Counter++ @ 125us, need 14ms, thus 112*125us = 14ms //Counter Reset in Mag PID Loop and incremented in TMR89_ISR
+		/*
+		if(Mag_PIDCounter>14){		//Counter++ @ 125us, need 14ms, thus 112*125us = 14ms //Counter Reset in Mag PID Loop and incremented in TMR89_ISR
 			//Get_MagData();
 			//ReturnMagData();
 			//MagSensorControlPID();
-		//}
+		}
+		*/
 		
 		//Get_AccGyroData();			//This Function takes 14ms (as of 3/30/2013)
 		/*		
@@ -574,29 +581,32 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 		*/
 		
 		if(AccGyro_ReadFlag >= 1){		//Triggered by External Interrupt (flag set in AccelGyroDataReady_ISR)
-			//LED_4 = 1;			//C2, Pin 14	//Inside GET_AccGyro
+			//LED_4 = 1;			//C2, Pin 14	//Loop Time = 1.5ms @20Hz Rate
 			Get_AccGyroData();
 			//LED_4 = 0;
 			AccGyro_ReadFlag = 0;
 		}
 		if(AccGyro_CF_FlagCounter > 0){	//This Value is incremented after Get_AccGyroData(); is called
-			//LED_2 = 1;			//B7, Pin 11	//Inside RUN_CF
+			//LED_2 = 1;			//B7, Pin 11	//Inside RUN_CF	//Loop Time = 13.5ms
 			Run_AccGyroCF();
 			//LED_2 = 0;
 			AccGyro_CF_FlagCounter--;	//Decremented because this value is not a static 1/0... number shows number of items in buffer that have not gone though the CF yet
 		}
-		if(Accel_PID_GoCounter>=4){		//This increments in the Run_AccGyroCF()... I don't know if this is the best trigger.. but for now, it works.  Calls GetAccGyroData and AccGyroCF once within the routine.
-			//LED_3 = 1;			//C1, Pin 13
-			AccelSensorControlPID(); // This Function takes 8.4ms loop (as of 3/30/2014)			
+		if(Accel_PID_GoCounter>= 1){		//This increments in the Run_AccGyroCF()... I don't know if this is the best trigger.. but for now, it works.  Calls GetAccGyroData and AccGyroCF once within the routine.
+			//LED_3 = 1;		//C1, Pin 13		//Loop Time = 25.47 with UART Debugging ON... 
+			AccelSensorControlPID(); 		
 			//LED_3 = 0;
 			Accel_PID_GoCounter = 0;
+			TestingEndTimer++;			//Comment this out to always loop (i.e.: no shut-down...)
 		}
 		
-		//if(Range_PIDCounter>63){	//Counter++ @ 125us, need 63ms, thus 504*125us = 63ms ///Counter Reset in Range PID Loop and incremented in TMR89_ISR
+		/*
+		if(Range_PIDCounter>63){	//Counter++ @ 125us, need 63ms, thus 504*125us = 63ms ///Counter Reset in Range PID Loop and incremented in TMR89_ISR
 			//Get_RangeData();
 			// Make a "Return Range Data" Func
 			//RangeSensorControlPID();
-		//}
+		}
+		*/
 		
 		//----- Testing Variables/Functions -----
 		//ReturnSensorData();
@@ -606,7 +616,7 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 		//MagSensorControl();		//First order control loop for working with the Mag sensor
 		
 		//Motor Run Time...
-		if(TestingEndTimer < 30000){		//50 == 3secs = 250 = 15 seconds
+		if(TestingEndTimer < 500){		//50 == 3secs = 250 = 15 seconds
 			//TestingEndTimer++;			//Comment this out to always loop (i.e.: no shut-down...)
 			goto Fast_Loop;
 		}
@@ -616,7 +626,7 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 			//QPB3 = 0;					//Disable Accel/Gyro Interrupt Pin
 			Shutdown();
 			TestingEndTimer = 0;
-			ArrayCounter = 0;
+			//ArrayCounter = 0;
 			goto Main_Loop;
 		}
 		//goto Main_Loop;
@@ -1157,7 +1167,6 @@ void Get_AccGyroData(void){
 	
 	LED_4 = 0;		//C2, Pin 14
 	EPB3 = 1;		//Turns Accel/Gyro Interrupt back on... again, this may not be necessary
-	Accel_PID_GoCounter++;		//Counts up to 4 to trigger the PID loop to start.
 	AccGyro_CF_FlagCounter++;	//Counts up to the number of values are in the buffer so main loop can call CF filter function
 }
 
@@ -1217,6 +1226,8 @@ void Run_AccGyroCF(void){
 		//}
 	}
 	*/
+	//AccGyro_CF_FlagCounter++;
+	Accel_PID_GoCounter++;		//Counts up to 4 to trigger the PID loop to start.
 	LED_2 = 0;			//B7, Pin 11
 }
 
@@ -1490,7 +1501,28 @@ int i;
 	Gyro_Xcal /= 10;
 	Gyro_Ycal /= 10;
 	Gyro_Zcal /= 10;
-
+	
+	for(i = 0; i<10; i++){
+		//EPB3 = 0;
+		//PB3E1 = 0;
+		//----- Accel/Gryo Start I2C Command ----- 
+		_flgI2CFin = 0;																	//reset I2C completed Flag
+		i2c_stop();																		//Make sure I2C is not currently running
+		I20MD = 1;		//Switch to I2C Fast Operation (400kbps)
+		i2c_startReceive(MPU6050Address, &AccGyro_ReadData, 1, &AccGyro_Data, 14, (cbfI2c)_funcI2CFin);	//Begin I2C Receive Command
+		while(_flgI2CFin != 1){															//Wait for I2C commands to finish transfer
+			main_clrWDT();	
+		}
+		//----- End Accel/Gyro I2C RX Command -----
+		//EPB3 = 1;
+		//PB3E1 = 1;
+		//Since Gyro is FLAT, Gravity only effects X and Y.  Thus, only save X and Y
+		Accel_Xcal[0] += (AccGyro_Data[0]<<8)+(AccGyro_Data[1]);
+		Accel_Ycal[0] += (AccGyro_Data[2]<<8)+(AccGyro_Data[3]);
+	}
+	Accel_Xcal[0] /= 10;
+	Accel_Ycal[0] /= 10;
+	
 	//Return Calibration Complete Message
 	for(i = 0; i<150; i++)
 	{
@@ -1724,7 +1756,7 @@ UARTTunePID:
 			main_clrWDT();
 		}
 
-
+/*
 		if(RecWorld[0] == 0x44){			//if RECWORLD == "DD" for Data Dump
 			if(RecWorld[1] == 0x44){
 				ArrayCounter = 0;
@@ -1766,7 +1798,7 @@ UARTTunePID:
 				goto UARTTunePID;
 			}
 		}
-
+*/
 		
 		if(RecWorld[0] == 0x6B){			//if RECWORLD == "kp"
 			if(RecWorld[1] == 0x70){
@@ -2214,10 +2246,10 @@ void AccelSensorControlPID(void){
 	static float			Accel_PID_YPitchdErr = 0;			//Derivative Error Portion of PID
 	static float			Accel_PID_YPitchOutput = 0;	
 
-	static float			Accel_PID_Motor1_temp = 0;
-	static float			Accel_PID_Motor2_temp = 0;
-	static float			Accel_PID_Motor3_temp = 0;
-	static float			Accel_PID_Motor4_temp = 0;
+	static float				Accel_PID_Motor1_temp = 0;
+	static float				Accel_PID_Motor2_temp = 0;
+	static float				Accel_PID_Motor3_temp = 0;
+	static float				Accel_PID_Motor4_temp = 0;
 	
 	LED_3 = 1;		//C1, Pin 13
 	
@@ -2239,6 +2271,14 @@ void AccelSensorControlPID(void){
 		//Converting so SP = 0 to find the "P" portion of PID
 		//Accel_PID_XRollError = Accel_PID_XRollSetpointPrime-CF_XRoll;	//Setpoint - Error (in this case setpoint is 0)
 		Accel_PID_XRollError = -CF_XRoll;	//Setpoint - Error (in this case setpoint is 0)
+		if(Accel_PID_XRollError > Accel_PID_PBounds)
+		{
+			Accel_PID_XRollError = Accel_PID_PBounds;
+		}
+		if(Accel_PID_XRollError < -Accel_PID_PBounds)
+		{
+			Accel_PID_XRollError = -Accel_PID_PBounds;
+		}
 		
 		//Get current counter and reset variable...
 		Accel_PID_XRollCurrentCount = Accel_PID_XRollCounter * .001;	//Timer in Seconds
@@ -2266,6 +2306,7 @@ void AccelSensorControlPID(void){
 		}
 		*/
 		
+		/*
 		//PWF0D, PWED, PWCD, PWDD
 		Accel_PID_Motor1 -= Accel_PID_XRollOutput;
 		Accel_PID_Motor2 += Accel_PID_XRollOutput;
@@ -2289,22 +2330,25 @@ void AccelSensorControlPID(void){
 		Accel_PID_Motor4_temp = Accel_PID_Motor4_temp/32767;
 		Accel_PID_Motor4_temp = Accel_PID_Motor4_temp * PWMUpperLowerDiff;
 		Accel_PID_Motor4_temp = Accel_PID_Motor4_temp + PWMLowerDutyLimitRun;	//Conversion from 65535 Scaling to PWM Period of 17000
+		*/
 		
 		//if PID output is negative, we want to Roll Right - Increase Motors 1+4 (F0,D) (Roll Right)
 		//if PID output is positive, we want to Roll Left - Increase Motors 2+3 (E,C) (Roll Left)
+		/*
 		PFRUN = 0;	//Turn OFF PWM
 		PERUN = 0;
 		PDRUN = 0;
 		PCRUN = 0;
-		PWF0D = Accel_PID_Motor1_temp; 		//Can't be running to change (Only this variable)
-		PWED = Accel_PID_Motor2_temp;	
-		PWCD = Accel_PID_Motor3_temp;	
-		PWDD = Accel_PID_Motor4_temp;
+		PWF0D = PWMIdleDutyRun - Accel_PID_XRollOutput; 		//Can't be running to change (Only this variable)
+		PWED = PWMIdleDutyRun + Accel_PID_XRollOutput;	
+		PWCD = PWMIdleDutyRun + Accel_PID_XRollOutput;	
+		PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput;
 		CheckSafetyLimit();
 		PFRUN = 1;	//Turn ON PWM
 		PERUN = 1;
 		PDRUN = 1;
 		PCRUN = 1;
+		*/
 		
         //Stuff data into array to check validity... (3/31/2014)
         //if (ArrayCounter <100) 
@@ -2325,7 +2369,7 @@ void AccelSensorControlPID(void){
             //ArrayCounter += 1;
         //}
 	
-		
+	/*	
 	while(AccGyro_ReadFlag == 0){
 		main_clrWDT();				//kick the dog...1.34uS duration.
 	}
@@ -2337,6 +2381,7 @@ void AccelSensorControlPID(void){
 		//LED_2 = 0;
 		AccGyro_CF_FlagCounter--;
 	}
+	*/
 	
 	//else{
 		/*
@@ -2355,6 +2400,14 @@ void AccelSensorControlPID(void){
 		//Converting so SP = 0 to find the "P" portion of PID
 		//Accel_PID_YPitchError = Accel_PID_YPitchSetpointPrime-CF_YPitch;		//Setpoint - Error (in this case setpoint is 0)
 		Accel_PID_YPitchError = -CF_YPitch;		//Setpoint - Error (in this case setpoint is 0)
+		if(Accel_PID_YPitchError > Accel_PID_PBounds)
+		{
+			Accel_PID_YPitchError = Accel_PID_PBounds;
+		}
+		if(Accel_PID_YPitchError < -Accel_PID_PBounds)
+		{
+			Accel_PID_YPitchError = -Accel_PID_PBounds;
+		}
 		
 		//Get current counter and reset variable...
 		Accel_PID_YPitchCurrentCount = Accel_PID_YPitchCounter * .001;		//Timer in Seconds
@@ -2383,6 +2436,7 @@ void AccelSensorControlPID(void){
 		*/
 		
 		//PWF0D, PWED, PWCD, PWDD
+		/*
 		Accel_PID_Motor1 += Accel_PID_YPitchOutput;
 		Accel_PID_Motor2 += Accel_PID_YPitchOutput;
 		Accel_PID_Motor3 -= Accel_PID_YPitchOutput;
@@ -2404,6 +2458,7 @@ void AccelSensorControlPID(void){
 		Accel_PID_Motor4_temp = Accel_PID_Motor4_temp/32767;
 		Accel_PID_Motor4_temp = Accel_PID_Motor4_temp * PWMUpperLowerDiff;
 		Accel_PID_Motor4_temp = Accel_PID_Motor4_temp + PWMLowerDutyLimitRun;	//Conversion from 65535 Scaling to PWM Period of 17000
+		*/
 		
 		//if PID output is negative, we want to Pitch Backwards (Increase Motors 1,2) (F0,E)
 		//if PID output is positive, we want to Pitch Forwards (Increase Motors 3,4) (C,D)
@@ -2411,10 +2466,10 @@ void AccelSensorControlPID(void){
 		PERUN = 0;
 		PDRUN = 0;
 		PCRUN = 0;
-		PWF0D = Accel_PID_Motor1_temp; 		//Can't be running to change (Only this variable)
-		PWED = Accel_PID_Motor2_temp;	
-		PWCD = Accel_PID_Motor3_temp;	
-		PWDD = Accel_PID_Motor4_temp;
+		PWF0D = PWMIdleDutyRun - Accel_PID_XRollOutput + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
+		PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + Accel_PID_YPitchOutput;	
+		PWCD = PWMIdleDutyRun + Accel_PID_XRollOutput - Accel_PID_YPitchOutput;	
+		PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput - Accel_PID_YPitchOutput;
 		CheckSafetyLimit();
 		PFRUN = 1;	//Turn ON PWM
 		PERUN = 1;
@@ -2422,15 +2477,15 @@ void AccelSensorControlPID(void){
 		PCRUN = 1;
 		//Accel_PID_XYChangeFlag = 0;
 		
-		/*
 		//Stuff data into array to check validity... (3/31/2014)
+		/*
 		if(ArrayCounter < 100) {
 			KeyCFData[0][ArrayCounter] = (unsigned int) CF_XRoll;	//X-Data
 			KeyCFData[1][ArrayCounter] = (unsigned int) CF_YPitch;	//Y-Data
 			
 			KeyMOTData[0][ArrayCounter] = Accel_PID_Motor1_temp;	//Motor 1
 			KeyMOTData[1][ArrayCounter] = Accel_PID_Motor2_temp;	//Motor 2
-			KeyMOTData[2][ArrayCounter]S = Accel_PID_Motor3_temp;	//Motor 3
+			KeyMOTData[2][ArrayCounter] = Accel_PID_Motor3_temp;	//Motor 3
 			KeyMOTData[3][ArrayCounter] = Accel_PID_Motor4_temp;	//Motor 4
 
 			ArrayCounter += 1;
@@ -2438,44 +2493,28 @@ void AccelSensorControlPID(void){
 		*/
 	//}
 	
+	
 	//SensorReturnSM
-	/*
-	for(i = 0; i<30; i++)
+	for(i = 0; i<50; i++)
 	{
 		SensorReturnSM[i] = 0x20;
 	}
 	
-	//sprintf(SensorReturn, "%f,%f,%f,%f,%f,%f,", Accel_Xout, Accel_Yout, Accel_PID_XRollCurrentCount, Accel_PID_YPitchCurrentCount, Accel_PID_XRollOutput, Accel_PID_YPitchOutput);
-	//sprintf(SensorReturn, "Use=%X, XRoll=%f, YPitch=%f", CF_UseFlag, CF_XRoll, CF_YPitch);
-	
-	//sprintf(SensorReturn, "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f", Gyro_Xout, Gyro_Yout, CF_Gyro_CurrentCount, Accel_Xout, Accel_Yout, Accel_Zout, CF_HPF, CF_LPF, CF_YPitch, CF_XRoll);
-	
-	
-	//sprintf(SensorReturnSM, "%f,%f,%f", CF_Gyro_CurrentCount, CF_YPitch, CF_XRoll);
-	//sprintf(SensorReturnSM, "%f,%f", CF_YPitch, CF_XRoll);
-	
-	
-	//sprintf(SensorReturnSM, "%u,%u,%u,%u", Accel_PID_Motor1, Accel_PID_Motor2, Accel_PID_Motor3, Accel_PID_Motor4);
-	sprintf(SensorReturnSM, "%u,%u,%u,%u", PWF0D, PWED, PWCD, PWDD);
+	sprintf(SensorReturnSM, "%f,%f,%u,%u,%u,%u", CF_YPitch, CF_XRoll, PWF0D, PWED, PWCD, PWDD);
 	
 	//sprintf(SensorReturnSM, "%f,%f", Accel_PID_YPitchOutput, Accel_PID_XRollOutput);
-	//sprintf(SensorReturnSM, "%u,%u,%f,%f", Accel_PID_XRoll_kp, Accel_PID_YPitch_kp, Accel_PID_YPitchOutput, Accel_PID_XRollOutput);
 	
-	//sprintf(SensorReturnSM, "%f,%f", Accel_PID_XRoll_kp, Accel_PID_XRoll_kd);
-	//sprintf(SensorReturnSM, "%f,%f", Accel_PID_XRoll_ki, Accel_PID_YPitch_ki);
-	//sprintf(SensorReturnSM, "%f,%f", Accel_PID_XRoll_kd, Accel_PID_YPitch_kd);
 	
-	SensorReturnSM[28] = 0x0D;
-	SensorReturnSM[29] = 0x0A;
+	SensorReturnSM[48] = 0x0D;
+	SensorReturnSM[49] = 0x0A;
 	
 	//Send Returned Sensor Output to PC!
 	_flgUartFin = 0;
 	uart_stop();
-	uart_startSend(SensorReturnSM, 30, _funcUartFin);
+	uart_startSend(SensorReturnSM, 50, _funcUartFin);
 	while(_flgUartFin != 1){
 		main_clrWDT();
 	}
-	*/
 	
 	/*
 	//Sensor Return Long! --------------------
@@ -3711,4 +3750,3 @@ float approx_arctan2(float y, float x)
 			}
 		}
 */
-		

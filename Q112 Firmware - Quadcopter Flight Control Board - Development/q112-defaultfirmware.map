@@ -1,0 +1,924 @@
+RLU8 Object Linker, Ver.1.51.2 Linkage Information
+[Sun Jun 08 11:59:28 2014]
+
+
+                         ------------------
+                          Control Synopsis
+                         ------------------
+
+I/O controls:    D  SD NS NA
+Other controls: CC STACK( 0100H(256) )
+                COMB( $$content_of_init $$end_of_init )
+                COMB( $$init_info $$init_info_end )
+
+
+
+                        ------------------------
+                         Object Module Synopsis
+                        ------------------------
+                                                                Creator
+Module Name           File Name                                 CCU8     RASU8
+-----------           ---------                                 -----    -----
+i2c                   _output\_obj\i2c.obj                      3.41     1.61
+irq                   _output\_obj\irq.obj                      3.41     1.61
+main                  _output\_obj\main.obj                     3.41     1.61
+ml610112              _output\_obj\ml610112.obj                 -.--     1.61
+tbc                   _output\_obj\tbc.obj                      3.41     1.61
+timer                 _output\_obj\timer.obj                    3.41     1.61
+uart                  _output\_obj\uart.obj                     3.41     1.61
+FNEGSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+atan                  C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+DNEGSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+xatan                 C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xpoly                 C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+sprintf_nn            C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+ULDIVSW               C:\PROGRA~1\U8Dev\Lib\longu8.lib          -.--     1.04
+DIV32SW               C:\PROGRA~1\U8Dev\Lib\longu8.lib          -.--     1.04
+pow                   C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xdunscal              C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xdnorm                C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+UIDIVSW               C:\PROGRA~1\U8Dev\Lib\longu8.lib          -.--     1.04
+DDIVSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+ETODSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+SHIFTSW               C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+FDIVSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+DTOFSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+DSUBSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+FSUBSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+xexp                  C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xvalues               C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xdtest                C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xlog                  C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xdint                 C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+atan2                 C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+DTOESW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+ROUNSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+NORMSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+FTOESW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+xdscale               C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+sscanf_nn             C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+memcpy_nf             C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+errno                 C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+CIDIMOSW              C:\PROGRA~1\U8Dev\Lib\longu8.lib          -.--     1.04
+xscanf_n              C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xgetfld_n             C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xctype                C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+memchr_n              C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+strchr_n              C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xgetfloa              C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+EDIVSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+CMPFSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+ETOFSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+DADDSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+EADDSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+FADDSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+DCMPSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+ECMPSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+DILDSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+LTOESW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+FCMPSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+FILDSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+DMULSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+EMULSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+DTOLSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+ETOLSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+FMULSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+FTOLSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+FTODSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+FULDSW                C:\PROGRA~1\U8Dev\Lib\doubleu8.lib        -.--     1.04
+IMULSW                C:\PROGRA~1\U8Dev\Lib\longu8.lib          -.--     1.04
+xstod_n               C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xdtento               C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+LMULSW                C:\PROGRA~1\U8Dev\Lib\longu8.lib          -.--     1.04
+xgetint               C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xstoul_n              C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+strtol_n              C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xprintf_nn            C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+strcpy_nn             C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+abs                   C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xputfld               C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xldtob                C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+SLDIVSW               C:\PROGRA~1\U8Dev\Lib\longu8.lib          -.--     1.04
+xgenld                C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+SIDIVSW               C:\PROGRA~1\U8Dev\Lib\longu8.lib          -.--     1.04
+strlen_f              C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+ldiv                  C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+xldunsca              C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+SLDIMOSW              C:\PROGRA~1\U8Dev\Lib\longu8.lib          -.--     1.04
+memcpy_ff             C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+memcpy_fn             C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+SIDIMOSW              C:\PROGRA~1\U8Dev\Lib\longu8.lib          -.--     1.04
+SIMODSW               C:\PROGRA~1\U8Dev\Lib\longu8.lib          -.--     1.04
+xlitob                C:\PROGRA~1\U8Dev\Lib\LU8100SW.lib        -.--     1.04
+ULMODSW               C:\PROGRA~1\U8Dev\Lib\longu8.lib          -.--     1.04
+
+
+Number of Modules: 92
+
+Number of Symbols:
+ +---------------------------------------------------------------------------+
+ |          | CODE | DATA | BIT  |NVDATA|NVBIT |TABLE |NUMBER| TBIT || total |
+ |----------+------+------+------+------+------+------+------+------++-------|
+ | SEGMENT  |   203|    10|     0|     0|     0|    39|      |      ||    252|
+ |----------+------+------+------+------+------+------+------+------++-------|
+ | COMMUNAL |     0|     3|     0|     0|     0|     0|      |      ||      3|
+ |----------+------+------+------+------+------+------+------+------++-------|
+ | PUBLIC   |   153|     2|     0|     0|     0|     6|     0|     0||    161|
+ +---------------------------------------------------------------------------+
+
+Target:  ML610112 
+Model:   SMALL
+
+
+Memory Map - Program memory space #0:
+      Type     Start      Stop
+     -----------------------------
+      ROM      00:0000    00:7FFF
+
+Memory Map - Data memory space #0:
+      Type     Start      Stop
+     -----------------------------
+      RAM      00:E000    00:FFFF
+
+Memory Map - Memory space above #1:
+      Type     Start      Stop
+     -----------------------------
+      ROM      02:0000    02:0FFF
+      ROM      08:0000    08:7FFF
+      ROM      0A:0000    0A:0FFF
+
+                         ------------------
+                          Segment Synopsis
+                         ------------------
+
+Link Map - Program memory space #0 ( ROMWINDOW: 0000 - 7FFF )
+
+      Type     Start      Stop       Size              Name
+     -------------------------------------------------------
+      S CODE   00:0000    00:0001    0002(2)           (absolute)
+      S CODE   00:0002    00:0003    0002(2)           (absolute)
+      S CODE   00:0004    00:0005    0002(2)           (absolute)
+      S CODE   00:0006    00:0007    0002(2)           $$_intUndefHdr$irq
+      S CODE   00:0008    00:0009    0002(2)           (absolute)
+      S CODE   00:000A    00:000A    0000(0)           $$content_of_init
+      S CODE   00:000A    00:000B    0002(2)           $$end_of_init
+      S CODE   00:000C    00:0077    006C(108)         (absolute)
+      S TABLE  00:0078    00:00C7    0050(80)          $$XNTABxldtob
+      S TABLE  00:00C8    00:00ED    0026(38)          $$XNTABxgetint
+      S TABLE  00:00EE    00:0145    0058(88)          $$XNTABxprintf_nn
+      S TABLE  00:0146    00:01C5    0080(128)         $$TABLE_SEGMENT
+      S TABLE  00:01C6    00:01F5    0030(48)          $$TAB$$S393$main
+      S TABLE  00:01F6    00:01F8    0003(3)           $$TAB$$S200$main
+>GAP<          00:01F9    00:01F9    0001(1)           (ROM)
+      S TABLE  00:01FA    00:0214    001B(27)          $$TAB$$S213$main
+>GAP<          00:0215    00:0215    0001(1)           (ROM)
+      S TABLE  00:0216    00:0231    001C(28)          $$TAB$$S224$main
+      S TABLE  00:0232    00:027D    004C(76)          $$TAB$$S238$main
+      S TABLE  00:027E    00:0298    001B(27)          $$TAB$$S273$main
+>GAP<          00:0299    00:0299    0001(1)           (ROM)
+      S TABLE  00:029A    00:0497    01FE(510)         $$NINITTAB
+      S TABLE  00:0498    00:0537    00A0(160)         $$XNTABxatan
+      S TABLE  00:0538    00:053F    0008(8)           $$XNTABxscanf_n
+      S TABLE  00:0540    00:0589    004A(74)          $$XNTABxdtento
+      S TABLE  00:058A    00:05AB    0022(34)          $$XNTABxlitob
+      S TABLE  00:05AC    00:05B3    0008(8)           $$init_info
+      S TABLE  00:05B4    00:05B5    0002(2)           $$init_info_end
+      S TABLE  00:05B6    00:05DD    0028(40)          $$XNTABxvalues
+      S TABLE  00:05DE    00:0627    004A(74)          $$XNTABxstoul_n
+      S TABLE  00:0628    00:064F    0028(40)          $$XNTABxstod_n
+      S TABLE  00:0650    00:0659    000A(10)          $$TAB_uartSetParam$main
+      S TABLE  00:065A    00:066B    0012(18)          $$TAB$$S525$main
+      S TABLE  00:066C    00:0697    002C(44)          $$TAB$$S437$main
+      S CODE   00:0698    00:06C1    002A(42)          $$uart_PortSet$uart
+      S CODE   00:06C2    00:06D3    0012(18)          $$nfnegu8sw
+      S CODE   00:06D4    00:06EF    001C(28)          $$_intT16HINT$irq
+      S CODE   00:06F0    00:070B    001C(28)          $$_intPB0INT$irq
+      S CODE   00:070C    00:0727    001C(28)          $$_intPB1INT$irq
+      S CODE   00:0728    00:0771    004A(74)          $$XNCODmemcpy_ff
+      S CODE   00:0772    00:0869    00F8(248)         $$uart_continue$uart
+      S CODE   00:086A    00:0885    001C(28)          $$_intPA0INT$irq
+      S CODE   00:0886    00:08C9    0044(68)          $$XNCODmemcpy_fn
+      S CODE   00:08CA    00:08E5    001C(28)          $$_intPA1INT$irq
+      S CODE   00:08E6    00:0901    001C(28)          $$_intCMP1INT$irq
+      S CODE   00:0902    00:0961    0060(96)          $$SoftStart$main
+      S CODE   00:0962    00:097D    001C(28)          $$_intCMP0INT$irq
+      S CODE   00:097E    00:0981    0004(4)           $$_intUart$main
+      S CODE   00:0982    00:09EF    006E(110)         $$XNCODxdtest
+      S CODE   00:09F0    00:0C33    0244(580)         $$XNCODxscanf_n
+      S CODE   00:0C34    00:0C65    0032(50)          $$ESC2_PWM$main
+      S CODE   00:0C66    00:0C73    000E(14)          $$uart_ErrSet$uart
+      S CODE   00:0C74    00:0C8F    001C(28)          $$_intTM8INT$irq
+      S CODE   00:0C90    00:0CAB    001C(28)          $$_intTM9INT$irq
+      S CODE   00:0CAC    00:0CCB    0020(32)          $$normu8sw
+      S CODE   00:0CCC    00:0CE7    001C(28)          $$_intTMEINT$irq
+      S CODE   00:0CE8    00:0D07    0020(32)          $$ulmodu8sw
+      S CODE   00:0D08    00:0D09    0002(2)           $$NOP1000$main
+      S CODE   00:0D0A    00:0D3B    0032(50)          $$ESC1_PWM$main
+      S CODE   00:0D3C    00:0D57    001C(28)          $$_intTMAINT$irq
+      S CODE   00:0D58    00:0DBB    0064(100)         $$PortD_Low$main
+      S CODE   00:0DBC    00:0FA1    01E6(486)         $$XNCODxlitob
+      S CODE   00:0FA2    00:0FC3    0022(34)          $$shiftu8sw
+      S CODE   00:0FC4    00:0FDF    001C(28)          $$_intUA0INT$irq
+      S CODE   00:0FE0    00:0FFB    001C(28)          $$_intUA1INT$irq
+      S CODE   00:0FFC    00:106F    0074(116)         $$XNCODxpoly
+      S CODE   00:1070    00:107F    0010(16)          $$simodu8sw
+      S CODE   00:1080    00:109D    001E(30)          $$XNCODstrcpy_nn
+      S CODE   00:109E    00:1127    008A(138)         $$XNCODxldunsca
+      S CODE   00:1128    00:11AB    0084(132)         $$i2c_startReceive$i2c
+      S CODE   00:11AC    00:11B7    000C(12)          $$roundu8sw
+      S CODE   00:11B8    00:11ED    0036(54)          $$ndmulu8sw
+      S CODE   00:11EE    00:1201    0014(20)          $$main_clrWDT$main
+      S CODE   00:1202    00:122D    002C(44)          $$nfildu8sw
+      S CODE   00:122E    00:1257    002A(42)          $$ndtolu8sw
+      S CODE   00:1258    00:1291    003A(58)          $$nfmulu8sw
+      S CODE   00:1292    00:12BB    002A(42)          $$nftolu8sw
+      S CODE   00:12BC    00:12E1    0026(38)          $$nftodu8sw
+      S CODE   00:12E2    00:12F7    0016(22)          $$XNCODabs
+      S CODE   00:12F8    00:1323    002C(44)          $$nfuldu8sw
+      S CODE   00:1324    00:1789    0466(1126)        $$XNCODxldtob
+      S CODE   00:178A    00:17BB    0032(50)          $$irq_setHdr$irq
+      S CODE   00:17BC    00:187B    00C0(192)         $$NOPms$main
+      S CODE   00:187C    00:1A97    021C(540)         $$XNCODxstoul_n
+      S CODE   00:1A98    00:1CF1    025A(602)         $$XNCODxdtento
+      S CODE   00:1CF2    00:1D47    0056(86)          $$uart_startSend$uart
+      S CODE   00:1D48    00:1DAF    0068(104)         $$XNCODsscanf_nn
+      S CODE   00:1DB0    00:1DB3    0004(4)           $$irq_di$irq
+      S CODE   00:1DB4    00:1DB7    0004(4)           $$irq_ei$irq
+      S CODE   00:1DB8    00:1DD3    001C(28)          $$_intT2HINT$irq
+      S CODE   00:1DD4    00:1E09    0036(54)          $$ndaddu8sw
+      S CODE   00:1E0A    00:1E39    0030(48)          $$ndcmpu8sw
+      S CODE   00:1E3A    00:1E73    003A(58)          $$nfaddu8sw
+      S CODE   00:1E74    00:1E9D    002A(42)          $$lloadu8sw
+      S CODE   00:1E9E    00:1ECD    0030(48)          $$nfcmpu8sw
+      S CODE   00:1ECE    00:1F0F    0042(66)          $$lmulu8sw
+      S CODE   00:1F10    00:1F11    0002(2)           $$_intNullHdr$irq
+      S CODE   00:1F12    00:1F1F    000E(14)          $$_funcI2CFin$main
+      S CODE   00:1F20    00:1F73    0054(84)          $$floadu8sw
+      S CODE   00:1F74    00:20B9    0146(326)         $$uart_init$uart
+      S CODE   00:20BA    00:2167    00AE(174)         $$SerialOutCoefficients$main
+      S CODE   00:2168    00:2365    01FE(510)         $$XNCODxatan
+      S CODE   00:2366    00:238F    002A(42)          $$uart_PortClear$uart
+      S CODE   00:2390    00:26C7    0338(824)         $$Run_AccGyroCF$main
+      S CODE   00:26C8    00:27C1    00FA(250)         $$daddu8sw
+      S CODE   00:27C2    00:281B    005A(90)          $$dcmpu8sw
+      S CODE   00:281C    00:2843    0028(40)          $$dildu8sw
+      S CODE   00:2844    00:287F    003C(60)          $$ClearVariables$main
+      S CODE   00:2880    00:28B1    0032(50)          $$ESC4_PWM$main
+      S CODE   00:28B2    00:29EB    013A(314)         $$dmulu8sw
+      S CODE   00:29EC    00:2ACD    00E2(226)         $$TMR89_ISR$main
+      S CODE   00:2ACE    00:2AF7    002A(42)          $$imulu8sw
+      S CODE   00:2AF8    00:2B69    0072(114)         $$dloadu8sw
+      S CODE   00:2B6A    00:2C61    00F8(248)         $$Shutdown$main
+      S CODE   00:2C62    00:2D25    00C4(196)         $$PortB_Low$main
+      S CODE   00:2D26    00:2E4B    0126(294)         $$i2c_init$i2c
+      S CODE   00:2E4C    00:2E67    001C(28)          $$_intPWDINT$irq
+      S CODE   00:2E68    00:2E83    001C(28)          $$_intPWEINT$irq
+      S CODE   00:2E84    00:3361    04DE(1246)        $$XNCODxprintf_nn
+      S CODE   00:3362    00:33EB    008A(138)         $$XNCODxdunscal
+      S CODE   00:33EC    00:35D7    01EC(492)         $$XNCODatan2
+      S CODE   00:35D8    00:3611    003A(58)          $$XNCODmemchr_n
+      S CODE   00:3612    00:362D    001C(28)          $$_intPWFINT$irq
+      S CODE   00:362E    00:3679    004C(76)          $$PortA_Low$main
+      S CODE   00:367A    00:3695    001C(28)          $$_intPWCINT$irq
+      S CODE   00:3696    00:36CD    0038(56)          $$tm_init$timer
+      S CODE   00:36CE    00:36FB    002E(46)          $$i2c_stop$i2c
+      S CODE   00:36FC    00:3BBF    04C4(1220)        $$XNCODxgenld
+      S CODE   00:3BC0    00:3BD1    0012(18)          $$ndnegu8sw
+      S CODE   00:3BD2    00:3BF1    0020(32)          $$uldivu8sw
+      S CODE   00:3BF2    00:3BFB    000A(10)          $$_branchHdr$irq
+      S CODE   00:3BFC    00:3C5B    0060(96)          $$sldimou8sw
+      S CODE   00:3C5C    00:3D5B    0100(256)         $$main$main
+      S CODE   00:3D5C    00:3D81    0026(38)          $$XNCODstrlen_f
+      S CODE   00:3D82    00:3DA5    0024(36)          $$XNCODstrchr_n
+      S CODE   00:3DA6    00:3DFF    005A(90)          $$irq_init$irq
+      S CODE   00:3E00    00:41E1    03E2(994)         $$XNCODxgetfloa
+      S CODE   00:41E2    00:41FD    001C(28)          $$uart_stop$uart
+      S CODE   00:41FE    00:4561    0364(868)         $$UARTTunePID$main
+      S CODE   00:4562    00:493B    03DA(986)         $$XNCODxstod_n
+      S CODE   00:493C    00:4B71    0236(566)         $$Get_AccGyroData$main
+      S CODE   00:4B72    00:4B7F    000E(14)          $$sidivu8sw
+      S CODE   00:4B80    00:4C43    00C4(196)         $$PortC_Low$main
+      S CODE   00:4C44    00:4C5D    001A(26)          $$sldivu8sw
+      S CODE   00:4C5E    00:4C9D    0040(64)          $$cidimou8sw
+      S CODE   00:4C9E    00:4CD1    0034(52)          $$sidimou8sw
+      S CODE   00:4CD2    00:4D53    0082(130)         $$CheckSafetyLimit$main
+      S CODE   00:4D54    00:511D    03CA(970)         $$Initialization$main
+      S CODE   00:511E    00:5129    000C(12)          $$uidivu8sw
+      S CODE   00:512A    00:5137    000E(14)          $$_funcUartFin$main
+      S CODE   00:5138    00:513B    0004(4)           $$_intI2c$main
+      S CODE   00:513C    00:5165    002A(42)          $$ndtofu8sw
+      S CODE   00:5166    00:5179    0014(20)          $$ndsubu8sw
+      S CODE   00:517A    00:53BB    0242(578)         $$XNCODxdscale
+      S CODE   00:53BC    00:53CF    0014(20)          $$nfsubu8sw
+      S CODE   00:53D0    00:5401    0032(50)          $$ESC3_PWM$main
+      S CODE   00:5402    00:543F    003E(62)          $$lstoru8sw
+      S CODE   00:5440    00:56A1    0262(610)         $$i2c_continue$i2c
+      S CODE   00:56A2    00:56A9    0008(8)           $$AccelGyroDataReady_ISR$main
+      S CODE   00:56AA    00:56C5    001C(28)          $$_intPB2INT$irq
+      S CODE   00:56C6    00:56E1    001C(28)          $$_intPB3INT$irq
+      S CODE   00:56E2    00:5769    0088(136)         $$fstoru8sw
+      S CODE   00:576A    00:5785    001C(28)          $$_intPA2INT$irq
+      S CODE   00:5786    00:57A1    001C(28)          $$_intT32HINT$irq
+      S CODE   00:57A2    00:57BD    001C(28)          $$_intVLSINT$irq
+      S CODE   00:57BE    00:591F    0162(354)         $$XNCODxdnorm
+      S CODE   00:5920    00:5985    0066(102)         $$XNCODldiv
+      S CODE   00:5986    00:59A5    0020(32)          $$SetOSC$main
+      S CODE   00:59A6    00:59DB    0036(54)          $$nddivu8sw
+      S CODE   00:59DC    00:5E87    04AC(1196)        $$AccelSensorControlPID$main
+      S CODE   00:5E88    00:5EF3    006C(108)         $$XNCODsprintf_nn
+      S CODE   00:5EF4    00:5F2D    003A(58)          $$nfdivu8sw
+      S CODE   00:5F2E    00:6285    0358(856)         $$XNCODxgetfld_n
+      S CODE   00:6286    00:62C7    0042(66)          $$uart_startReceive$uart
+      S CODE   00:62C8    00:62E3    001C(28)          $$_intSADINT$irq
+      S CODE   00:62E4    00:62FF    001C(28)          $$_intT128HINT$irq
+      S CODE   00:6300    00:6799    049A(1178)        $$XNCODxputfld
+      S CODE   00:679A    00:6831    0098(152)         $$NOP$main
+      S CODE   00:6832    00:684B    001A(26)          $$_intWDTINT$irq
+      S CODE   00:684C    00:68FF    00B4(180)         $$dstoru8sw
+      S CODE   00:6900    00:6A87    0188(392)         $$CalibrateMotors$main
+      S CODE   00:6A88    00:6AA3    001C(28)          $$_intTMFINT$irq
+      S CODE   00:6AA4    00:6ABF    001C(28)          $$_intTMBINT$irq
+      S CODE   00:6AC0    00:6B6D    00AE(174)         $$XNCODstrtol_n
+      S CODE   00:6B6E    00:6FB1    0444(1092)        $$XNCODxgetint
+      S CODE   00:6FB2    00:6FCD    001C(28)          $$_intI2CSINT$irq
+      S CODE   00:6FCE    00:710D    0140(320)         $$ddivu8sw
+      S CODE   00:710E    00:7129    001C(28)          $$_intSIO0INT$irq
+      S CODE   00:712A    00:7145    001C(28)          $$cmpfu8sw
+      S CODE   00:7146    00:7173    002E(46)          $$div32u8sw
+      S CODE   00:7174    00:718F    001C(28)          $$_intI2CMINT$irq
+      S CODE   00:7190    00:74CD    033E(830)         $$CalibrateGyro$main
+      S CODE   00:74CE    00:755D    0090(144)         $$NCODml610112sw
+      S CODE   00:755E    00:759B    003E(62)          $$XNCODmemcpy_nf
+      S CODE   00:759C    00:7611    0076(118)         $$i2c_startSend$i2c
+      S TABLE  00:7612    00:7716    0105(261)         $$XFTABxctype
+>GAP<          00:7717    00:7FDF    08C9(2249)        (ROM)
+      S CODE   00:7FE0    00:7FFF    0020(32)          (absolute)
+
+
+Link Map - Data memory space #0
+
+      Type     Start      Stop       Size              Name
+     -------------------------------------------------------
+      Q ROMWIN 00:0000    00:7FFF    8000(32768)       (ROMWIN)
+>GAP<          00:E000.0  00:E95F.7  0960.0(2400.0)    (RAM)
+      S DATA   00:E960    00:EA5F    0100(256)         $STACK
+      S DATA   00:EA60    00:EAB0    0051(81)          $$XNVARxgetint
+>GAP<          00:EAB1.0  00:EAB1.7  0001.0(1.0)       (RAM)
+      S DATA   00:EAB2    00:EAEF    003E(62)          $$NVARirq
+      S DATA   00:EAF0    00:EB40    0051(81)          $$XNVARxgetfloa
+>GAP<          00:EB41.0  00:EB41.7  0001.0(1.0)       (RAM)
+      S DATA   00:EB42    00:EB75    0034(52)          $$XNVARxstod_n
+      S DATA   00:EB76    00:EB76    0001(1)           $$NVARuart
+      C DATA   00:EB77    00:EB77    0001(1)           __reqNotHalt
+      S DATA   00:EB78    00:EDAD    0236(566)         $$NVARmain
+      S DATA   00:EDAE    00:EFAB    01FE(510)         $$NINITVAR
+      S DATA   00:EFAC    00:EFED    0042(66)          $$XNVARxprintf_nn
+      C DATA   00:EFEE    00:EFEE    0001(1)           __flgI2CFin
+      C DATA   00:EFEF    00:EFEF    0001(1)           __flgUartFin
+      S DATA   00:EFF0    00:EFFF    0010(16)          $$XNVARxscanf_n
+      Q SFR    00:F000    00:FFFF    1000(4096)        (SFR)
+
+
+Link Map - Memory space above #1
+
+      Type     Start      Stop       Size              Name
+     -------------------------------------------------------
+ ---
+      S TABLE  02:0000    02:0FFF    1000(4096)        (absolute)
+ ---
+      S TABLE  08:0000    08:7FFF    8000(32768)       (absolute)
+ ---
+      S TABLE  0A:0000    0A:0FFF    1000(4096)        (absolute)
+
+
+Not Linked segments:
+
+      Module Name         Type       Size              Segment Name 
+     --------------------------------------------------------------
+      i2c
+                          CODE       0006(6)           $$i2c_getTransSize$i2c
+                          CODE       0012(18)          $$i2c_checkIRQ$i2c
+                          CODE       0006(6)           $$i2c_clearIRQ$i2c
+     --------------------------------------------------------------
+      main
+                          CODE       02AC(684)         $$Get_MagData$main
+                          CODE       011C(284)         $$MagSensorControl$main
+                          CODE       0008(8)           $$main_reqNotHalt$main
+                          TABLE      003F(63)          $$TAB$$S290$main
+                          TABLE      005B(91)          $$TAB$$S346$main
+                          TABLE      001C(28)          $$TAB$$S371$main
+                          TABLE      0018(24)          $$TAB$$S174$main
+                          TABLE      0009(9)           $$TAB$$S187$main
+                          TABLE      005A(90)          $$TAB$$S321$main
+                          CODE       00EE(238)         $$DistanceSensorControl$main
+                          CODE       009A(154)         $$Get_RangeData$main
+                          CODE       0016(22)          $$NOPus$main
+                          CODE       000A(10)          $$TBC_ISR$main
+                          CODE       0070(112)         $$ReturnAccelData$main
+                          CODE       000E(14)          $$checkI2C$main
+                          CODE       009A(154)         $$Get_PingData$main
+                          CODE       03A8(936)         $$MagSensorControlPID$main
+                          CODE       00AA(170)         $$CheckSafetyLimitUnscaled$main
+                          CODE       0152(338)         $$RampUpMotorTest$main
+                          CODE       001A(26)          $$analog_comparator$main
+                          CODE       0040(64)          $$PortA_Digital_Inputs$main
+                          CODE       027E(638)         $$RangeSensorControlPID$main
+                          CODE       03DC(988)         $$approx_arctan2$main
+                          TABLE      000C(12)          $$TAB$$S504$main
+                          CODE       0098(152)         $$ReturnSensorData$main
+                          CODE       05B0(1456)        $$CalibrateAccel$main
+                          CODE       006E(110)         $$ReturnMagData$main
+     --------------------------------------------------------------
+      uart
+                          CODE       0006(6)           $$uart_clearIRQ$uart
+                          CODE       0012(18)          $$uart_checkIRQ$uart
+                          CODE       0008(8)           $$uart_ErrClr$uart
+                          CODE       0006(6)           $$uart_ErrGet$uart
+                          CODE       0006(6)           $$uart_getTransSize$uart
+     --------------------------------------------------------------
+      atan
+                          CODE       0128(296)         $$XNCODatan
+                          TABLE      0008(8)           $$XNTABatan
+     --------------------------------------------------------------
+      pow
+                          TABLE      001A(26)          $$XNTABpow
+                          CODE       06FE(1790)        $$XNCODpow
+     --------------------------------------------------------------
+      xexp
+                          TABLE      0058(88)          $$XNTABxexp
+                          CODE       02BA(698)         $$XNCODxexp
+     --------------------------------------------------------------
+      xlog
+                          TABLE      0050(80)          $$XNTABxlog
+                          CODE       02FA(762)         $$XNCODxlog
+     --------------------------------------------------------------
+      xdint
+                          TABLE      0050(80)          $$XNTABxdint
+                          CODE       028C(652)         $$XNCODxdint
+     --------------------------------------------------------------
+
+
+Total size (CODE  ) = 07012   (28690)
+Total size (DATA  ) = 0069E   (1694)
+Total size (BIT   ) = 00000.0 (0.0)
+Total size (NVDATA) = 00000   (0)
+Total size (NVBIT ) = 00000.0 (0.0)
+Total size (TABLE ) = 0A722   (42786)
+
+          -----------------------
+           Symbol Table Synopsis
+          -----------------------
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+i2c
+               00:36CE   Pub CODE     _i2c_stop
+               00:1128   Pub CODE     _i2c_startReceive
+               00:5440   Pub CODE     _i2c_continue
+               00:759C   Pub CODE     _i2c_startSend
+               00:2D26   Pub CODE     _i2c_init
+               00:EDAE   Loc DATA     __gsCtrlParam
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+irq
+               00:08E6   Loc CODE     __intCMP1INT
+               00:5786   Loc CODE     __intT32HINT
+               00:0962   Loc CODE     __intCMP0INT
+               00:0C74   Loc CODE     __intTM8INT
+               00:0C90   Loc CODE     __intTM9INT
+               00:62E4   Loc CODE     __intT128HINT
+               00:1DB8   Loc CODE     __intT2HINT
+               00:7174   Loc CODE     __intI2CMINT
+               00:6832   Loc CODE     __intWDTINT
+               00:086A   Loc CODE     __intPA0INT
+               00:0D3C   Loc CODE     __intTMAINT
+               00:08CA   Loc CODE     __intPA1INT
+               00:710E   Loc CODE     __intSIO0INT
+               00:6FB2   Loc CODE     __intI2CSINT
+               00:62C8   Loc CODE     __intSADINT
+               00:06F0   Loc CODE     __intPB0INT
+               00:3BF2   Loc CODE     __branchHdr
+               00:0CCC   Loc CODE     __intTMEINT
+               00:070C   Loc CODE     __intPB1INT
+               00:6AA4   Loc CODE     __intTMBINT
+               00:576A   Loc CODE     __intPA2INT
+               00:06D4   Loc CODE     __intT16HINT
+               00:6A88   Loc CODE     __intTMFINT
+               00:56AA   Loc CODE     __intPB2INT
+               00:56C6   Loc CODE     __intPB3INT
+               00:2E4C   Loc CODE     __intPWDINT
+               00:2E68   Loc CODE     __intPWEINT
+               00:367A   Loc CODE     __intPWCINT
+               00:0FC4   Loc CODE     __intUA0INT
+               00:0006   Loc CODE     __intUndefHdr
+               00:0FE0   Loc CODE     __intUA1INT
+               00:3612   Loc CODE     __intPWFINT
+               00:57A2   Loc CODE     __intVLSINT
+               00:3DA6   Pub CODE     _irq_init
+               00:1DB0   Pub CODE     _irq_di
+               00:1DB4   Pub CODE     _irq_ei
+               00:178A   Pub CODE     _irq_setHdr
+               00:1F10   Loc CODE     __intNullHdr
+               00:EAB2   Loc DATA     __sIrqHdr
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+main
+               00:2B6A   Pub CODE     _Shutdown
+               00:17BC   Pub CODE     _NOPms
+               00:11EE   Pub CODE     _main_clrWDT
+               00:59DC   Pub CODE     _AccelSensorControlPID
+               00:0C34   Pub CODE     _ESC2_PWM
+               00:493C   Pub CODE     _Get_AccGyroData
+               00:3C5C   Pub CODE     _main
+               00:2844   Pub CODE     _ClearVariables
+               00:0D58   Pub CODE     _PortD_Low
+               00:0D08   Pub CODE     _NOP1000
+               00:0D0A   Pub CODE     _ESC1_PWM
+               00:4B80   Pub CODE     _PortC_Low
+               00:4CD2   Pub CODE     _CheckSafetyLimit
+               00:2880   Pub CODE     _ESC4_PWM
+               00:41FE   Pub CODE     _UARTTunePID
+               00:20BA   Pub CODE     _SerialOutCoefficients
+               00:2C62   Pub CODE     _PortB_Low
+               00:512A   Loc CODE     __funcUartFin
+               00:4D54   Loc CODE     _Initialization
+               00:097E   Loc CODE     __intUart
+               00:5138   Loc CODE     __intI2c
+               00:5986   Loc CODE     _SetOSC
+               00:56A2   Loc CODE     _AccelGyroDataReady_ISR
+               00:29EC   Loc CODE     _TMR89_ISR
+               00:1F12   Loc CODE     __funcI2CFin
+               00:EEA0   Loc DATA     _CF_LPF
+               00:EE5A   Loc DATA     _Mag_OpposingPole
+               00:EDD0   Loc DATA     _AccGyro_GyroAccel_SMPRTDIV
+               00:EE8C   Loc DATA     _Mag_PIDOutput
+               00:EB78   Loc DATA     _RecWorld
+               00:EF16   Loc DATA     _Accel_PID_Motor4
+               00:EF10   Loc DATA     _Accel_PID_Motor1
+               00:EF12   Loc DATA     _Accel_PID_Motor2
+               00:EF14   Loc DATA     _Accel_PID_Motor3
+               00:EF58   Loc DATA     _PWMIdleDutyRun
+               00:EE6E   Loc DATA     _Mag_PIDCounter
+               00:EEB0   Loc DATA     _CF_YPitch_high
+               00:EE52   Loc DATA     _Mag_CWThres
+               00:EE2A   Loc DATA     _Ping_out
+               00:EB80   Loc DATA     _SensorReturn
+               00:EF52   Loc DATA     _PWMCounter
+               00:EDC0   Loc DATA     _AccGyro_PWRMGMT1REG_Contents
+               00:EDDD   Loc DATA     _Accel_RetIndex
+               00:EDDC   Loc DATA     _Accel_SavIndex
+               00:EDD6   Loc DATA     _AccGyro_ReadData
+               00:EE6A   Loc DATA     _Mag_PIDError
+               00:EDEC   Loc DATA     _CF_Gyro_YPitch
+               00:EE88   Loc DATA     _Mag_PID_kd
+               00:EE84   Loc DATA     _Mag_PID_ki
+               00:EE80   Loc DATA     _Mag_PID_kp
+               00:EE0E   Loc DATA     _Mag_Xout
+               00:EF50   Loc DATA     _PWMPeriod
+               00:EEB8   Loc DATA     _CF_YPitch_low
+               00:EC48   Loc DATA     _Gyro_Zout
+               00:EEE6   Loc DATA     _Accel_PID_XRollErrPrev
+               00:EE30   Loc DATA     _Range_out
+               00:EEEA   Loc DATA     _Accel_PID_YPitchCounter
+               00:EF1E   Loc DATA     _Range_PIDError
+               00:EC70   Loc DATA     _Gyro_Yout
+               00:EF34   Loc DATA     _Range_PIDOutput
+               00:EC98   Loc DATA     _NewVar_Str
+               00:EDC1   Loc DATA     _AccGyro_AccelConfig
+               00:EF4C   Loc DATA     _PWMLowerDutyLimitCalib
+               00:EEF8   Loc DATA     _Accel_PID_XRoll_ki
+               00:EEFC   Loc DATA     _Accel_PID_XRoll_kd
+               00:EEF4   Loc DATA     _Accel_PID_XRoll_kp
+               00:EDDE   Loc DATA     _AccGyro_CF_FlagCounter
+               00:EDD5   Loc DATA     _AccGyro_ReadFlag
+               00:EE74   Loc DATA     _Mag_PIDErrSum
+               00:EF1A   Loc DATA     _Range_PIDSetpoint
+               00:EE0A   Loc DATA     _Mag_ModeReg_Contents
+               00:EC9E   Loc DATA     _NewVar
+               00:EE12   Loc DATA     _Mag_Yout
+               00:EE90   Loc DATA     _CF_Gyro_Counter
+               00:EE98   Loc DATA     _CF_XRoll
+               00:EE34   Loc DATA     _Mag_MotorStep
+               00:EDD1   Loc DATA     _AccGyro_GyroAccelLPF_SMPRTDIVCo
+               00:EDF0   Loc DATA     _CF_Accel_ForceMagApprox
+               00:EE16   Loc DATA     _Mag_Zout
+               00:EEE2   Loc DATA     _Accel_PID_XRollErrSum
+               00:EF18   Loc DATA     _Accel_PID_GoCounter
+               00:EECC   Loc DATA     _CF_StdDev_Mtmp_X
+               00:EED0   Loc DATA     _CF_StdDev_Mtmp_Y
+               00:EEDC   Loc DATA     _CF_StdDev_K
+               00:EE70   Loc DATA     _Mag_PIDCurrentCount
+               00:ECA2   Loc DATA     _AccGyro_Data
+               00:EEAA   Loc DATA     _CF_XRoll_avg
+               00:EF00   Loc DATA     _Accel_PID_YPitch_kp
+               00:EF04   Loc DATA     _Accel_PID_YPitch_ki
+               00:EF08   Loc DATA     _Accel_PID_YPitch_kd
+               00:EE78   Loc DATA     _Mag_PIDdErr
+               00:EF48   Loc DATA     _PWMflag
+               00:EDD3   Loc DATA     _AccGyro_INTENABLEReg_contents
+               00:EDC9   Loc DATA     _AccGyro_GyroConfig_Contents
+               00:EE04   Loc DATA     _HMC5883Address
+               00:EF53   Loc DATA     _PWMSensorResPerInc
+               00:EDE8   Loc DATA     _CF_Gyro_XRoll
+               00:EDBE   Loc DATA     _MPU6050Address
+               00:EF54   Loc DATA     _PWMUpperLowerDiff
+               00:0650   Loc TABLE    __uartSetParam
+               00:EF2C   Loc DATA     _Range_PIDdErr
+               00:EF4E   Loc DATA     _PWMSafeDuty
+               00:EEC4   Loc DATA     _CF_StdDev_M_X
+               00:EEC8   Loc DATA     _CF_StdDev_M_Y
+               00:EEF0   Loc DATA     _Accel_PID_YPitchErrPrev
+               00:EEBC   Loc DATA     _CF_XRoll_low
+               00:EED4   Loc DATA     _CF_StdDev_S_X
+               00:EED8   Loc DATA     _CF_StdDev_S_Y
+               00:EEE0   Loc DATA     _Accel_PID_XRollCounter
+               00:EE09   Loc DATA     _Mag_ModeReg
+               00:EE08   Loc DATA     _Mag_ConfigB_Contents
+               00:EDD8   Loc DATA     _Temp_out
+               00:EDBF   Loc DATA     _AccGyro_PWRMGMT1REG
+               00:EE06   Loc DATA     _Mag_ConfigA_Contents
+               00:EDC8   Loc DATA     _AccGyro_GyroConfig
+               00:EF28   Loc DATA     _Range_PIDErrSum
+               00:EE94   Loc DATA     _CF_YPitch
+               00:ECB0   Loc DATA     _Range_Output
+               00:EF5A   Loc DATA     _PWMLowerDutyLimitRun
+               00:EEC0   Loc DATA     _CF_avgCnt
+               00:EDCE   Loc DATA     _AccGyro_GyroAccelLPF
+               00:EE2E   Loc DATA     _Range_Address
+               00:EE22   Loc DATA     _Mag_DeclinationAngle
+               00:EEA5   Loc DATA     _CF_Counter
+               00:EF24   Loc DATA     _Range_PIDCurrentCount
+               00:EE36   Loc DATA     _Range_ZHiThres
+               00:EE3A   Loc DATA     _Range_ZLoThres
+               00:EE66   Loc DATA     _Mag_PIDAngleScaled
+               00:EF22   Loc DATA     _Range_PIDCounter
+               00:EF56   Loc DATA     _PWMUpperDutyLimitRun
+               00:EE3E   Loc DATA     _Range_Ceiling
+               00:EEEC   Loc DATA     _Accel_PID_YPitchErrSum
+               00:EEB4   Loc DATA     _CF_XRoll_high
+               00:EE56   Loc DATA     _Mag_CCWThres
+               00:ECB2   Loc DATA     _Accel_Zcal
+               00:EE0C   Loc DATA     _Mag_Status
+               00:EDC2   Loc DATA     _AccGyro_AccelConfig_Contents
+               00:EE62   Loc DATA     _Mag_PIDCorrectionFactor
+               00:ECBE   Loc DATA     _Accel_Xcal
+               00:EDCA   Loc DATA     _AccGyro_GyroScaling
+               00:EDE0   Loc DATA     _CF_Accel_XRoll
+               00:ECCA   Loc DATA     _Mag_Data
+               00:ECD0   Loc DATA     _Accel_Xout
+               00:EEAE   Loc DATA     _CF_highlow_flag
+               00:ECF8   Loc DATA     _Accel_Ycal
+               00:EDD4   Loc DATA     _AccGYRO_Test
+               00:ED04   Loc DATA     _SensorReturnSM
+               00:EDF4   Loc DATA     _CF_Gyro_CurrentCount
+               00:EE7C   Loc DATA     _Mag_PIDErrPrev
+               00:EEA4   Loc DATA     _CF_UseFlag
+               00:EF44   Loc DATA     _TestingEndTimer
+               00:EDE4   Loc DATA     _CF_Accel_YPitch
+               00:EE1A   Loc DATA     _Mag_Angle
+               00:6900   Pub CODE     _CalibrateMotors
+               00:53D0   Pub CODE     _ESC3_PWM
+               00:7190   Pub CODE     _CalibrateGyro
+               00:679A   Pub CODE     _NOP
+               00:362E   Pub CODE     _PortA_Low
+               00:2390   Pub CODE     _Run_AccGyroCF
+               00:0902   Pub CODE     _SoftStart
+               00:EF0C   Pub DATA     _Accel_PID_XYChangeFlag
+               00:EE1E   Loc DATA     _Mag_GainFactor
+               00:EDD2   Loc DATA     _AccGyro_INTENABLEReg
+               00:EF4A   Loc DATA     _PWMUpperDutyLimitCalib
+               00:EE5E   Loc DATA     _Mag_PIDSetpoint
+               00:EDC4   Loc DATA     _AccGyro_AccelScaling
+               00:EE42   Loc DATA     _Accel_XLoThres
+               00:EE4E   Loc DATA     _Accel_YHiThres
+               00:EF38   Loc DATA     _Range_PID_kp
+               00:EE46   Loc DATA     _Accel_XHiThres
+               00:EE2F   Loc DATA     _Range_TakeRangeReading
+               00:EF40   Loc DATA     _Range_PID_kd
+               00:ED36   Loc DATA     _Accel_Yout
+               00:EF3C   Loc DATA     _Range_PID_ki
+               00:EE32   Loc DATA     _MotorStep
+               00:ED5E   Loc DATA     _Accel_Zout
+               00:EF46   Loc DATA     _Timer8Counter
+               00:EDCF   Loc DATA     _AccGyro_GyroAccelLPF_Contents
+               00:EE00   Loc DATA     _Gyro_Zcal
+               00:EE05   Loc DATA     _Mag_ConfigA
+               00:EE07   Loc DATA     _Mag_ConfigB
+               00:EE0B   Loc DATA     _Mag_ReadData
+               00:EE4A   Loc DATA     _Accel_YLoThres
+               00:EF0E   Loc DATA     _Accel_PID_Counter
+               00:EDFC   Loc DATA     _Gyro_Ycal
+               00:EE26   Loc DATA     _timer_us
+               00:ED86   Loc DATA     _Gyro_Xout
+               00:EDF8   Loc DATA     _Gyro_Xcal
+               00:EEA6   Loc DATA     _CF_YPitch_avg
+               00:EE9C   Loc DATA     _CF_HPF
+               00:EF30   Loc DATA     _Range_PIDErrPrev
+               00:EE28   Loc DATA     _Ping_timer
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+ml610112
+              0000EFFF   Loc NUMBER   NEAR_RAM_END
+              0000E000   Loc NUMBER   NEAR_RAM_START
+               00:74F0   Loc CODE     __wdtcounter_clear
+              000000FF   Loc NUMBER   _$$WINVAL
+               00:7FFF   Loc TABLE    _$$ROMWINEND
+               00:74D2   Loc CODE     $begin
+               00:0000   Loc TABLE    _$$ROMWINSTART
+               00:7504   Loc CODE     __init_loop
+               00:7550   Loc CODE     __init_end
+               00:74D0   Loc CODE     $$brk_reset
+               00:7510   Loc CODE     __skip
+               00:752C   Loc CODE     __init_loop2
+               00:753E   Loc CODE     __loop_by_byte
+               00:74E0   Loc CODE     __near_ram_loop
+               00:74CE   Pub CODE     $$start_up
+
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+tbc
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+timer
+               00:3696   Pub CODE     _tm_init
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+uart
+               00:0698   Pub CODE     _uart_PortSet
+               00:6286   Pub CODE     _uart_startReceive
+               00:1F74   Pub CODE     _uart_init
+               00:0C66   Pub CODE     _uart_ErrSet
+               00:41E2   Pub CODE     _uart_stop
+               00:1CF2   Pub CODE     _uart_startSend
+               00:0772   Pub CODE     _uart_continue
+               00:2366   Pub CODE     _uart_PortClear
+               00:EB76   Loc DATA     __Err_Status
+               00:EFA0   Loc DATA     __gsCtrlParam
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+atan
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xatan
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xpoly
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+sprintf_nn
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+pow
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xdunscal
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xdnorm
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xexp
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xvalues
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xdtest
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xlog
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xdint
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+atan2
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xdscale
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+sscanf_nn
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+memcpy_nf
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+errno
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xscanf_n
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xgetfld_n
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xctype
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+memchr_n
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+strchr_n
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xgetfloa
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xstod_n
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xdtento
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xgetint
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xstoul_n
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+strtol_n
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xprintf_nn
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+strcpy_nn
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+abs
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xputfld
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xldtob
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xgenld
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+strlen_f
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+ldiv
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xldunsca
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+memcpy_ff
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+memcpy_fn
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+xlitob
+
+End of mapfile.
