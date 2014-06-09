@@ -13,7 +13,7 @@
 // UPDATED:	 APRIL 11, 2014
 //*****************************************************************************
 
-#define Accel_PID_PBounds  200
+//#define Accel_PID_PBounds  200
 
 //*****************************************************************************
 // Microcontroller's connections on the LaPi Development Board
@@ -204,7 +204,8 @@
 #define FLG_SET	    ( 0x01u ) 	
 
 // SET DESIRED UART SETTINGS HERE! (Options in UART.h)
-#define UART_BAUDRATE		( UART_BR_256000BPS) 	// Data Bits Per Second - Tested at rates from 2400bps to 512000bps!
+//#define UART_BAUDRATE		( UART_BR_256000BPS) 	// Data Bits Per Second - Tested at rates from 2400bps to 512000bps!
+#define UART_BAUDRATE		( UART_BR_57600BPS) 	// Data Bits Per Second - Tested at rates from 2400bps to 512000bps!
 #define UART_DATA_LENGTH	( UART_LG_8BIT )		// x-Bit Data
 #define UART_PARITY_BIT		( UART_PT_NON )			// Parity
 #define UART_STOP_BIT		( UART_STP_1BIT )		// x Stop-Bits
@@ -315,7 +316,7 @@ static float					AccGyro_GyroScaling = 65.536;			//	0x00 = 131, 0x08 = 65.536, 0
 static unsigned char			AccGyro_GyroAccelLPF = 0x1A;			//	Address of Config for LPF for Gyro and Accel
 static unsigned char			AccGyro_GyroAccelLPF_Contents = 0x4;	//	6=5Hz, 5=10Hz, 4=21Hz (Config Low-Pass Filter for Gyro and Accel)
 static unsigned char			AccGyro_GyroAccel_SMPRTDIV = 0x19;			//	Address of Sample Rate Divider
-static unsigned char			AccGyro_GyroAccelLPF_SMPRTDIVContents = 0x31;	//	Changing SMPRT to 20Hz (decimal 49)
+static unsigned char			AccGyro_GyroAccelLPF_SMPRTDIVContents = 0x31;	//	Changing SMPRT to 20Hz (decimal 49 = 0x31) //Change to 10Hz (0x63) //30Hz = 0x20
 static unsigned char			AccGyro_INTENABLEReg = 0x38;			//	
 static unsigned char			AccGyro_INTENABLEReg_contents = 0x01;	//	Turn on Data Ready Interrupt	//Output at 83Hz
 static unsigned char			AccGYRO_Test = 0;
@@ -411,8 +412,8 @@ static float					Mag_PIDOutput = 0;
 static float					CF_Gyro_Counter = 0;
 static float					CF_YPitch = 0;
 static float					CF_XRoll = 0;
-static float					CF_HPF = 0.97; 					// = a = tau/(tau+dt) => Calibrated 3-28-2014 = 0.97 
-static float					CF_LPF = 0.03;					// = 1-a
+static float					CF_HPF = 0.92; 					// = a = tau/(tau+dt) => Calibrated 3-28-2014 = 0.97 
+static float					CF_LPF = 0.08;					// = 1-a
 static unsigned char			CF_UseFlag = 0;
 static unsigned char			CF_Counter = 0;
 
@@ -447,12 +448,15 @@ static unsigned int				Accel_PID_YPitchCounter = 0;
 static float					Accel_PID_YPitchErrSum = 0;		//Integral Error Portion of PID
 static float					Accel_PID_YPitchErrPrev = 0;	//Derivative Error Portion of PID from last measurement
 
-static float					Accel_PID_XRoll_kp = 15;			//Calibrated 3-30-2014	//0.8
-static float					Accel_PID_XRoll_ki = 8;							//0.001
-static float					Accel_PID_XRoll_kd = 1.7;							//0.5
-static float					Accel_PID_YPitch_kp = 15;
-static float					Accel_PID_YPitch_ki = 8;
-static float					Accel_PID_YPitch_kd = 1.7;
+static float					Accel_PID_XRoll_kp = 7.8;		//			//Calibrated 3-30-2014	//0.8
+static float					Accel_PID_XRoll_ki = 4;		//On other Board, I is half of P						//0.001
+static float					Accel_PID_XRoll_kd = 2;							//0.5
+static float					Accel_PID_YPitch_kp = 7.8;
+static float					Accel_PID_YPitch_ki = 4;
+static float					Accel_PID_YPitch_kd = 2;
+
+ //kp=20.000000,ki=0.000000,kd=-3.000000,a1=0.920000,a2=0.080000<0>    
+//Current Settings: kp=7.800000,ki=4.000000,kd=2.000000,a1=0.920000,a2=0.080000<0>   @10Hz
 
 unsigned char					Accel_PID_XYChangeFlag = 0;
 static unsigned int				Accel_PID_Counter = 0;
@@ -485,6 +489,8 @@ static unsigned int				Timer8Counter = 0;
 static unsigned char			RecWorld[8];
 static unsigned char			NewVar_Str[6];
 static float					NewVar;	
+
+static unsigned char			PrePIDCount = 0;
 
 //Motor Control
 static unsigned char 			PWMflag = 0;
@@ -539,9 +545,9 @@ Init:
 	
 Main_Loop:
 		SerialOutCoefficients();	//~23ms when PID is Triggered as well..13.8ms otherwise
+		PrePIDCount = 0;
 		UARTTunePID();				//Allow PID & CF Constant changes over UART
 		main_clrWDT();				//kick the dog...1.34uS duration.
-		SoftStart();				//Smoothly bring up the Motor RPM
 		
 		Accel_SavIndex = 0;			//Reset Circular Buffer for Accel/Gyro Measurements
 		Accel_RetIndex = 0;
@@ -554,6 +560,32 @@ Main_Loop:
 			Gyro_Zout[i] = 0;
 		}
 		EPB3 = 1;					//Enable Accel/Gyro Interrupt Pin
+		
+		SoftStart();				//Smoothly bring up the Motor RPM
+		while(PrePIDCount < 10){
+			if(AccGyro_ReadFlag >= 1){		//Triggered by External Interrupt (flag set in AccelGyroDataReady_ISR)
+				//LED_4 = 1;			//C2, Pin 14	//Loop Time = 1.5ms @20Hz Rate
+				Get_AccGyroData();
+				//LED_4 = 0;
+				AccGyro_ReadFlag = 0;
+			}
+			if(AccGyro_CF_FlagCounter > 0){	//This Value is incremented after Get_AccGyroData(); is called
+				//LED_2 = 1;			//B7, Pin 11	//Inside RUN_CF	//Loop Time = 13.5ms
+				Run_AccGyroCF();
+				//LED_2 = 0;
+				AccGyro_CF_FlagCounter--;	//Decremented because this value is not a static 1/0... number shows number of items in buffer that have not gone though the CF yet
+			}
+			if(Accel_PID_GoCounter>= 1){		//This increments in the Run_AccGyroCF()... I don't know if this is the best trigger.. but for now, it works.  Calls GetAccGyroData and AccGyroCF once within the routine.
+				//LED_3 = 1;		//C1, Pin 13		//Loop Time = 25.47 with UART Debugging ON... 
+				AccelSensorControlPID(); 		
+				//LED_3 = 0;
+				Accel_PID_GoCounter = 0;
+				PrePIDCount++;			//Comment this out to always loop (i.e.: no shut-down...)
+			}
+			main_clrWDT();
+		}
+		Accel_PID_XRollErrSum = 0;
+		Accel_PID_YPitchErrSum = 0;
 		
 Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014		
 		//LED_1 ^= 1;					
@@ -1126,6 +1158,7 @@ void Get_AccGyroData(void){
 
 	//Begin data... => Takes 1.3ms to gather  Raw Accel/Gyro data
 	LED_4 = 1;		//C2, Pin 14
+	LED_2 = 1;			//B7, Pin 11
 	
 	EPB3 = 0;		//Turn off Accel/Gyro Interrupt.  This can probably be removed...
 	//----- Accel/Gryo Start I2C Command ----- 
@@ -1173,8 +1206,6 @@ void Get_AccGyroData(void){
 void Run_AccGyroCF(void){
 	static int 				i = 0;
 	static char				I2CCont = 0;	
-
-	LED_2 = 1;			//B7, Pin 11
 	
 	//This section with CF math takes 12.7ms as of 3/30/2013
 	//----- Start Complementary Filter for Sensor Fusion -----
@@ -1204,20 +1235,21 @@ void Run_AccGyroCF(void){
 	if(Accel_RetIndex > 9){
 		Accel_RetIndex = 0;
 	}
+	
 	/*
-	for(i = 0; i<30; i++)
+	for(i = 0; i<50; i++)
 	{
 		SensorReturnSM[i] = 0x20;
 	}
-	sprintf(SensorReturnSM, "%f,%f", CF_XRoll, CF_YPitch);
-	SensorReturnSM[28] = 0x0D;
-	SensorReturnSM[29] = 0x0A;
+	sprintf(SensorReturnSM, "%f,%f,%f", CF_Gyro_YPitch, CF_Accel_YPitch, CF_YPitch);
+	SensorReturnSM[48] = 0x0D; 
+	SensorReturnSM[49] = 0x0A;
 	//Send Returned Sensor Output to PC!
 	//EPB3 = 0;
 	//PB3E1 = 0;
 	_flgUartFin = 0;
 	uart_stop();
-	uart_startSend(SensorReturnSM, 30, _funcUartFin);
+	uart_startSend(SensorReturnSM, 50, _funcUartFin);
 	while(_flgUartFin != 1){
 		main_clrWDT();
 		//I2CCont = uart_continue();
@@ -1226,9 +1258,10 @@ void Run_AccGyroCF(void){
 		//}
 	}
 	*/
+	
 	//AccGyro_CF_FlagCounter++;
 	Accel_PID_GoCounter++;		//Counts up to 4 to trigger the PID loop to start.
-	LED_2 = 0;			//B7, Pin 11
+	//LED_2 = 0;			//B7, Pin 11
 }
 
 
@@ -1354,6 +1387,7 @@ Delay (500 ms)
 void CalibrateMotors(void){
 int i;
 	//Return Start Calibration Message
+	/*
 	for(i = 0; i<150; i++)
 	{
 		SensorReturn[i] = 0x20;
@@ -1390,7 +1424,6 @@ int i;
 	//LED_4 = 0;
 	main_clrWDT();
 	
-	
 	//Set Min PWM for 3 secs
 	PFRUN = 0;
 	PERUN = 0;
@@ -1408,6 +1441,7 @@ int i;
 	PCRUN = 1;
 	
 	NOP(3);
+	*/
 	
 	//Adjust PWM to Safe Level just below the "motor on" point
 	PFRUN = 0;
@@ -1431,6 +1465,7 @@ int i;
 	Accel_PID_YPitchCounter = 0;
 	Range_PIDCounter = 0;
 	
+	/*
 	//Return Calibration Complete Message
 	for(i = 0; i<150; i++)
 	{
@@ -1447,6 +1482,7 @@ int i;
 		NOP1000();
 		main_clrWDT();
 	}
+	*/
 }
 
 //----- Calibrate Accel/Gyro -----
@@ -1479,29 +1515,40 @@ int i;
 		main_clrWDT();
 	}
 	
+	i = 0;
 	//Obtain the Data! Loop to average (10 Times)
-	for(i = 0; i<10; i++){
-		//EPB3 = 0;
-		//PB3E1 = 0;
-		//----- Accel/Gryo Start I2C Command ----- 
-		_flgI2CFin = 0;																	//reset I2C completed Flag
-		i2c_stop();																		//Make sure I2C is not currently running
-		I20MD = 1;		//Switch to I2C Fast Operation (400kbps)
-		i2c_startReceive(MPU6050Address, &AccGyro_ReadData, 1, &AccGyro_Data, 14, (cbfI2c)_funcI2CFin);	//Begin I2C Receive Command
-		while(_flgI2CFin != 1){															//Wait for I2C commands to finish transfer
-			main_clrWDT();	
+	EPB3 = 1;					//Enable Accel/Gyro Interrupt Pin
+	while(i < 10){
+		if(AccGyro_ReadFlag >= 1){		//Triggered by External Interrupt (flag set in AccelGyroDataReady_ISR)
+			//EPB3 = 0;
+			//PB3E1 = 0;
+			//----- Accel/Gryo Start I2C Command ----- 
+			_flgI2CFin = 0;																	//reset I2C completed Flag
+			i2c_stop();																		//Make sure I2C is not currently running
+			I20MD = 1;		//Switch to I2C Fast Operation (400kbps)
+			i2c_startReceive(MPU6050Address, &AccGyro_ReadData, 1, &AccGyro_Data, 14, (cbfI2c)_funcI2CFin);	//Begin I2C Receive Command
+			while(_flgI2CFin != 1){															//Wait for I2C commands to finish transfer
+				main_clrWDT();	
+			}
+			//----- End Accel/Gyro I2C RX Command -----
+			//EPB3 = 1;
+			//PB3E1 = 1;
+			Gyro_Xcal += (AccGyro_Data[8]<<8)+(AccGyro_Data[9]);
+			Gyro_Ycal += (AccGyro_Data[10]<<8)+(AccGyro_Data[11]);
+			Gyro_Zcal += (AccGyro_Data[12]<<8)+(AccGyro_Data[13]);
+			Accel_Xcal[0] += (AccGyro_Data[0]<<8)+(AccGyro_Data[1]);
+			Accel_Ycal[0] += (AccGyro_Data[2]<<8)+(AccGyro_Data[3]);
+			i++;
 		}
-		//----- End Accel/Gyro I2C RX Command -----
-		//EPB3 = 1;
-		//PB3E1 = 1;
-		Gyro_Xcal += (AccGyro_Data[8]<<8)+(AccGyro_Data[9]);
-		Gyro_Ycal += (AccGyro_Data[10]<<8)+(AccGyro_Data[11]);
-		Gyro_Zcal += (AccGyro_Data[12]<<8)+(AccGyro_Data[13]);
 	}
 	Gyro_Xcal /= 10;
 	Gyro_Ycal /= 10;
 	Gyro_Zcal /= 10;
+	Accel_Xcal[0] /= 10;
+	Accel_Ycal[0] /= 10;
+	EPB3 = 0;					//Enable Accel/Gyro Interrupt Pin
 	
+	/*
 	for(i = 0; i<10; i++){
 		//EPB3 = 0;
 		//PB3E1 = 0;
@@ -1522,6 +1569,7 @@ int i;
 	}
 	Accel_Xcal[0] /= 10;
 	Accel_Ycal[0] /= 10;
+	*/
 	
 	//Return Calibration Complete Message
 	for(i = 0; i<150; i++)
@@ -1800,6 +1848,24 @@ UARTTunePID:
 		}
 */
 		
+		if(RecWorld[0] == 0x6B){			//if RECWORLD == "kpi"
+			if(RecWorld[1] == 0x70){
+				if(RecWorld[1] == 0x69){
+					NewVar_Str[0] = RecWorld[2];
+					NewVar_Str[1] = RecWorld[3];
+					NewVar_Str[2] = RecWorld[4];
+					NewVar_Str[3] = RecWorld[5];
+					NewVar_Str[4] = RecWorld[6];
+					NewVar_Str[5] = RecWorld[7];
+					sscanf(NewVar_Str, "%f", &NewVar);
+					Accel_PID_XRoll_kp = NewVar;
+					Accel_PID_YPitch_kp = NewVar;
+					Accel_PID_XRoll_ki = NewVar/2;
+					Accel_PID_YPitch_ki = NewVar/2;
+				}
+			}
+		}
+		
 		if(RecWorld[0] == 0x6B){			//if RECWORLD == "kp"
 			if(RecWorld[1] == 0x70){
 				NewVar_Str[0] = RecWorld[2];
@@ -1811,6 +1877,8 @@ UARTTunePID:
 				sscanf(NewVar_Str, "%f", &NewVar);
 				Accel_PID_XRoll_kp = NewVar;
 				Accel_PID_YPitch_kp = NewVar;
+				//Accel_PID_XRoll_ki = NewVar/2;
+				//Accel_PID_YPitch_ki = NewVar/2;
 			}
 		}
 		
@@ -1897,7 +1965,7 @@ void SoftStart(void)
 {
 		//Build a Soft Start Here...
 		//9500; 8450
-		while(PWED < PWMLowerDutyLimitRun){
+		while(PWED < PWMIdleDutyRun){
 			NOPms(50);
 			PFRUN = 0;	//Turn OFF PWM
 			PERUN = 0;
@@ -2271,6 +2339,7 @@ void AccelSensorControlPID(void){
 		//Converting so SP = 0 to find the "P" portion of PID
 		//Accel_PID_XRollError = Accel_PID_XRollSetpointPrime-CF_XRoll;	//Setpoint - Error (in this case setpoint is 0)
 		Accel_PID_XRollError = -CF_XRoll;	//Setpoint - Error (in this case setpoint is 0)
+		#ifdef Accel_PID_PBounds
 		if(Accel_PID_XRollError > Accel_PID_PBounds)
 		{
 			Accel_PID_XRollError = Accel_PID_PBounds;
@@ -2279,6 +2348,7 @@ void AccelSensorControlPID(void){
 		{
 			Accel_PID_XRollError = -Accel_PID_PBounds;
 		}
+		#endif
 		
 		//Get current counter and reset variable...
 		Accel_PID_XRollCurrentCount = Accel_PID_XRollCounter * .001;	//Timer in Seconds
@@ -2400,6 +2470,7 @@ void AccelSensorControlPID(void){
 		//Converting so SP = 0 to find the "P" portion of PID
 		//Accel_PID_YPitchError = Accel_PID_YPitchSetpointPrime-CF_YPitch;		//Setpoint - Error (in this case setpoint is 0)
 		Accel_PID_YPitchError = -CF_YPitch;		//Setpoint - Error (in this case setpoint is 0)
+		#ifdef Accel_PID_PBounds
 		if(Accel_PID_YPitchError > Accel_PID_PBounds)
 		{
 			Accel_PID_YPitchError = Accel_PID_PBounds;
@@ -2408,6 +2479,7 @@ void AccelSensorControlPID(void){
 		{
 			Accel_PID_YPitchError = -Accel_PID_PBounds;
 		}
+		#endif
 		
 		//Get current counter and reset variable...
 		Accel_PID_YPitchCurrentCount = Accel_PID_YPitchCounter * .001;		//Timer in Seconds
@@ -2462,19 +2534,27 @@ void AccelSensorControlPID(void){
 		
 		//if PID output is negative, we want to Pitch Backwards (Increase Motors 1,2) (F0,E)
 		//if PID output is positive, we want to Pitch Forwards (Increase Motors 3,4) (C,D)
-		PFRUN = 0;	//Turn OFF PWM
-		PERUN = 0;
-		PDRUN = 0;
-		PCRUN = 0;
-		PWF0D = PWMIdleDutyRun - Accel_PID_XRollOutput + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
-		PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + Accel_PID_YPitchOutput;	
-		PWCD = PWMIdleDutyRun + Accel_PID_XRollOutput - Accel_PID_YPitchOutput;	
-		PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput - Accel_PID_YPitchOutput;
-		CheckSafetyLimit();
-		PFRUN = 1;	//Turn ON PWM
-		PERUN = 1;
-		PDRUN = 1;
-		PCRUN = 1;
+		
+		if(PrePIDCount >= 10){
+			PFRUN = 0;	//Turn OFF PWM
+			PERUN = 0;
+			PDRUN = 0;
+			PCRUN = 0;
+			//PWF0D = PWMIdleDutyRun - Accel_PID_XRollOutput + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
+			//PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + Accel_PID_YPitchOutput;	
+			//PWCD = PWMIdleDutyRun + Accel_PID_XRollOutput - Accel_PID_YPitchOutput;	
+			//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput - Accel_PID_YPitchOutput;
+			PWF0D = PWMIdleDutyRun + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
+			PWED = PWMIdleDutyRun + Accel_PID_XRollOutput;	
+			PWCD = PWMIdleDutyRun - Accel_PID_YPitchOutput;	
+			PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput;
+			CheckSafetyLimit();
+			PFRUN = 1;	//Turn ON PWM
+			PERUN = 1;
+			PDRUN = 1;
+			PCRUN = 1;
+		}
+		
 		//Accel_PID_XYChangeFlag = 0;
 		
 		//Stuff data into array to check validity... (3/31/2014)
@@ -2493,7 +2573,7 @@ void AccelSensorControlPID(void){
 		*/
 	//}
 	
-	
+	/*
 	//SensorReturnSM
 	for(i = 0; i<50; i++)
 	{
@@ -2515,7 +2595,7 @@ void AccelSensorControlPID(void){
 	while(_flgUartFin != 1){
 		main_clrWDT();
 	}
-	
+	*/
 	/*
 	//Sensor Return Long! --------------------
 	for(i = 0; i<200; i++)
@@ -2550,6 +2630,7 @@ void AccelSensorControlPID(void){
 	*/
 	//----- End Accelerometer PID Loop ----- 
 	LED_3 = 0;		//C1, Pin 13
+	LED_2 = 0;			//B7, Pin 11
 }
 
 void RangeSensorControlPID(void){
