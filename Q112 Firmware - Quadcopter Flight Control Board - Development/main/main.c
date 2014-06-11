@@ -14,6 +14,8 @@
 //*****************************************************************************
 
 //#define Accel_PID_PBounds  200
+#define Accel_PID_IBounds  200
+//#define MotorToRPMCal 1
 
 //*****************************************************************************
 // Microcontroller's connections on the LaPi Development Board
@@ -448,9 +450,11 @@ static unsigned int				Accel_PID_YPitchCounter = 0;
 static float					Accel_PID_YPitchErrSum = 0;		//Integral Error Portion of PID
 static float					Accel_PID_YPitchErrPrev = 0;	//Derivative Error Portion of PID from last measurement
 
-static float					Accel_PID_XRoll_kp = 7.8;		//			//Calibrated 3-30-2014	//0.8
-static float					Accel_PID_XRoll_ki = 4;		//On other Board, I is half of P						//0.001
-static float					Accel_PID_XRoll_kd = 2;							//0.5
+static float					Accel_PID_XRoll_kp = 7.8; //13;		//			//Calibrated 3-30-2014	//0.8
+static float					Accel_PID_XRoll_ki = 4; //6.1;		//On other Board, I is half of P						//0.001
+static float					Accel_PID_XRoll_kd = 2; //2.9;							//0.5
+
+//Tuned for SC Quad
 static float					Accel_PID_YPitch_kp = 7.8;
 static float					Accel_PID_YPitch_ki = 4;
 static float					Accel_PID_YPitch_kd = 2;
@@ -489,7 +493,9 @@ static unsigned int				Timer8Counter = 0;
 static unsigned char			RecWorld[8];
 static unsigned char			NewVar_Str[6];
 static float					NewVar;	
-
+#ifdef MotorToRPMCal
+static int				MotorCalib = 0;
+#endif
 static unsigned char			PrePIDCount = 0;
 
 //Motor Control
@@ -511,6 +517,13 @@ static unsigned int 			PWMLowerDutyLimitRun = 8500;			//Value for Minimum Duty	/
 																		//12000 duty	=	6700rpm
 																		//13000 duty	=	7780rpm
 
+																		//Motor Offsets: Motor 1 MIN:5201 MAX: 5245
+																		//Motor 2: 5271 @ -100 offset, 5100 @ -150... Thus 5200 @ -120
+																		//Motor 3: 5274 @ -50, 5200 @ -100
+																		//Motor 4: 5155 @ 0, 5200 @ +50
+static unsigned int				PWMtoRPMOffset_Mot2 = -120;		
+static unsigned int				PWMtoRPMOffset_Mot3 = -100;																		
+static unsigned int				PWMtoRPMOffset_Mot4 = 50;																		
 /*############################################################################*/
 /*#                                  APIs                                    #*/
 /*############################################################################*/
@@ -542,6 +555,9 @@ Init:
 			Accel_Ycal[0] = ?
 			Accel_Zcal[0] = ?
 			*/
+		#ifdef MotorToRPMCal
+		MotorCalib = 0;
+		#endif
 	
 Main_Loop:
 		SerialOutCoefficients();	//~23ms when PID is Triggered as well..13.8ms otherwise
@@ -561,6 +577,7 @@ Main_Loop:
 		}
 		EPB3 = 1;					//Enable Accel/Gyro Interrupt Pin
 		
+		#ifndef MotorToRPMCal
 		SoftStart();				//Smoothly bring up the Motor RPM
 		while(PrePIDCount < 10){
 			if(AccGyro_ReadFlag >= 1){		//Triggered by External Interrupt (flag set in AccelGyroDataReady_ISR)
@@ -586,11 +603,16 @@ Main_Loop:
 		}
 		Accel_PID_XRollErrSum = 0;
 		Accel_PID_YPitchErrSum = 0;
+		#endif
 		
 Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014		
 		//LED_1 ^= 1;					
 		main_clrWDT();				//kick the dog...1.34uS duration
 		ClearVariables();			//Fresh start each loop...
+		
+		#ifdef MotorToRPMCal
+		NOPms(500);
+		#endif
 		
 		/*
 		if(Mag_PIDCounter>14){		//Counter++ @ 125us, need 14ms, thus 112*125us = 14ms //Counter Reset in Mag PID Loop and incremented in TMR89_ISR
@@ -612,6 +634,7 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 		}			
 		*/
 		
+		#ifndef MotorToRPMCal
 		if(AccGyro_ReadFlag >= 1){		//Triggered by External Interrupt (flag set in AccelGyroDataReady_ISR)
 			//LED_4 = 1;			//C2, Pin 14	//Loop Time = 1.5ms @20Hz Rate
 			Get_AccGyroData();
@@ -631,6 +654,7 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 			Accel_PID_GoCounter = 0;
 			TestingEndTimer++;			//Comment this out to always loop (i.e.: no shut-down...)
 		}
+		#endif
 		
 		/*
 		if(Range_PIDCounter>63){	//Counter++ @ 125us, need 63ms, thus 504*125us = 63ms ///Counter Reset in Range PID Loop and incremented in TMR89_ISR
@@ -649,7 +673,9 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 		
 		//Motor Run Time...
 		if(TestingEndTimer < 500){		//50 == 3secs = 250 = 15 seconds
-			//TestingEndTimer++;			//Comment this out to always loop (i.e.: no shut-down...)
+			#ifdef MotorToRPMCal
+			TestingEndTimer++;			//Comment this out to always loop (i.e.: no shut-down...)
+			#endif
 			goto Fast_Loop;
 		}
 		else{
@@ -1804,6 +1830,22 @@ UARTTunePID:
 			main_clrWDT();
 		}
 
+		#ifdef MotorToRPMCal
+		PFRUN = 0;	//Turn OFF PWM
+		PERUN = 0;
+		PDRUN = 0;
+		PCRUN = 0;
+		PWF0D = PWMIdleDutyRun; 		//Can't be running to change (Only this variable)
+		PWED = PWMIdleDutyRun - 120;	
+		PWCD = PWMIdleDutyRun - 100;	
+		PWDD = PWMIdleDutyRun + 50;
+		CheckSafetyLimit();
+		PFRUN = 1;	//Turn ON PWM
+		PERUN = 1;
+		PDRUN = 1;
+		PCRUN = 1;
+		#endif
+		
 /*
 		if(RecWorld[0] == 0x44){			//if RECWORLD == "DD" for Data Dump
 			if(RecWorld[1] == 0x44){
@@ -1850,7 +1892,7 @@ UARTTunePID:
 		
 		if(RecWorld[0] == 0x6B){			//if RECWORLD == "kpi"
 			if(RecWorld[1] == 0x70){
-				if(RecWorld[1] == 0x69){
+				if(RecWorld[2] == 0x69){
 					NewVar_Str[0] = RecWorld[2];
 					NewVar_Str[1] = RecWorld[3];
 					NewVar_Str[2] = RecWorld[4];
@@ -1874,11 +1916,36 @@ UARTTunePID:
 				NewVar_Str[3] = RecWorld[5];
 				NewVar_Str[4] = RecWorld[6];
 				NewVar_Str[5] = RecWorld[7];
+				#ifndef MotorToRPMCal
 				sscanf(NewVar_Str, "%f", &NewVar);
 				Accel_PID_XRoll_kp = NewVar;
 				Accel_PID_YPitch_kp = NewVar;
+				#endif
+				
 				//Accel_PID_XRoll_ki = NewVar/2;
 				//Accel_PID_YPitch_ki = NewVar/2;
+
+				#ifdef MotorToRPMCal
+				MotorCalib += 50;
+				PFRUN = 0;	//Turn OFF PWM
+				PERUN = 0;
+				PDRUN = 0;
+				PCRUN = 0;
+				//PWF0D = PWMIdleDutyRun - Accel_PID_XRollOutput + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
+				//PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + Accel_PID_YPitchOutput;	
+				//PWCD = PWMIdleDutyRun + Accel_PID_XRollOutput - Accel_PID_YPitchOutput;	
+				//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput - Accel_PID_YPitchOutput;
+				//PWF0D += 20; 		//Can't be running to change (Only this variable)
+				//PWED += MotorCalib;	
+				//PWCD += MotorCalib;	
+				PWDD += MotorCalib;
+				CheckSafetyLimit();
+				PFRUN = 1;	//Turn ON PWM
+				PERUN = 1;
+				PDRUN = 1;
+				PCRUN = 1;
+				#endif
+				
 			}
 		}
 		
@@ -1890,9 +1957,32 @@ UARTTunePID:
 				NewVar_Str[3] = RecWorld[5];
 				NewVar_Str[4] = RecWorld[6];
 				NewVar_Str[5] = RecWorld[7];
+				#ifndef MotorToRPMCal
 				sscanf(NewVar_Str, "%f", &NewVar);
 				Accel_PID_XRoll_ki = NewVar;
 				Accel_PID_YPitch_ki = NewVar;
+				#endif
+				
+				#ifdef MotorToRPMCal
+				MotorCalib -= 50;
+				PFRUN = 0;	//Turn OFF PWM
+				PERUN = 0;
+				PDRUN = 0;
+				PCRUN = 0;
+				//PWF0D = PWMIdleDutyRun - Accel_PID_XRollOutput + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
+				//PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + Accel_PID_YPitchOutput;	
+				//PWCD = PWMIdleDutyRun + Accel_PID_XRollOutput - Accel_PID_YPitchOutput;	
+				//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput - Accel_PID_YPitchOutput;
+				//PWF0D -= 20; 		//Can't be running to change (Only this variable)
+				//PWED += MotorCalib;	
+				//PWCD += MotorCalib;	
+				PWDD += MotorCalib;
+				CheckSafetyLimit();
+				PFRUN = 1;	//Turn ON PWM
+				PERUN = 1;
+				PDRUN = 1;
+				PCRUN = 1;
+				#endif
 			}
 		}
 		
@@ -1964,8 +2054,11 @@ UARTTunePID:
 void SoftStart(void)
 {
 		//Build a Soft Start Here...
-		//9500; 8450
-		while(PWED < PWMIdleDutyRun){
+		PWED += PWMtoRPMOffset_Mot2;	
+		PWCD += PWMtoRPMOffset_Mot3;	
+		PWDD += PWMtoRPMOffset_Mot4;
+		
+		while(PWF0D < PWMIdleDutyRun){
 			NOPms(50);
 			PFRUN = 0;	//Turn OFF PWM
 			PERUN = 0;
@@ -2356,6 +2449,16 @@ void AccelSensorControlPID(void){
 		
 		//Calculating the "I" portion of PID
 		Accel_PID_XRollErrSum += (Accel_PID_XRollError * Accel_PID_XRollCurrentCount);
+		#ifdef Accel_PID_IBounds
+		if(Accel_PID_XRollErrSum > Accel_PID_IBounds)
+		{
+			Accel_PID_XRollErrSum = Accel_PID_IBounds;
+		}
+		if(Accel_PID_XRollErrSum < -Accel_PID_IBounds)
+		{
+			Accel_PID_XRollErrSum = -Accel_PID_IBounds;
+		}
+		#endif
 		
 		//Calculating the "D" portion of PID
 		Accel_PID_XRolldErr = (Accel_PID_XRollError -  Accel_PID_XRollErrPrev);
@@ -2488,6 +2591,16 @@ void AccelSensorControlPID(void){
 		
 		//Calculating the "I" portion of PID
 		Accel_PID_YPitchErrSum += (Accel_PID_YPitchError * Accel_PID_YPitchCurrentCount);
+		#ifdef Accel_PID_IBounds
+		if(Accel_PID_YPitchErrSum > Accel_PID_IBounds)
+		{
+			Accel_PID_YPitchErrSum = Accel_PID_IBounds;
+		}
+		if(Accel_PID_YPitchErrSum < -Accel_PID_IBounds)
+		{
+			Accel_PID_YPitchErrSum = -Accel_PID_IBounds;
+		}
+		#endif
 		
 		//Calculating the "D" portion of PID
 		Accel_PID_YPitchdErr = (Accel_PID_YPitchError -  Accel_PID_YPitchErrPrev);
@@ -2545,9 +2658,17 @@ void AccelSensorControlPID(void){
 			//PWCD = PWMIdleDutyRun + Accel_PID_XRollOutput - Accel_PID_YPitchOutput;	
 			//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput - Accel_PID_YPitchOutput;
 			PWF0D = PWMIdleDutyRun + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
+			
+			PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + PWMtoRPMOffset_Mot2;	
+			PWCD = PWMIdleDutyRun - Accel_PID_YPitchOutput + PWMtoRPMOffset_Mot3;	
+			PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
+			
+			/*
 			PWED = PWMIdleDutyRun + Accel_PID_XRollOutput;	
 			PWCD = PWMIdleDutyRun - Accel_PID_YPitchOutput;	
 			PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput;
+			*/
+			
 			CheckSafetyLimit();
 			PFRUN = 1;	//Turn ON PWM
 			PERUN = 1;
