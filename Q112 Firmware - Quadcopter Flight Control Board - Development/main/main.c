@@ -13,10 +13,19 @@
 // UPDATED:	 APRIL 11, 2014
 //*****************************************************************************
 
-#define Accel_PID_PBounds  100
-#define Accel_PID_DBounds  3000
+//Debugging Strings
+#define _PIDPBoundsEN			(1)
+#define _PIDDBoundsEN			(1)
 
-#define IenterThres	3
+//Constants
+#define PIDPBounds			(100)
+#define PIDDBounds			(100)
+
+#define Accel_SetKp			0	
+#define Accel_SetKi			0
+#define Accel_SetKd			0
+
+#define IenterThres	1
 #define DenterThres 1
 
 //*****************************************************************************
@@ -459,12 +468,12 @@ static float					Accel_PID_YPitchErrPrev = 0;	//Derivative Error Portion of PID 
 static float					Accel_PID_XRolldErr = 0;
 static float					Accel_PID_YPitchdErr = 0;	
 
-static float					Accel_PID_XRoll_kp = 0;		//			//Calibrated 3-30-2014	//0.8
-static float					Accel_PID_XRoll_ki = 0;		//On other Board, I is half of P						//0.001
-static float					Accel_PID_XRoll_kd = 0;//5;							//0.5
-static float					Accel_PID_YPitch_kp = 0;
-static float					Accel_PID_YPitch_ki = 0;
-static float					Accel_PID_YPitch_kd = 0;
+static float					Accel_PID_XRoll_kp = Accel_SetKp;		//			//Calibrated 3-30-2014	//0.8
+static float					Accel_PID_XRoll_ki = Accel_SetKi;		//On other Board, I is half of P						//0.001
+static float					Accel_PID_XRoll_kd = Accel_SetKd;//5;							//0.5
+static float					Accel_PID_YPitch_kp = Accel_SetKp;
+static float					Accel_PID_YPitch_ki = Accel_SetKi;
+static float					Accel_PID_YPitch_kd = Accel_SetKd;
 
 static unsigned char			Accel_PID_IFlag = 0;
 static unsigned char			Accel_PID_DFlag = 0;
@@ -502,6 +511,10 @@ static unsigned int				Timer8Counter = 0;
 static unsigned char			RecWorld[8];
 static unsigned char			NewVar_Str[6];
 static float					NewVar;	
+static int						Accel_PID_PBounds_Var_Pos = PIDPBounds;
+static int						Accel_PID_DBounds_Var_Pos = PIDDBounds;
+static int						Accel_PID_PBounds_Var_Neg = -PIDPBounds;
+static int						Accel_PID_DBounds_Var_Neg = -PIDDBounds;
 
 static unsigned char			PrePIDCount = 0;
 
@@ -1805,7 +1818,7 @@ void SerialOutCoefficients(void)
 			SensorReturn[j] = 0x20;
 		}
 		//sprintf(SensorReturn, "%f,%f,%f,%f,%f,%f,%f,%f,%f", Accel_Xout, Accel_Yout, Accel_Zout, Gyro_Xout, Gyro_Yout, Gyro_Zout, Mag_Angle,Range_out,Ping_out);
-		sprintf(SensorReturn, "Current Settings: kp=%f,ki=%f,kd=%f,a1=%f,a2=%f", Accel_PID_XRoll_kp, Accel_PID_XRoll_ki, Accel_PID_XRoll_kd, CF_HPF, CF_LPF);
+		sprintf(SensorReturn, "Current Settings: kp=%f,ki=%f,kd=%f,a1=%f,a2=%f,Pb=%u,Db=%u", Accel_PID_XRoll_kp, Accel_PID_XRoll_ki, Accel_PID_XRoll_kd, CF_HPF, CF_LPF,Accel_PID_PBounds_Var_Pos,Accel_PID_DBounds_Var_Pos);
 		
 		SensorReturn[148] = 0x0D;	//CR
 		SensorReturn[149] = 0x0A;	//LF
@@ -1888,21 +1901,49 @@ UARTTunePID:
 		}
 */
 		
-		if(RecWorld[0] == 0x6B){			//if RECWORLD == "kpi"
-			if(RecWorld[1] == 0x70){
-				if(RecWorld[1] == 0x69){
-					NewVar_Str[0] = RecWorld[2];
-					NewVar_Str[1] = RecWorld[3];
-					NewVar_Str[2] = RecWorld[4];
-					NewVar_Str[3] = RecWorld[5];
-					NewVar_Str[4] = RecWorld[6];
-					NewVar_Str[5] = RecWorld[7];
-					sscanf(NewVar_Str, "%f", &NewVar);
-					Accel_PID_XRoll_kp = NewVar;
-					Accel_PID_YPitch_kp = NewVar;
-					Accel_PID_XRoll_ki = NewVar/2;
-					Accel_PID_YPitch_ki = NewVar/2;
-				}
+		if(RecWorld[0] == 0x70){		//if RECWORLD == "pi"
+			if(RecWorld[1] == 0x69){
+				NewVar_Str[0] = RecWorld[2];
+				NewVar_Str[1] = RecWorld[3];
+				NewVar_Str[2] = RecWorld[4];
+				NewVar_Str[3] = RecWorld[5];
+				NewVar_Str[4] = RecWorld[6];
+				NewVar_Str[5] = RecWorld[7];
+				sscanf(NewVar_Str, "%f", &NewVar);
+				Accel_PID_XRoll_kp = NewVar;
+				Accel_PID_YPitch_kp = NewVar;
+				Accel_PID_XRoll_ki = NewVar/2;
+				Accel_PID_YPitch_ki = NewVar/2;
+			}
+		}
+		
+		if(RecWorld[0] == 0x70){		//if RECWORLD == "pb"
+			if(RecWorld[1] == 0x62){
+				NewVar_Str[0] = RecWorld[2];
+				NewVar_Str[1] = RecWorld[3];
+				NewVar_Str[2] = RecWorld[4];
+				NewVar_Str[3] = RecWorld[5];
+				NewVar_Str[4] = RecWorld[6];
+				NewVar_Str[5] = RecWorld[7];
+				sscanf(NewVar_Str, "%f", &NewVar);
+				Accel_PID_PBounds_Var_Pos = NewVar;
+				Accel_PID_PBounds_Var_Neg = -1* NewVar;
+				
+			}
+		}
+		
+		if(RecWorld[0] == 0x64){			//if RECWORLD == "db"
+			if(RecWorld[1] == 0x62){
+				NewVar_Str[0] = RecWorld[2];
+				NewVar_Str[1] = RecWorld[3];
+				NewVar_Str[2] = RecWorld[4];
+				NewVar_Str[3] = RecWorld[5];
+				NewVar_Str[4] = RecWorld[6];
+				NewVar_Str[5] = RecWorld[7];
+				sscanf(NewVar_Str, "%f", &NewVar);
+				Accel_PID_DBounds_Var_Pos = NewVar;
+				Accel_PID_DBounds_Var_Neg = -1 * NewVar;
+				
 			}
 		}
 		
@@ -1917,8 +1958,6 @@ UARTTunePID:
 				sscanf(NewVar_Str, "%f", &NewVar);
 				Accel_PID_XRoll_kp = NewVar;
 				Accel_PID_YPitch_kp = NewVar;
-				//Accel_PID_XRoll_ki = NewVar/2;
-				//Accel_PID_YPitch_ki = NewVar/2;
 			}
 		}
 		
@@ -1983,7 +2022,7 @@ UARTTunePID:
 			SensorReturn[k] = 0x20;
 		}
 		//sprintf(SensorReturn, "%f,%f,%f,%f,%f,%f,%f,%f,%f", Accel_Xout, Accel_Yout, Accel_Zout, Gyro_Xout, Gyro_Yout, Gyro_Zout, Mag_Angle,Range_out,Ping_out);
-		sprintf(SensorReturn, "New Settings: kp=%f,ki=%f,kd=%f,a1=%f,a2=%f", Accel_PID_XRoll_kp, Accel_PID_XRoll_ki, Accel_PID_XRoll_kd, CF_HPF, CF_LPF);
+		sprintf(SensorReturn, "    New Settings: kp=%f,ki=%f,kd=%f,a1=%f,a2=%f,Pb=%u,Db=%u", Accel_PID_XRoll_kp, Accel_PID_XRoll_ki, Accel_PID_XRoll_kd, CF_HPF, CF_LPF,Accel_PID_PBounds_Var_Pos,Accel_PID_DBounds_Var_Pos);
 		
 		SensorReturn[148] = 0x0D;	//CR
 		SensorReturn[149] = 0x0A;	//LF
@@ -2362,8 +2401,8 @@ void AccelSensorControlPID_P(void){
 	
 		//Calculating the "P" portion of PID
 		Accel_PID_XRollError = -CF_XRoll;	//Setpoint - Error (in this case setpoint is 0)
-		#ifdef Accel_PID_PBounds
-		if((-Accel_PID_PBounds < Accel_PID_XRollError) && (Accel_PID_XRollError < Accel_PID_DBounds))
+		#ifdef _PIDPBoundsEN
+		if((Accel_PID_PBounds_Var_Neg < Accel_PID_XRollError) && (Accel_PID_XRollError < Accel_PID_PBounds_Var_Pos))
 		{
 			Accel_PID_XRollError = 0;
 		}
@@ -2372,20 +2411,21 @@ void AccelSensorControlPID_P(void){
 		//Calculating PID Output
 		Accel_PID_XRollOutput = (Accel_PID_XRoll_kp*Accel_PID_XRollError);
 		Accel_PID_XRollOutput += (Accel_PID_XRoll_ki*Accel_PID_XRollErrSum);
-		Accel_PID_XRollOutput += (Accel_PID_XRoll_kd*Accel_PID_XRolldErr);
+		//Accel_PID_XRollOutput += (Accel_PID_XRoll_kd*Accel_PID_XRolldErr);	//Commented this out, because D portion needs to be independent (Burst output, compensate using Increased D value)
 		
 		//Converting so SP = 0 to 
 		//Find the "P" portion of PID
 		Accel_PID_YPitchError = -CF_YPitch;		//Setpoint - Error (in this case setpoint is 0)
-		#ifdef Accel_PID_PBounds
-		if((-Accel_PID_PBounds < Accel_PID_XRollError) && (Accel_PID_XRollError < Accel_PID_DBounds))
+		#ifdef _PIDPBoundsEN
+		if((Accel_PID_PBounds_Var_Neg < Accel_PID_YPitchError) && (Accel_PID_YPitchError < Accel_PID_PBounds_Var_Pos))
 		{
-			Accel_PID_XRollError = 0;
+			Accel_PID_YPitchError = 0;
 		}
 		#endif
 		
 		//Calculating PID Output
-		Accel_PID_YPitchOutput = (Accel_PID_YPitch_kp*Accel_PID_YPitchError) + (Accel_PID_YPitch_ki*Accel_PID_YPitchErrSum) + (Accel_PID_YPitch_kd*Accel_PID_YPitchdErr);
+		//Accel_PID_YPitchOutput = (Accel_PID_YPitch_kp*Accel_PID_YPitchError) + (Accel_PID_YPitch_ki*Accel_PID_YPitchErrSum) + (Accel_PID_YPitch_kd*Accel_PID_YPitchdErr);
+		Accel_PID_YPitchOutput = (Accel_PID_YPitch_kp*Accel_PID_YPitchError) + (Accel_PID_YPitch_ki*Accel_PID_YPitchErrSum);
 		
 		if(PrePIDCount >= 10){
 			PFRUN = 0;	//Turn OFF PWM
@@ -2465,7 +2505,7 @@ int i;
 		//Calculating PID Output
 		Accel_PID_XRollOutput = (Accel_PID_XRoll_kp*Accel_PID_XRollError);
 		Accel_PID_XRollOutput += (Accel_PID_XRoll_ki*Accel_PID_XRollErrSum);
-		Accel_PID_XRollOutput += (Accel_PID_XRoll_kd*Accel_PID_XRolldErr);
+		//Accel_PID_XRollOutput += (Accel_PID_XRoll_kd*Accel_PID_XRolldErr);
 	
 		
 		//Get current counter and reset variable...
@@ -2478,6 +2518,7 @@ int i;
 		
 		//Calculating PID Output
 		Accel_PID_YPitchOutput = (Accel_PID_YPitch_kp*Accel_PID_YPitchError) + (Accel_PID_YPitch_ki*Accel_PID_YPitchErrSum) + (Accel_PID_YPitch_kd*Accel_PID_YPitchdErr);
+		Accel_PID_YPitchOutput = (Accel_PID_YPitch_kp*Accel_PID_YPitchError) + (Accel_PID_YPitch_ki*Accel_PID_YPitchErrSum);
 		
 		if(PrePIDCount >= 10){
 			PFRUN = 0;	//Turn OFF PWM
@@ -2558,8 +2599,8 @@ int i;
 		Accel_PID_XRolldErr	/= Accel_PID_XRollCurrentCount;
 		Accel_PID_XRollErrPrev = Accel_PID_XRollError;
 		 
-		#ifdef Accel_PID_DBounds
-		if((-Accel_PID_DBounds < Accel_PID_XRollErrPrev) && (Accel_PID_XRollErrPrev < Accel_PID_DBounds))
+		#ifdef _PIDDBoundsEN
+		if((Accel_PID_DBounds_Var_Neg < Accel_PID_XRollErrPrev) && (Accel_PID_XRollErrPrev < Accel_PID_DBounds_Var_Pos))
 		{
 			Accel_PID_XRollErrPrev = 0;
 		}
@@ -2580,10 +2621,10 @@ int i;
 		Accel_PID_YPitchdErr = (Accel_PID_YPitchError -  Accel_PID_YPitchErrPrev);
 		Accel_PID_YPitchdErr /= Accel_PID_YPitchCurrentCount;
 		Accel_PID_YPitchErrPrev = Accel_PID_YPitchError;
-		#ifdef Accel_PID_DBounds
-		if((-Accel_PID_DBounds < Accel_PID_XRollErrPrev) && (Accel_PID_XRollErrPrev < Accel_PID_DBounds))
+		#ifdef _PIDDBoundsEN
+		if((Accel_PID_DBounds_Var_Neg < Accel_PID_YPitchErrPrev) && (Accel_PID_YPitchErrPrev < Accel_PID_DBounds_Var_Pos))
 		{
-			Accel_PID_XRollErrPrev = 0;
+			Accel_PID_YPitchErrPrev = 0;
 		}
 		#endif
 		
