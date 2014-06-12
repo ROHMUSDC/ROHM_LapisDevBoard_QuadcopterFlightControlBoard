@@ -13,7 +13,7 @@
 // UPDATED:	 APRIL 11, 2014
 //*****************************************************************************
 
-#define Accel_PID_PBounds  101
+#define Accel_PID_PBounds  100
 #define Accel_PID_DBounds  3000
 
 #define IenterThres	3
