@@ -18,15 +18,17 @@
 #define _PIDDBoundsEN			(1)
 
 //Constants
-#define PIDPBounds			(100)
-#define PIDDBounds			(100)
+#define PIDPBounds			(0)
+#define PIDDBounds			(40)
 
+// PID Gains
 #define Accel_SetKp			0	
 #define Accel_SetKi			0
-#define Accel_SetKd			0
+#define Accel_SetKd			3
 
-#define IenterThres	1
-#define DenterThres 1
+// Sampling control
+#define IenterThres	1 // P_sample_rate / I_sample_rate = IenterThres
+#define DenterThres 1 // P_sample_rate / D_sample_rate = DenterThres
 
 //*****************************************************************************
 // Microcontroller's connections on the LaPi Development Board
@@ -2407,6 +2409,9 @@ void AccelSensorControlPID_P(void){
 			Accel_PID_XRollError = 0;
 		}
 		#endif
+		if(Accel_PID_DFlag < DenterThres){
+			Accel_PID_XRollErrPrev = Accel_PID_XRollError;
+		}
 		
 		//Calculating PID Output
 		Accel_PID_XRollOutput = (Accel_PID_XRoll_kp*Accel_PID_XRollError);
@@ -2422,6 +2427,9 @@ void AccelSensorControlPID_P(void){
 			Accel_PID_YPitchError = 0;
 		}
 		#endif
+		if(Accel_PID_DFlag < DenterThres){
+			Accel_PID_YPitchErrPrev = Accel_PID_YPitchError;
+		}
 		
 		//Calculating PID Output
 		//Accel_PID_YPitchOutput = (Accel_PID_YPitch_kp*Accel_PID_YPitchError) + (Accel_PID_YPitch_ki*Accel_PID_YPitchErrSum) + (Accel_PID_YPitch_kd*Accel_PID_YPitchdErr);
@@ -2517,7 +2525,7 @@ int i;
 		Accel_PID_YPitchErrSum += (Accel_PID_YPitchError * Accel_PID_YPitchCurrentCount);
 		
 		//Calculating PID Output
-		Accel_PID_YPitchOutput = (Accel_PID_YPitch_kp*Accel_PID_YPitchError) + (Accel_PID_YPitch_ki*Accel_PID_YPitchErrSum) + (Accel_PID_YPitch_kd*Accel_PID_YPitchdErr);
+		//Accel_PID_YPitchOutput = (Accel_PID_YPitch_kp*Accel_PID_YPitchError) + (Accel_PID_YPitch_ki*Accel_PID_YPitchErrSum) + (Accel_PID_YPitch_kd*Accel_PID_YPitchdErr);
 		Accel_PID_YPitchOutput = (Accel_PID_YPitch_kp*Accel_PID_YPitchError) + (Accel_PID_YPitch_ki*Accel_PID_YPitchErrSum);
 		
 		if(PrePIDCount >= 10){
@@ -2602,7 +2610,7 @@ int i;
 		#ifdef _PIDDBoundsEN
 		if((Accel_PID_DBounds_Var_Neg < Accel_PID_XRollErrPrev) && (Accel_PID_XRollErrPrev < Accel_PID_DBounds_Var_Pos))
 		{
-			Accel_PID_XRollErrPrev = 0;
+			Accel_PID_XRolldErr = 0;
 		}
 		#endif
 		
@@ -2624,7 +2632,7 @@ int i;
 		#ifdef _PIDDBoundsEN
 		if((Accel_PID_DBounds_Var_Neg < Accel_PID_YPitchErrPrev) && (Accel_PID_YPitchErrPrev < Accel_PID_DBounds_Var_Pos))
 		{
-			Accel_PID_YPitchErrPrev = 0;
+			Accel_PID_YPitchdErr = 0;
 		}
 		#endif
 		

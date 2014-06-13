@@ -1,7 +1,7 @@
 RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1 
  Source File: _output\_obj\main.asm
  Object File: _output\_obj\main.obj
- Date  : 2014/06/12 Thu.[16:09]
+ Date  : 2014/06/12 Thu.[19:42]
  Title : 
 ## Loc. Object                   Line   Source Statements
 
@@ -8333,11 +8333,11 @@ RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1
 00:00CC 05 C0                    8326   	bge	_$L523
                                  8327   CBLOCK 240 3 2604
                                  8328   
-                                 8329   ;;			Accel_PID_XRollErrPrev = 0;
-                                 8330   CLINEA 0000H 0001H 0A2DH 0004H 001EH
+                                 8329   ;;			Accel_PID_XRolldErr = 0;
+                                 8330   CLINEA 0000H 0001H 0A2DH 0004H 001BH
 00:00CE 00 E0                    8331   	mov	er0,	#0 
-00:00D0 13-90 00-00'             8332   	st	er0,	NEAR _Accel_PID_XRollErrPrev
-00:00D4 13-90 00-00'             8333   	st	er0,	NEAR _Accel_PID_XRollErrPrev+02h
+00:00D0 13-90 00-00'             8332   	st	er0,	NEAR _Accel_PID_XRolldErr
+00:00D4 13-90 00-00'             8333   	st	er0,	NEAR _Accel_PID_XRolldErr+02h
                                  8334   CBLOCKEND 240 3 2606
                                  8335   
                                  8336   ;;		}
@@ -8472,11 +8472,11 @@ RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1
 00:0214 05 C0                    8465   	bge	_$L530
                                  8466   CBLOCK 240 4 2626
                                  8467   
-                                 8468   ;;			Accel_PID_YPitchErrPrev = 0;
-                                 8469   CLINEA 0000H 0001H 0A43H 0004H 001FH
+                                 8468   ;;			Accel_PID_YPitchdErr = 0;
+                                 8469   CLINEA 0000H 0001H 0A43H 0004H 001CH
 00:0216 00 E0                    8470   	mov	er0,	#0 
-00:0218 13-90 00-00'             8471   	st	er0,	NEAR _Accel_PID_YPitchErrPrev
-00:021C 13-90 00-00'             8472   	st	er0,	NEAR _Accel_PID_YPitchErrPrev+02h
+00:0218 13-90 00-00'             8471   	st	er0,	NEAR _Accel_PID_YPitchdErr
+00:021C 13-90 00-00'             8472   	st	er0,	NEAR _Accel_PID_YPitchdErr+02h
                                  8473   CBLOCKEND 240 4 2628
                                  8474   
                                  8475   ;;		}
@@ -12413,13 +12413,13 @@ RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1
 ??:014E 00-00                   12406   	dw	00h
 ??:0150 00-00                   12407   	dw	00h
 ??:0152 00-00                   12408   	dw	00h
-??:0154 00-00                   12409   	dw	00h
+??:0154 40-40                   12409   	dw	04040h
 ??:0156 00-00                   12410   	dw	00h
 ??:0158 00-00                   12411   	dw	00h
 ??:015A 00-00                   12412   	dw	00h
 ??:015C 00-00                   12413   	dw	00h
 ??:015E 00-00                   12414   	dw	00h
-??:0160 00-00                   12415   	dw	00h
+??:0160 40-40                   12415   	dw	04040h
 ??:0162 00                      12416   	db	00h
 ??:0163 00                      12417   	db	00h
 ??:0164 00                      12418   	db	00h
@@ -12453,10 +12453,10 @@ RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1
 ??:0198 00-00                   12446   	dw	00h
 ??:019A 00-00                   12447   	dw	00h
 ??:019C 00-00                   12448   	dw	00h
-??:019E 64-00                   12449   	dw	064h
-??:01A0 64-00                   12450   	dw	064h
-??:01A2 9C-FF                   12451   	dw	0ff9ch
-??:01A4 9C-FF                   12452   	dw	0ff9ch
+??:019E 00-00                   12449   	dw	00h
+??:01A0 28-00                   12450   	dw	028h
+??:01A2 00-00                   12451   	dw	00h
+??:01A4 D8-FF                   12452   	dw	0ffd8h
 ??:01A6 00                      12453   	db	00h
 ??:01A7 00                      12454   	db	00h
 ??:01A8 98-3A                   12455   	dw	03a98h

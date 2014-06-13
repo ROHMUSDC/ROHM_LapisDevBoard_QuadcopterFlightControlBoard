@@ -8326,11 +8326,11 @@ CLINEA 0000H 0001H 0A2BH 0003H 0072H
 	bge	_$L523
 CBLOCK 240 3 2604
 
-;;			Accel_PID_XRollErrPrev = 0;
-CLINEA 0000H 0001H 0A2DH 0004H 001EH
+;;			Accel_PID_XRolldErr = 0;
+CLINEA 0000H 0001H 0A2DH 0004H 001BH
 	mov	er0,	#0 
-	st	er0,	NEAR _Accel_PID_XRollErrPrev
-	st	er0,	NEAR _Accel_PID_XRollErrPrev+02h
+	st	er0,	NEAR _Accel_PID_XRolldErr
+	st	er0,	NEAR _Accel_PID_XRolldErr+02h
 CBLOCKEND 240 3 2606
 
 ;;		}
@@ -8465,11 +8465,11 @@ CLINEA 0000H 0001H 0A41H 0003H 0074H
 	bge	_$L530
 CBLOCK 240 4 2626
 
-;;			Accel_PID_YPitchErrPrev = 0;
-CLINEA 0000H 0001H 0A43H 0004H 001FH
+;;			Accel_PID_YPitchdErr = 0;
+CLINEA 0000H 0001H 0A43H 0004H 001CH
 	mov	er0,	#0 
-	st	er0,	NEAR _Accel_PID_YPitchErrPrev
-	st	er0,	NEAR _Accel_PID_YPitchErrPrev+02h
+	st	er0,	NEAR _Accel_PID_YPitchdErr
+	st	er0,	NEAR _Accel_PID_YPitchdErr+02h
 CBLOCKEND 240 4 2628
 
 ;;		}
@@ -12406,13 +12406,13 @@ CFUNCTIONEND 255
 	dw	00h
 	dw	00h
 	dw	00h
+	dw	04040h
 	dw	00h
 	dw	00h
 	dw	00h
 	dw	00h
 	dw	00h
-	dw	00h
-	dw	00h
+	dw	04040h
 	db	00h
 	db	00h
 	db	00h
@@ -12446,10 +12446,10 @@ CFUNCTIONEND 255
 	dw	00h
 	dw	00h
 	dw	00h
-	dw	064h
-	dw	064h
-	dw	0ff9ch
-	dw	0ff9ch
+	dw	00h
+	dw	028h
+	dw	00h
+	dw	0ffd8h
 	db	00h
 	db	00h
 	dw	03a98h
