@@ -18,13 +18,13 @@
 #define _PIDDBoundsEN			(1)
 
 //Constants
-#define PIDPBounds			(0)
-#define PIDDBounds			(40)
+#define PIDPBounds				(0)
+#define PIDDBounds				(0)	//2
 
 // PID Gains
-#define Accel_SetKp			0	
-#define Accel_SetKi			0
-#define Accel_SetKd			3
+#define Accel_SetKp				0	
+#define Accel_SetKi				0	
+#define Accel_SetKd				0	//25
 
 // Sampling control
 #define IenterThres	1 // P_sample_rate / I_sample_rate = IenterThres
@@ -551,9 +551,9 @@ static unsigned int				PWMtoRPMOffset_Mot4 = 50;																			//10000 duty 
 int main(void) 
 {
 int i;
-unsigned char flag;
+//unsigned char flag;
 
-Init:
+//Init:
 		Initialization(); 			//Ports, UART, Timers, Oscillator, Comparators, etc.
 		main_clrWDT();				//kick the dog...1.34uS duration
 		CalibrateMotors();			//Time-consuming ~6s
@@ -592,32 +592,7 @@ Main_Loop:
 		EPB3 = 1;					//Enable Accel/Gyro Interrupt Pin
 		
 		SoftStart();				//Smoothly bring up the Motor RPM
-		while(PrePIDCount < 10){
-			if(AccGyro_ReadFlag >= 1){		//Triggered by External Interrupt (flag set in AccelGyroDataReady_ISR)
-				//LED_4 = 1;			//C2, Pin 14	//Loop Time = 1.5ms @20Hz Rate
-				Get_AccGyroData();
-				//LED_4 = 0;
-				AccGyro_ReadFlag = 0;
-			}
-			if(AccGyro_CF_FlagCounter > 0){	//This Value is incremented after Get_AccGyroData(); is called
-				//LED_2 = 1;			//B7, Pin 11	//Inside RUN_CF	//Loop Time = 13.5ms
-				Run_AccGyroCF();
-				//LED_2 = 0;
-				AccGyro_CF_FlagCounter--;	//Decremented because this value is not a static 1/0... number shows number of items in buffer that have not gone though the CF yet
-			}
-			if(Accel_PID_GoCounter>= 1){		//This increments in the Run_AccGyroCF()... I don't know if this is the best trigger.. but for now, it works.  Calls GetAccGyroData and AccGyroCF once within the routine.
-				//LED_3 = 1;			//C1, Pin 13		//Loop Time = 25.47 with UART Debugging ON... 
-				AccelSensorControlPID_P(); 		
-				AccelSensorControlPID_I(); 		
-				AccelSensorControlPID_D(); 		
-				//LED_3 = 0;
-				Accel_PID_GoCounter = 0;
-				PrePIDCount++;			//Comment this out to always loop (i.e.: no shut-down...)
-			}
-			main_clrWDT();
-		}
-		Accel_PID_XRollErrSum = 0;
-		Accel_PID_YPitchErrSum = 0;
+
 		
 Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014		
 		//LED_1 ^= 1;					
@@ -662,8 +637,11 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 			LED_3 = 0;
 			Accel_PID_IFlag++;
 			Accel_PID_DFlag++;
+			if(Accel_PID_DFlag < DenterThres){
+				Accel_PID_YPitchErrPrev = Accel_PID_YPitchError;
+				Accel_PID_XRollErrPrev = Accel_PID_XRollError;
+			}
 			Accel_PID_GoCounter = 0;
-			
 			TestingEndTimer++;			//Comment this out to always loop (i.e.: no shut-down...)
 		}
 		
@@ -2044,28 +2022,55 @@ UARTTunePID:
 //A Simple SOFT Start for the Motors...
 void SoftStart(void)
 {
-		//Build a Soft Start Here...
-		//9500; 8450
-		
-		PWED += PWMtoRPMOffset_Mot2;	
-		PWDD += PWMtoRPMOffset_Mot3;	
-		PWCD += PWMtoRPMOffset_Mot4;
-		while(PWF0D < PWMIdleDutyRun){
-			NOPms(50);
-			PFRUN = 0;	//Turn OFF PWM
-			PERUN = 0;
-			PDRUN = 0;
-			PCRUN = 0;
-			PWF0D += 1; 		//Can't be running to change (Only this variable)
-			PWED += 1;	
-			PWDD += 1;	
-			PWCD += 1;
-			//CheckSafetyLimit();
-			PFRUN = 1;	//Turn ON PWM
-			PERUN = 1;
-			PDRUN = 1;
-			PCRUN = 1;
+	//Build a Soft Start Here...
+	//9500; 8450
+	
+	PWED += PWMtoRPMOffset_Mot2;	
+	PWDD += PWMtoRPMOffset_Mot3;	
+	PWCD += PWMtoRPMOffset_Mot4;
+	while(PWF0D < PWMIdleDutyRun){
+		NOPms(50);
+		PFRUN = 0;	//Turn OFF PWM
+		PERUN = 0;
+		PDRUN = 0;
+		PCRUN = 0;
+		PWF0D += 1; 		//Can't be running to change (Only this variable)
+		PWED += 1;	
+		PWDD += 1;	
+		PWCD += 1;
+		//CheckSafetyLimit();
+		PFRUN = 1;	//Turn ON PWM
+		PERUN = 1;
+		PDRUN = 1;
+		PCRUN = 1;
+	}
+	while(PrePIDCount < 10){
+		if(AccGyro_ReadFlag >= 1){		//Triggered by External Interrupt (flag set in AccelGyroDataReady_ISR)
+			//LED_4 = 1;			//C2, Pin 14	//Loop Time = 1.5ms @20Hz Rate
+			Get_AccGyroData();
+			//LED_4 = 0;
+			AccGyro_ReadFlag = 0;
 		}
+		if(AccGyro_CF_FlagCounter > 0){	//This Value is incremented after Get_AccGyroData(); is called
+			//LED_2 = 1;			//B7, Pin 11	//Inside RUN_CF	//Loop Time = 13.5ms
+			Run_AccGyroCF();
+			//LED_2 = 0;
+			AccGyro_CF_FlagCounter--;	//Decremented because this value is not a static 1/0... number shows number of items in buffer that have not gone though the CF yet
+		}
+		if(Accel_PID_GoCounter>= 1){		//This increments in the Run_AccGyroCF()... I don't know if this is the best trigger.. but for now, it works.  Calls GetAccGyroData and AccGyroCF once within the routine.
+			//LED_3 = 1;			//C1, Pin 13		//Loop Time = 25.47 with UART Debugging ON... 
+			AccelSensorControlPID_P(); 		
+			AccelSensorControlPID_I(); 		
+			AccelSensorControlPID_D(); 		
+			//LED_3 = 0;
+			Accel_PID_GoCounter = 0;
+			PrePIDCount++;			//Comment this out to always loop (i.e.: no shut-down...)
+		}
+		main_clrWDT();
+	}
+	Accel_PID_XRollErrSum = 0;
+	Accel_PID_YPitchErrSum = 0;	
+
 }
 
 //PWM Increment-er... 
@@ -2409,9 +2414,6 @@ void AccelSensorControlPID_P(void){
 			Accel_PID_XRollError = 0;
 		}
 		#endif
-		if(Accel_PID_DFlag < DenterThres){
-			Accel_PID_XRollErrPrev = Accel_PID_XRollError;
-		}
 		
 		//Calculating PID Output
 		Accel_PID_XRollOutput = (Accel_PID_XRoll_kp*Accel_PID_XRollError);
@@ -2427,32 +2429,74 @@ void AccelSensorControlPID_P(void){
 			Accel_PID_YPitchError = 0;
 		}
 		#endif
-		if(Accel_PID_DFlag < DenterThres){
-			Accel_PID_YPitchErrPrev = Accel_PID_YPitchError;
-		}
+
 		
 		//Calculating PID Output
 		//Accel_PID_YPitchOutput = (Accel_PID_YPitch_kp*Accel_PID_YPitchError) + (Accel_PID_YPitch_ki*Accel_PID_YPitchErrSum) + (Accel_PID_YPitch_kd*Accel_PID_YPitchdErr);
 		Accel_PID_YPitchOutput = (Accel_PID_YPitch_kp*Accel_PID_YPitchError) + (Accel_PID_YPitch_ki*Accel_PID_YPitchErrSum);
 		
 		if(PrePIDCount >= 10){
-			PFRUN = 0;	//Turn OFF PWM
-			PERUN = 0;
-			PDRUN = 0;
-			PCRUN = 0;
-			//PWF0D = PWMIdleDutyRun - Accel_PID_XRollOutput + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
-			//PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + Accel_PID_YPitchOutput;	
-			//PWCD = PWMIdleDutyRun + Accel_PID_XRollOutput - Accel_PID_YPitchOutput;	
-			//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput - Accel_PID_YPitchOutput;
-			PWF0D = PWMIdleDutyRun + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
-			PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + PWMtoRPMOffset_Mot2;	
-			PWCD = PWMIdleDutyRun - Accel_PID_YPitchOutput + PWMtoRPMOffset_Mot3;	
-			PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
-			CheckSafetyLimit();
-			PFRUN = 1;	//Turn ON PWM
-			PERUN = 1;
-			PDRUN = 1;
-			PCRUN = 1;
+			if(Accel_PID_XRollError > 0){
+				//PFRUN = 0;	//Turn OFF PWM
+				PERUN = 0;
+				PDRUN = 0;
+				//PCRUN = 0;
+				//PWF0D = PWMIdleDutyRun + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
+				PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + PWMtoRPMOffset_Mot2;	
+				//PWCD = PWMIdleDutyRun - Accel_PID_YPitchOutput + PWMtoRPMOffset_Mot3;	
+				//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
+				PWDD = PWMIdleDutyRun;
+				CheckSafetyLimit();
+				//PFRUN = 1;	//Turn ON PWM
+				PERUN = 1;
+				PDRUN = 1;
+				//PCRUN = 1;
+			}
+			else{
+				//PFRUN = 0;	//Turn OFF PWM
+				PERUN = 0;
+				PDRUN = 0;
+				//PCRUN = 0;
+				//PWF0D = PWMIdleDutyRun + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
+				PWED = PWMIdleDutyRun;	
+				//PWCD = PWMIdleDutyRun - Accel_PID_YPitchOutput + PWMtoRPMOffset_Mot3;	
+				PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
+				CheckSafetyLimit();
+				//PFRUN = 1;	//Turn ON PWM
+				PERUN = 1;
+				PDRUN = 1;
+				//PCRUN = 1;
+			}
+			if(Accel_PID_YPitchError > 0){
+				PFRUN = 0;	//Turn OFF PWM
+				//PERUN = 0;
+				//PDRUN = 0;
+				PCRUN = 0;
+				PWF0D = PWMIdleDutyRun + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
+				//PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + PWMtoRPMOffset_Mot2;	
+				PWCD = PWMIdleDutyRun;	
+				//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
+				CheckSafetyLimit();
+				PFRUN = 1;	//Turn ON PWM
+				//PERUN = 1;
+				//PDRUN = 1;
+				PCRUN = 1;
+			}
+			else{
+				PFRUN = 0;	//Turn OFF PWM
+				//PERUN = 0;
+				//PDRUN = 0;
+				PCRUN = 0;
+				PWF0D = PWMIdleDutyRun; 		//Can't be running to change (Only this variable)
+				//PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + PWMtoRPMOffset_Mot2;	
+				PWCD = PWMIdleDutyRun - Accel_PID_YPitchOutput + PWMtoRPMOffset_Mot3;	
+				//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
+				CheckSafetyLimit();
+				PFRUN = 1;	//Turn ON PWM
+				//PERUN = 1;
+				//PDRUN = 1;
+				PCRUN = 1;
+			}
 		}
 		
 		/*
@@ -2529,23 +2573,67 @@ int i;
 		Accel_PID_YPitchOutput = (Accel_PID_YPitch_kp*Accel_PID_YPitchError) + (Accel_PID_YPitch_ki*Accel_PID_YPitchErrSum);
 		
 		if(PrePIDCount >= 10){
-			PFRUN = 0;	//Turn OFF PWM
-			PERUN = 0;
-			PDRUN = 0;
-			PCRUN = 0;
-			//PWF0D = PWMIdleDutyRun - Accel_PID_XRollOutput + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
-			//PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + Accel_PID_YPitchOutput;	
-			//PWCD = PWMIdleDutyRun + Accel_PID_XRollOutput - Accel_PID_YPitchOutput;	
-			//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput - Accel_PID_YPitchOutput;
-			PWF0D = PWMIdleDutyRun + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
-			PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + PWMtoRPMOffset_Mot2;	
-			PWCD = PWMIdleDutyRun - Accel_PID_YPitchOutput + PWMtoRPMOffset_Mot3;	
-			PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
-			CheckSafetyLimit();
-			PFRUN = 1;	//Turn ON PWM
-			PERUN = 1;
-			PDRUN = 1;
-			PCRUN = 1;
+			if(Accel_PID_XRollError > 0){
+				//PFRUN = 0;	//Turn OFF PWM
+				PERUN = 0;
+				PDRUN = 0;
+				//PCRUN = 0;
+				//PWF0D = PWMIdleDutyRun + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
+				PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + PWMtoRPMOffset_Mot2;	
+				//PWCD = PWMIdleDutyRun - Accel_PID_YPitchOutput + PWMtoRPMOffset_Mot3;	
+				//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
+				PWDD = PWMIdleDutyRun;
+				CheckSafetyLimit();
+				//PFRUN = 1;	//Turn ON PWM
+				PERUN = 1;
+				PDRUN = 1;
+				//PCRUN = 1;
+			}
+			else{
+				//PFRUN = 0;	//Turn OFF PWM
+				PERUN = 0;
+				PDRUN = 0;
+				//PCRUN = 0;
+				//PWF0D = PWMIdleDutyRun + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
+				PWED = PWMIdleDutyRun;	
+				//PWCD = PWMIdleDutyRun - Accel_PID_YPitchOutput + PWMtoRPMOffset_Mot3;	
+				PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
+				CheckSafetyLimit();
+				//PFRUN = 1;	//Turn ON PWM
+				PERUN = 1;
+				PDRUN = 1;
+				//PCRUN = 1;
+			}
+			if(Accel_PID_YPitchError > 0){
+				PFRUN = 0;	//Turn OFF PWM
+				//PERUN = 0;
+				//PDRUN = 0;
+				PCRUN = 0;
+				PWF0D = PWMIdleDutyRun + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
+				//PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + PWMtoRPMOffset_Mot2;	
+				PWCD = PWMIdleDutyRun;	
+				//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
+				CheckSafetyLimit();
+				PFRUN = 1;	//Turn ON PWM
+				//PERUN = 1;
+				//PDRUN = 1;
+				PCRUN = 1;
+			}
+			else{
+				PFRUN = 0;	//Turn OFF PWM
+				//PERUN = 0;
+				//PDRUN = 0;
+				PCRUN = 0;
+				PWF0D = PWMIdleDutyRun; 		//Can't be running to change (Only this variable)
+				//PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + PWMtoRPMOffset_Mot2;	
+				PWCD = PWMIdleDutyRun - Accel_PID_YPitchOutput + PWMtoRPMOffset_Mot3;	
+				//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
+				CheckSafetyLimit();
+				PFRUN = 1;	//Turn ON PWM
+				//PERUN = 1;
+				//PDRUN = 1;
+				PCRUN = 1;
+			}
 		}
 		
 		/*
@@ -2606,6 +2694,7 @@ int i;
 		Accel_PID_XRolldErr = (Accel_PID_XRollError -  Accel_PID_XRollErrPrev);
 		Accel_PID_XRolldErr	/= Accel_PID_XRollCurrentCount;
 		Accel_PID_XRollErrPrev = Accel_PID_XRollError;
+		if(
 		 
 		#ifdef _PIDDBoundsEN
 		if((Accel_PID_DBounds_Var_Neg < Accel_PID_XRollErrPrev) && (Accel_PID_XRollErrPrev < Accel_PID_DBounds_Var_Pos))
@@ -2641,23 +2730,67 @@ int i;
 		Accel_PID_YPitchOutput = (Accel_PID_YPitch_kp*Accel_PID_YPitchError) + (Accel_PID_YPitch_ki*Accel_PID_YPitchErrSum) + (Accel_PID_YPitch_kd*Accel_PID_YPitchdErr);
 		
 		if(PrePIDCount >= 10){
-			PFRUN = 0;	//Turn OFF PWM
-			PERUN = 0;
-			PDRUN = 0;
-			PCRUN = 0;
-			//PWF0D = PWMIdleDutyRun - Accel_PID_XRollOutput + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
-			//PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + Accel_PID_YPitchOutput;	
-			//PWCD = PWMIdleDutyRun + Accel_PID_XRollOutput - Accel_PID_YPitchOutput;	
-			//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput - Accel_PID_YPitchOutput;
-			PWF0D = PWMIdleDutyRun + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
-			PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + PWMtoRPMOffset_Mot2;	
-			PWCD = PWMIdleDutyRun - Accel_PID_YPitchOutput + PWMtoRPMOffset_Mot3;	
-			PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
-			CheckSafetyLimit();
-			PFRUN = 1;	//Turn ON PWM
-			PERUN = 1;
-			PDRUN = 1;
-			PCRUN = 1;
+			if(Accel_PID_XRollError > 0){
+				//PFRUN = 0;	//Turn OFF PWM
+				PERUN = 0;
+				PDRUN = 0;
+				//PCRUN = 0;
+				//PWF0D = PWMIdleDutyRun + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
+				PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + PWMtoRPMOffset_Mot2;	
+				//PWCD = PWMIdleDutyRun - Accel_PID_YPitchOutput + PWMtoRPMOffset_Mot3;	
+				//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
+				PWDD = PWMIdleDutyRun;
+				CheckSafetyLimit();
+				//PFRUN = 1;	//Turn ON PWM
+				PERUN = 1;
+				PDRUN = 1;
+				//PCRUN = 1;
+			}
+			else{
+				//PFRUN = 0;	//Turn OFF PWM
+				PERUN = 0;
+				PDRUN = 0;
+				//PCRUN = 0;
+				//PWF0D = PWMIdleDutyRun + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
+				PWED = PWMIdleDutyRun;	
+				//PWCD = PWMIdleDutyRun - Accel_PID_YPitchOutput + PWMtoRPMOffset_Mot3;	
+				PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
+				CheckSafetyLimit();
+				//PFRUN = 1;	//Turn ON PWM
+				PERUN = 1;
+				PDRUN = 1;
+				//PCRUN = 1;
+			}
+			if(Accel_PID_YPitchError > 0){
+				PFRUN = 0;	//Turn OFF PWM
+				//PERUN = 0;
+				//PDRUN = 0;
+				PCRUN = 0;
+				PWF0D = PWMIdleDutyRun + Accel_PID_YPitchOutput; 		//Can't be running to change (Only this variable)
+				//PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + PWMtoRPMOffset_Mot2;	
+				PWCD = PWMIdleDutyRun;	
+				//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
+				CheckSafetyLimit();
+				PFRUN = 1;	//Turn ON PWM
+				//PERUN = 1;
+				//PDRUN = 1;
+				PCRUN = 1;
+			}
+			else{
+				PFRUN = 0;	//Turn OFF PWM
+				//PERUN = 0;
+				//PDRUN = 0;
+				PCRUN = 0;
+				PWF0D = PWMIdleDutyRun; 		//Can't be running to change (Only this variable)
+				//PWED = PWMIdleDutyRun + Accel_PID_XRollOutput + PWMtoRPMOffset_Mot2;	
+				PWCD = PWMIdleDutyRun - Accel_PID_YPitchOutput + PWMtoRPMOffset_Mot3;	
+				//PWDD = PWMIdleDutyRun - Accel_PID_XRollOutput + PWMtoRPMOffset_Mot4;
+				CheckSafetyLimit();
+				PFRUN = 1;	//Turn ON PWM
+				//PERUN = 1;
+				//PDRUN = 1;
+				PCRUN = 1;
+			}
 		}
 		
 		/*
