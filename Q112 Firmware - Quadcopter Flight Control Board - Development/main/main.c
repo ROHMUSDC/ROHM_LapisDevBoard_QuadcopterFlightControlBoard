@@ -17,18 +17,24 @@
 //#define _PIDPBoundsEN			(1)
 //#define _PIDDBoundsEN			(1)
 
-//Constants
+//Constants 
 #define PIDPBounds				(0)
 #define PIDDBounds				(0)	//2
 
 // PID Gains
-#define Accel_SetKp				35	
-#define Accel_SetKi				5	
-#define Accel_SetKd				10	//25
+#define Accel_x_SetKp				37	
+#define Accel_x_SetKi				8	
+#define Accel_x_SetKd				13	//25
+
+#define Accel_y_SetKp				37	
+#define Accel_y_SetKi				8	
+#define Accel_y_SetKd				13	//25
 
 // Sampling control
-#define IenterThres	1 // P_sample_rate / I_sample_rate = IenterThres
-#define DenterThres 1 // P_sample_rate / D_sample_rate = DenterThres
+#define IenterThres				1 // P_sample_rate / I_sample_rate = IenterThres
+#define DenterThres 			1 // P_sample_rate / D_sample_rate = DenterThres
+#define AccelAvg				15
+
 
 //*****************************************************************************
 // Microcontroller's connections on the LaPi Development Board
@@ -341,15 +347,19 @@ static unsigned char			AccGyro_ReadFlag = 0;
 
 static unsigned char			AccGyro_ReadData = 0x3B;
 static unsigned char			AccGyro_Data[14];
-static float					Accel_Xout[10];
-static float					Accel_Yout[10];
-static float					Accel_Zout[10];
+static float					Accel_Xout[AccelAvg];
+static float					Accel_Xout_Avg;
+static float					Accel_Yout[AccelAvg];
+static float					Accel_Yout_Avg;
+static float					Accel_Zout[AccelAvg];
+static float					Accel_Zout_Avg;
 static float					Temp_out = 0;
-static float					Gyro_Xout[10];
-static float					Gyro_Yout[10];
-static float					Gyro_Zout[10];
+static float					Gyro_Xout;
+static float					Gyro_Yout;
+static float					Gyro_Zout;
+//static unsigned char			Accel_GetCounter = 0;
 static unsigned char			Accel_SavIndex = 0;
-static unsigned char			Accel_RetIndex = 0;
+//static unsigned char			Accel_RetIndex = 0;
 static unsigned char			AccGyro_CF_FlagCounter = 0;
 
 
@@ -470,12 +480,12 @@ static float					Accel_PID_YPitchErrPrev = 0;	//Derivative Error Portion of PID 
 static float					Accel_PID_XRolldErr = 0;
 static float					Accel_PID_YPitchdErr = 0;	
 
-static float					Accel_PID_XRoll_kp = Accel_SetKp;		//			//Calibrated 3-30-2014	//0.8
-static float					Accel_PID_XRoll_ki = Accel_SetKi;		//On other Board, I is half of P						//0.001
-static float					Accel_PID_XRoll_kd = Accel_SetKd;//5;							//0.5
-static float					Accel_PID_YPitch_kp = Accel_SetKp;
-static float					Accel_PID_YPitch_ki = Accel_SetKi;
-static float					Accel_PID_YPitch_kd = Accel_SetKd;
+static float					Accel_PID_XRoll_kp = Accel_x_SetKp;		//			//Calibrated 3-30-2014	//0.8
+static float					Accel_PID_XRoll_ki = Accel_x_SetKi;		//On other Board, I is half of P						//0.001
+static float					Accel_PID_XRoll_kd = Accel_x_SetKd;//5;							//0.5
+static float					Accel_PID_YPitch_kp = Accel_y_SetKp;
+static float					Accel_PID_YPitch_ki = Accel_y_SetKi;
+static float					Accel_PID_YPitch_kd = Accel_y_SetKd;
 
 static unsigned char			Accel_PID_IFlag = 0;
 static unsigned char			Accel_PID_DFlag = 0;
@@ -531,7 +541,7 @@ static unsigned char 			PWMSensorResPerInc = 0;
 //static unsigned int			PWM_AccelMinHoverRPM = 10500;			//Unused as of 3/30/2014...
 static unsigned int				PWMUpperLowerDiff = 0;
 static unsigned int 			PWMUpperDutyLimitRun = 13000;			//Value for Maximum Duty	//18min flight = 11500
-static unsigned int				PWMIdleDutyRun = 11000;
+static unsigned int				PWMIdleDutyRun = 10500;
 static unsigned int 			PWMLowerDutyLimitRun = 8500;			//Value for Minimum Duty	//18min flight = 9500
 																		//9000 duty 	=  	3040rpm
 static unsigned int				PWMtoRPMOffset_Mot2 = -120;		
@@ -580,14 +590,14 @@ Main_Loop:
 		main_clrWDT();				//kick the dog...1.34uS duration.
 		
 		Accel_SavIndex = 0;			//Reset Circular Buffer for Accel/Gyro Measurements
-		Accel_RetIndex = 0;
-		for(i=0; i<10; i++){
+		//Accel_RetIndex = 0;
+		for(i=0; i<AccelAvg; i++){
 			Accel_Xout[i] = 0;
 			Accel_Yout[i] = 0;
 			Accel_Zout[i] = 0;
-			Gyro_Xout[i] = 0;
-			Gyro_Yout[i] = 0;
-			Gyro_Zout[i] = 0;
+			//Gyro_Xout[i] = 0;
+			//Gyro_Yout[i] = 0;
+			//Gyro_Zout[i] = 0;
 		}
 		EPB3 = 1;					//Enable Accel/Gyro Interrupt Pin
 		
@@ -1180,6 +1190,7 @@ void Get_PingData(void){
 }
 
 void Get_AccGyroData(void){
+static int i;
 	//CF Local Variables	
 
 	//Begin data... => Takes 1.3ms to gather  Raw Accel/Gyro data
@@ -1208,19 +1219,31 @@ void Get_AccGyroData(void){
 	//Temp_out = (AccGyro_Data[6]<<8)+(AccGyro_Data[7]);
 	//Eventually add this scaling and print!
 	
-	Gyro_Xout[Accel_SavIndex] = (AccGyro_Data[8]<<8)+(AccGyro_Data[9]);
-	Gyro_Yout[Accel_SavIndex] = (AccGyro_Data[10]<<8)+(AccGyro_Data[11]);
-	Gyro_Zout[Accel_SavIndex] = (AccGyro_Data[12]<<8)+(AccGyro_Data[13]);
+	Gyro_Xout = (AccGyro_Data[8]<<8)+(AccGyro_Data[9]);
+	Gyro_Yout = (AccGyro_Data[10]<<8)+(AccGyro_Data[11]);
+	Gyro_Zout = (AccGyro_Data[12]<<8)+(AccGyro_Data[13]);
 	
 	Accel_Xout[Accel_SavIndex] -= Accel_Xcal[0];
 	Accel_Yout[Accel_SavIndex] -= Accel_Ycal[0];
 	Accel_Zout[Accel_SavIndex] -= Accel_Zcal[0];
-	Gyro_Xout[Accel_SavIndex] -= Gyro_Xcal;
-	Gyro_Yout[Accel_SavIndex] -= Gyro_Ycal;
-	Gyro_Zout[Accel_SavIndex] -= Gyro_Zcal;
+	
+	Gyro_Xout -= Gyro_Xcal;
+	Gyro_Yout -= Gyro_Ycal;
+	Gyro_Zout -= Gyro_Zcal;
+	
+	for(i=0; i<AccelAvg; i++)
+	{
+		Accel_Xout_Avg += Accel_Xout[i];
+		Accel_Yout_Avg += Accel_Yout[i];
+		Accel_Zout_Avg += Accel_Zout[i];
+	}
+	Accel_Xout_Avg /= AccelAvg;
+	Accel_Yout_Avg /= AccelAvg;
+	Accel_Zout_Avg /= AccelAvg;
+	
 	
 	Accel_SavIndex++;
-	if(Accel_SavIndex>9){
+	if(Accel_SavIndex >= AccelAvg){
 		Accel_SavIndex = 0;
 	}
 	
@@ -1238,35 +1261,37 @@ void Run_AccGyroCF(void){
 	CF_Gyro_CurrentCount = CF_Gyro_Counter * .001;		//Timer in Seconds (.007 used to convert 128Hz TBC to seconds)
 	CF_Gyro_Counter = 0;
 	
-	CF_Gyro_YPitch = CF_YPitch + ((Gyro_Xout[Accel_RetIndex]/AccGyro_GyroScaling) * CF_Gyro_CurrentCount);
-	CF_Gyro_XRoll = CF_XRoll - ((Gyro_Yout[Accel_RetIndex]/AccGyro_GyroScaling) * CF_Gyro_CurrentCount);	
+	CF_Gyro_YPitch = CF_YPitch + ((Gyro_Xout/AccGyro_GyroScaling) * CF_Gyro_CurrentCount);
+	CF_Gyro_XRoll = CF_XRoll - ((Gyro_Yout/AccGyro_GyroScaling) * CF_Gyro_CurrentCount);	
 	
-	CF_Accel_ForceMagApprox = abs(Accel_Xout[Accel_RetIndex]) + abs(Accel_Yout[Accel_RetIndex]) + abs(Accel_Zout[Accel_RetIndex]);
+	CF_Accel_ForceMagApprox = abs(Accel_Xout_Avg) + abs(Accel_Yout_Avg) + abs(Accel_Zout_Avg);
 	if (CF_Accel_ForceMagApprox > 16384 && CF_Accel_ForceMagApprox < 32768)
     {
 	// Turning around the X axis results in a vector on the Y-axis
-        CF_Accel_YPitch = atan2(Accel_Yout[Accel_RetIndex], Accel_Zout[Accel_RetIndex]) * (57.29);	//57.29 = 180deg/pi
+        CF_Accel_YPitch = atan2(Accel_Yout_Avg, Accel_Zout_Avg) * (57.29);	//57.29 = 180deg/pi
         CF_YPitch = (CF_Gyro_YPitch * CF_HPF) + (CF_Accel_YPitch * CF_LPF);
  
 	// Turning around the Y axis results in a vector on the X-axis
-        CF_Accel_XRoll = atan2(Accel_Xout[Accel_RetIndex], Accel_Zout[Accel_RetIndex]) * (57.29);
+        CF_Accel_XRoll = atan2(Accel_Xout_Avg, Accel_Zout_Avg) * (57.29);
         CF_XRoll = (CF_Gyro_XRoll * CF_HPF) + (CF_Accel_XRoll * CF_LPF);
     }
 	else{
 	// Turning around the X axis results in a vector on the Y-axis
-        CF_Accel_YPitch = atan2(Accel_Yout[Accel_RetIndex], Accel_Zout[Accel_RetIndex]) * (57.29);	//57.29 = 180deg/pi
+        CF_Accel_YPitch = atan2(Accel_Yout_Avg, Accel_Zout_Avg) * (57.29);	//57.29 = 180deg/pi
 		CF_YPitch = CF_Gyro_YPitch;
 	
 	// Turning around the Y axis results in a vector on the X-axis
-        CF_Accel_XRoll = atan2(Accel_Xout[Accel_RetIndex], Accel_Zout[Accel_RetIndex]) * (57.29);
+        CF_Accel_XRoll = atan2(Accel_Xout_Avg, Accel_Zout_Avg) * (57.29);
 		CF_XRoll = CF_Gyro_XRoll;
 	}
+	
+	/*
 	
 	Accel_RetIndex++;
 	if(Accel_RetIndex > 9){
 		Accel_RetIndex = 0;
 	}
-	
+	*/
 	/*
 	for(i = 0; i<50; i++)
 	{
