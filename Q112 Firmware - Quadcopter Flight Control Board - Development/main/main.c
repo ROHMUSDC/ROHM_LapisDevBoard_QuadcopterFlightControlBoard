@@ -24,7 +24,7 @@
 // PID Gains
 #define Accel_SetKp				35	
 #define Accel_SetKi				5	
-#define Accel_SetKd				5	//25
+#define Accel_SetKd				10	//25
 
 // Sampling control
 #define IenterThres	1 // P_sample_rate / I_sample_rate = IenterThres
@@ -333,7 +333,7 @@ static float					AccGyro_GyroScaling = 65.536;			//	0x00 = 131, 0x08 = 65.536, 0
 static unsigned char			AccGyro_GyroAccelLPF = 0x1A;			//	Address of Config for LPF for Gyro and Accel
 static unsigned char			AccGyro_GyroAccelLPF_Contents = 0x4;	//	6=5Hz, 5=10Hz, 4=21Hz (Config Low-Pass Filter for Gyro and Accel)
 static unsigned char			AccGyro_GyroAccel_SMPRTDIV = 0x19;			//	Address of Sample Rate Divider
-static unsigned char			AccGyro_GyroAccelLPF_SMPRTDIVContents = 0x20; //0x13 = 50Hz	//	Changing SMPRT to 20Hz (decimal 49 = 0x31) //Change to 10Hz (0x63) //30Hz = 0x20
+static unsigned char			AccGyro_GyroAccelLPF_SMPRTDIVContents = 0x13; //0x13 = 50Hz	//	Changing SMPRT to 20Hz (decimal 49 = 0x31) //Change to 10Hz (0x63) //30Hz = 0x20
 static unsigned char			AccGyro_INTENABLEReg = 0x38;			//	
 static unsigned char			AccGyro_INTENABLEReg_contents = 0x01;	//	Turn on Data Ready Interrupt	//Output at 83Hz
 static unsigned char			AccGYRO_Test = 0;
@@ -428,8 +428,8 @@ static float					Mag_PIDOutput = 0;
 static float					CF_Gyro_Counter = 0;
 static float					CF_YPitch = 0;
 static float					CF_XRoll = 0;
-static float					CF_HPF = 0.96; 					// = a = tau/(tau+dt) => Calibrated 3-28-2014 = 0.97 
-static float					CF_LPF = 0.04;					// = 1-a
+static float					CF_HPF = 0.97; 					// = a = tau/(tau+dt) => Calibrated 3-28-2014 = 0.97 
+static float					CF_LPF = 0.03;					// = 1-a
 static unsigned char			CF_UseFlag = 0;
 static unsigned char			CF_Counter = 0;
 
@@ -2570,7 +2570,7 @@ int i;
 		
 		//Calculating the "I" portion of PID
 		Accel_PID_YPitchErrSum += (Accel_PID_YPitchError * Accel_PID_YPitchCurrentCount);
-		
+		 
 		//Calculating PID Output
 		//Accel_PID_YPitchOutput = (Accel_PID_YPitch_kp*Accel_PID_YPitchError) + (Accel_PID_YPitch_ki*Accel_PID_YPitchErrSum) + (Accel_PID_YPitch_kd*Accel_PID_YPitchdErr);
 		Accel_PID_YPitchOutput = (Accel_PID_YPitch_kp*Accel_PID_YPitchError) + (Accel_PID_YPitch_ki*Accel_PID_YPitchErrSum);
@@ -2696,8 +2696,25 @@ int i;
 		//Calculating the "D" portion of PID
 		Accel_PID_XRolldErr = (Accel_PID_XRollError -  Accel_PID_XRollErrPrev);
 		Accel_PID_XRolldErr	/= Accel_PID_XRollCurrentCount;
+
+		if( Accel_PID_XRollError<0)
+		{
+			if(Accel_PID_XRollErrPrev>=0)
+			{
+				Accel_PID_XRollErrSum = 0;
+			}
+		}
+	 
+		if( Accel_PID_XRollError>=0)
+		{
+			if(Accel_PID_XRollErrPrev<0)
+			{
+				Accel_PID_XRollErrSum = 0;
+			}
+		}
+		
 		Accel_PID_XRollErrPrev = Accel_PID_XRollError;
-		 
+		
 		#ifdef _PIDDBoundsEN
 		if((Accel_PID_DBounds_Var_Neg < Accel_PID_XRollErrPrev) && (Accel_PID_XRollErrPrev < Accel_PID_DBounds_Var_Pos))
 		{
@@ -2722,7 +2739,24 @@ int i;
 		//Calculating the "D" portion of PID
 		Accel_PID_YPitchdErr = (Accel_PID_YPitchError -  Accel_PID_YPitchErrPrev);
 		Accel_PID_YPitchdErr /= Accel_PID_YPitchCurrentCount;
+		
+		if( Accel_PID_YPitchError<0)
+		{
+			if(Accel_PID_YPitchErrPrev>=0) 
+			{
+				Accel_PID_YPitchErrSum = 0;
+			}
+		}
+		if( Accel_PID_YPitchError>=0)
+		{
+			if(Accel_PID_YPitchErrPrev<0)
+			{
+				Accel_PID_YPitchErrSum = 0;
+			}
+		} 
+		
 		Accel_PID_YPitchErrPrev = Accel_PID_YPitchError;
+		
 		#ifdef _PIDDBoundsEN
 		if((Accel_PID_DBounds_Var_Neg < Accel_PID_YPitchErrPrev) && (Accel_PID_YPitchErrPrev < Accel_PID_DBounds_Var_Pos))
 		{
@@ -2798,7 +2832,7 @@ int i;
 			}
 		}
 		
-	 
+	 /*
 		//SensorReturnSM
 		for(i = 0; i<50; i++)
 		{
@@ -2821,7 +2855,7 @@ int i;
 		while(_flgUartFin != 1){
 			main_clrWDT();
 		}
-		 
+	*/	 
 	
 	//----- End Accelerometer PID Loop ----- 
 	//LED_3 = 0;		//C1, Pin 13
