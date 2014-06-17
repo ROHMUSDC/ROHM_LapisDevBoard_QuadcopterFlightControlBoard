@@ -14,17 +14,17 @@
 //*****************************************************************************
 
 //Debugging Strings
-#define _PIDPBoundsEN			(1)
-#define _PIDDBoundsEN			(1)
+//#define _PIDPBoundsEN			(1)
+//#define _PIDDBoundsEN			(1)
 
 //Constants
 #define PIDPBounds				(0)
 #define PIDDBounds				(0)	//2
 
 // PID Gains
-#define Accel_SetKp				0	
-#define Accel_SetKi				0	
-#define Accel_SetKd				0	//25
+#define Accel_SetKp				35	
+#define Accel_SetKi				5	
+#define Accel_SetKd				5	//25
 
 // Sampling control
 #define IenterThres	1 // P_sample_rate / I_sample_rate = IenterThres
@@ -333,7 +333,7 @@ static float					AccGyro_GyroScaling = 65.536;			//	0x00 = 131, 0x08 = 65.536, 0
 static unsigned char			AccGyro_GyroAccelLPF = 0x1A;			//	Address of Config for LPF for Gyro and Accel
 static unsigned char			AccGyro_GyroAccelLPF_Contents = 0x4;	//	6=5Hz, 5=10Hz, 4=21Hz (Config Low-Pass Filter for Gyro and Accel)
 static unsigned char			AccGyro_GyroAccel_SMPRTDIV = 0x19;			//	Address of Sample Rate Divider
-static unsigned char			AccGyro_GyroAccelLPF_SMPRTDIVContents = 0x13; //0x13 = 50Hz	//	Changing SMPRT to 20Hz (decimal 49 = 0x31) //Change to 10Hz (0x63) //30Hz = 0x20
+static unsigned char			AccGyro_GyroAccelLPF_SMPRTDIVContents = 0x20; //0x13 = 50Hz	//	Changing SMPRT to 20Hz (decimal 49 = 0x31) //Change to 10Hz (0x63) //30Hz = 0x20
 static unsigned char			AccGyro_INTENABLEReg = 0x38;			//	
 static unsigned char			AccGyro_INTENABLEReg_contents = 0x01;	//	Turn on Data Ready Interrupt	//Output at 83Hz
 static unsigned char			AccGYRO_Test = 0;
@@ -428,8 +428,8 @@ static float					Mag_PIDOutput = 0;
 static float					CF_Gyro_Counter = 0;
 static float					CF_YPitch = 0;
 static float					CF_XRoll = 0;
-static float					CF_HPF = 0.92; 					// = a = tau/(tau+dt) => Calibrated 3-28-2014 = 0.97 
-static float					CF_LPF = 0.08;					// = 1-a
+static float					CF_HPF = 0.96; 					// = a = tau/(tau+dt) => Calibrated 3-28-2014 = 0.97 
+static float					CF_LPF = 0.04;					// = 1-a
 static unsigned char			CF_UseFlag = 0;
 static unsigned char			CF_Counter = 0;
 
@@ -531,7 +531,7 @@ static unsigned char 			PWMSensorResPerInc = 0;
 //static unsigned int			PWM_AccelMinHoverRPM = 10500;			//Unused as of 3/30/2014...
 static unsigned int				PWMUpperLowerDiff = 0;
 static unsigned int 			PWMUpperDutyLimitRun = 13000;			//Value for Maximum Duty	//18min flight = 11500
-static unsigned int				PWMIdleDutyRun = 10000;
+static unsigned int				PWMIdleDutyRun = 11000;
 static unsigned int 			PWMLowerDutyLimitRun = 8500;			//Value for Minimum Duty	//18min flight = 9500
 																		//9000 duty 	=  	3040rpm
 static unsigned int				PWMtoRPMOffset_Mot2 = -120;		
@@ -540,7 +540,7 @@ static unsigned int				PWMtoRPMOffset_Mot4 = 50;																			//10000 duty 
 																		//11000 duty	=	5820rpm
 																		//12000 duty	=	6700rpm
 																		//13000 duty	=	7780rpm
-
+static int testP, testI, testD;
 /*############################################################################*/
 /*#                                  APIs                                    #*/
 /*############################################################################*/
@@ -2417,6 +2417,7 @@ void AccelSensorControlPID_P(void){
 		
 		//Calculating PID Output
 		Accel_PID_XRollOutput = (Accel_PID_XRoll_kp*Accel_PID_XRollError);
+		testP = Accel_PID_XRollOutput;
 		Accel_PID_XRollOutput += (Accel_PID_XRoll_ki*Accel_PID_XRollErrSum);
 		//Accel_PID_XRollOutput += (Accel_PID_XRoll_kd*Accel_PID_XRolldErr);	//Commented this out, because D portion needs to be independent (Burst output, compensate using Increased D value)
 		
@@ -2508,7 +2509,8 @@ void AccelSensorControlPID_P(void){
 		
 		//sprintf(SensorReturnSM, "%f,%f,%u,%u,%u,%u", CF_YPitch, CF_XRoll, PWF0D, PWED, PWCD, PWDD);
 		//sprintf(SensorReturnSM, "%f,%f", Accel_PID_YPitchOutput, Accel_PID_XRollOutput);
-		sprintf(SensorReturnSM, "%f,%f", Accel_PID_XRollErrPrev, Accel_PID_YPitchErrPrev);
+		//sprintf(SensorReturnSM, "%f,%f", Accel_PID_XRollErrPrev, Accel_PID_YPitchErrPrev);
+		//sprintf(SensorReturnSM, "%f,%u,%u,%u", CF_XRoll, testP, testI, testD );
 		
 		SensorReturnSM[48] = 0x0D;
 		SensorReturnSM[49] = 0x0A;
@@ -2556,7 +2558,8 @@ int i;
 		
 		//Calculating PID Output
 		Accel_PID_XRollOutput = (Accel_PID_XRoll_kp*Accel_PID_XRollError);
-		Accel_PID_XRollOutput += (Accel_PID_XRoll_ki*Accel_PID_XRollErrSum);
+		testI = (Accel_PID_XRoll_ki*Accel_PID_XRollErrSum);
+		Accel_PID_XRollOutput += testI;
 		//Accel_PID_XRollOutput += (Accel_PID_XRoll_kd*Accel_PID_XRolldErr);
 	
 		
@@ -2694,7 +2697,6 @@ int i;
 		Accel_PID_XRolldErr = (Accel_PID_XRollError -  Accel_PID_XRollErrPrev);
 		Accel_PID_XRolldErr	/= Accel_PID_XRollCurrentCount;
 		Accel_PID_XRollErrPrev = Accel_PID_XRollError;
-		if(
 		 
 		#ifdef _PIDDBoundsEN
 		if((Accel_PID_DBounds_Var_Neg < Accel_PID_XRollErrPrev) && (Accel_PID_XRollErrPrev < Accel_PID_DBounds_Var_Pos))
@@ -2706,7 +2708,10 @@ int i;
 		//Calculating PID Output
 		Accel_PID_XRollOutput = (Accel_PID_XRoll_kp*Accel_PID_XRollError);
 		Accel_PID_XRollOutput += (Accel_PID_XRoll_ki*Accel_PID_XRollErrSum);
-		Accel_PID_XRollOutput += (Accel_PID_XRoll_kd*Accel_PID_XRolldErr);
+		 
+		testD = (Accel_PID_XRoll_kd*Accel_PID_XRolldErr);
+		
+		Accel_PID_XRollOutput += testD;
 
 		
 		//Get current counter and reset variable...
@@ -2793,17 +2798,18 @@ int i;
 			}
 		}
 		
-		/*
+	 
 		//SensorReturnSM
 		for(i = 0; i<50; i++)
 		{
 			SensorReturnSM[i] = 0x20;
 		}
 		
-		sprintf(SensorReturnSM, "%f,%f,%u,%u,%u,%u", CF_YPitch, CF_XRoll, PWF0D, PWED, PWCD, PWDD);
+		//sprintf(SensorReturnSM, "%f,%f,%u,%u,%u,%u", CF_YPitch, CF_XRoll, PWF0D, PWED, PWCD, PWDD);
 		
 		//sprintf(SensorReturnSM, "%f,%f", Accel_PID_YPitchOutput, Accel_PID_XRollOutput);
 		
+		sprintf(SensorReturnSM, "%f,%d,%d,%d", CF_XRoll, testP, testI, testD );
 		
 		SensorReturnSM[48] = 0x0D;
 		SensorReturnSM[49] = 0x0A;
@@ -2815,7 +2821,7 @@ int i;
 		while(_flgUartFin != 1){
 			main_clrWDT();
 		}
-		*/
+		 
 	
 	//----- End Accelerometer PID Loop ----- 
 	//LED_3 = 0;		//C1, Pin 13
