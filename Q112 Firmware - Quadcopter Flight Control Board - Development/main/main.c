@@ -22,18 +22,18 @@
 #define PIDDBounds				(0)	//2
 
 // PID Gains
-#define Accel_x_SetKp				37	
-#define Accel_x_SetKi				8	
-#define Accel_x_SetKd				13	//25
+#define Accel_x_SetKp				51	
+#define Accel_x_SetKi				11.5	
+#define Accel_x_SetKd				17	//25
 
-#define Accel_y_SetKp				37	
-#define Accel_y_SetKi				8	
-#define Accel_y_SetKd				13	//25
+#define Accel_y_SetKp				51	
+#define Accel_y_SetKi				11.5	
+#define Accel_y_SetKd				17	//25
 
 // Sampling control
 #define IenterThres				1 // P_sample_rate / I_sample_rate = IenterThres
 #define DenterThres 			1 // P_sample_rate / D_sample_rate = DenterThres
-#define AccelAvg				15
+#define AccelAvg				17
 
 
 //*****************************************************************************
@@ -318,6 +318,8 @@ float approx_arctan2(float y, float x);
 void TBC_ISR( void );	//TBC Interrupt Service Routine...
 void TMR89_ISR( void );
 void AccelGyroDataReady_ISR( void );
+void Emit_Warning( void );
+void InitializeTone( void );
 
 //*****************************************************************************
 
@@ -534,7 +536,7 @@ static unsigned char			PrePIDCount = 0;
 static unsigned char 			PWMflag = 0;
 static unsigned int 			PWMUpperDutyLimitCalib = 15000;			//Value for Maximum Duty (WAS 16000)
 static unsigned int 			PWMLowerDutyLimitCalib = 8000;			//Value for Minimum Duty
-static unsigned int 			PWMSafeDuty = 8450;						//Value for Safe Duty = Off, right before starting to spin
+static unsigned int 			PWMSafeDuty = 8400;						//Value for Safe Duty = Off, right before starting to spin
 static unsigned int				PWMPeriod = 17000; 						//Value for Period 
 static unsigned char 			PWMCounter = 0;
 static unsigned char 			PWMSensorResPerInc = 0;
@@ -550,7 +552,8 @@ static unsigned int				PWMtoRPMOffset_Mot4 = 50;																			//10000 duty 
 																		//11000 duty	=	5820rpm
 																		//12000 duty	=	6700rpm
 																		//13000 duty	=	7780rpm
-static int testP, testI, testD;
+static int testP, testI, testD; 
+static int isDemoing;
 /*############################################################################*/
 /*#                                  APIs                                    #*/
 /*############################################################################*/
@@ -560,20 +563,34 @@ static int testP, testI, testD;
 //===========================================================================
 int main(void) 
 {
-int i;
+int i;  
 //unsigned char flag;
 
 //Init:
 		Initialization(); 			//Ports, UART, Timers, Oscillator, Comparators, etc.
+	    
+		if(PC3D==0)
+		{
+			isDemoing = 1;
+			InitializeTone();
+		}
+		else
+		{
+			isDemoing = 0; 
+			InitializeTone();
+			InitializeTone();
+		}
+		 
+		 
 		main_clrWDT();				//kick the dog...1.34uS duration
-		CalibrateMotors();			//Time-consuming ~6s
+		CalibrateMotors();			//Time-consuming ~6s 
 		CalibrateGyro();			//Enter Calibration Sequence for Gyro
 		//CalibrateAccel();			//Enter Calibration Sequence for Accel
 									//*** Be Aware: The Below Values were found after "CalibrateAccel" was run.  Use Debugger to find and Hardcode Below...
 			
 			//--- Kris's Quad's Accel Calibration Settings ---
-			//Accel_Xcal[0] = 75;
-			//Accel_Ycal[0] = -675;
+			Accel_Xcal[0] = 754;
+			Accel_Ycal[0] = -1360;
 			Accel_Zcal[0] = -162;
 			
 			//--- Carl's Quad's Accel Calibration Settings ---
@@ -582,12 +599,15 @@ int i;
 			Accel_Ycal[0] = ?
 			Accel_Zcal[0] = ?
 			*/
-	
+		
 Main_Loop:
-		SerialOutCoefficients();	//~23ms when PID is Triggered as well..13.8ms otherwise
-		PrePIDCount = 0;
-		UARTTunePID();				//Allow PID & CF Constant changes over UART
-		main_clrWDT();				//kick the dog...1.34uS duration.
+		if(!isDemoing)
+		{
+			SerialOutCoefficients();	//~23ms when PID is Triggered as well..13.8ms otherwise
+			PrePIDCount = 0;
+			UARTTunePID();				//Allow PID & CF Constant changes over UART
+			main_clrWDT();				//kick the dog...1.34uS duration.
+		} 
 		
 		Accel_SavIndex = 0;			//Reset Circular Buffer for Accel/Gyro Measurements
 		//Accel_RetIndex = 0;
@@ -598,11 +618,17 @@ Main_Loop:
 			//Gyro_Xout[i] = 0;
 			//Gyro_Yout[i] = 0;
 			//Gyro_Zout[i] = 0;
-		}
+		} 
 		EPB3 = 1;					//Enable Accel/Gyro Interrupt Pin
 		
+		while(!PC3D){
+			NOPms(100);
+			main_clrWDT();
+		}
+		
+		Emit_Warning();
 		SoftStart();				//Smoothly bring up the Motor RPM
-
+	 
 		
 Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014		
 		//LED_1 ^= 1;					
@@ -684,7 +710,7 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 		//MagSensorControl();		//First order control loop for working with the Mag sensor
 		
 		//Motor Run Time...
-		if(TestingEndTimer < 1000){		//50 == 3secs = 250 = 15 seconds
+		if(PC3D==1){		//50 == 3secs = 250 = 15 seconds
 			//TestingEndTimer++;			//Comment this out to always loop (i.e.: no shut-down...)
 			goto Fast_Loop;
 		}
@@ -699,7 +725,83 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 		}
 		//goto Main_Loop;
 }//end main
-
+ 
+void InitializeTone( void )
+{ 
+	int i; 
+	if(isDemoing)
+	{
+		for(i=0; i<15; i++)
+		{
+			LED_2 = 1;
+			NOPms(100);
+			LED_2 = 0;
+			NOPms(100);  
+		} 
+		NOPms(100); 
+		NOPms(100);    
+		for(i=0; i<15; i++)
+		{
+			LED_2 = 1;
+			NOPms(100);
+			LED_2 = 0;
+			NOPms(100);  
+		}
+		NOPms(100); 
+		NOPms(100);  
+	}
+	else
+	{
+		for(i=0; i<7; i++)
+		{
+			LED_2 = 1;
+			NOPms(100);
+			LED_2 = 0;
+			NOPms(100);  
+		} 
+		NOPms(100); 
+		NOPms(100);  
+		for(i=0; i<7; i++)
+		{
+			LED_2 = 1;
+			NOPms(100);
+			LED_2 = 0;
+			NOPms(100);  
+		}
+		NOPms(100); 
+		NOPms(100);  
+		for(i=0; i<7; i++)
+		{
+			LED_2 = 1;
+			NOPms(100);
+			LED_2 = 0;
+			NOPms(100);  
+		} 
+		NOPms(100); 
+		NOPms(100);  
+		for(i=0; i<7; i++)
+		{
+			LED_2 = 1;
+			NOPms(100);
+			LED_2 = 0;
+			NOPms(100);  
+		}
+		NOPms(100); 
+		NOPms(100);  
+	}
+}
+ 
+void Emit_Warning( void )
+{
+	int i; 
+	for(i=0; i<40; i++)
+	{
+		LED_2 = 1;
+		NOPms(100);
+		LED_2 = 0;
+		NOPms(100);  
+	}
+}
 //===========================================================================
 //  	End of MAIN FUNCTION
 //===========================================================================
@@ -1546,33 +1648,34 @@ int i;
 //----- Calibrate Accel/Gyro -----
 void CalibrateGyro(void){
 int i;
-
-	//Send Message Indicating Calibration to Begin
-	for(i = 0; i<150; i++)
+	if(!isDemoing)
 	{
-		SensorReturn[i] = 0x20;
-	}
-	sprintf(SensorReturn, "Gyro Calibration: Please Keep the Quad Flat and Return Any 2 chars to Start");
-	
-	SensorReturn[148] = 0x0D;
-	SensorReturn[149] = 0x0A;
-	//Send Returned Sensor Output to PC!
-	_flgUartFin = 0;
-	uart_stop();
-	uart_startSend(SensorReturn, 150, _funcUartFin);
-	while(_flgUartFin != 1){
-		NOP1000();
-		main_clrWDT();
-	}
-	
-	//Start Recieve and wait for the return message
-	_flgUartFin = 0;
-	uart_stop();
-	uart_startReceive(RecWorld, 2, _funcUartFin);
-	while(_flgUartFin != 1){
-		main_clrWDT();
-	}
-	
+		//Send Message Indicating Calibration to Begin
+		for(i = 0; i<150; i++)
+		{
+			SensorReturn[i] = 0x20;
+		}
+		sprintf(SensorReturn, "Gyro Calibration: Please Keep the Quad Flat and Return Any 2 chars to Start");
+		
+		SensorReturn[148] = 0x0D;
+		SensorReturn[149] = 0x0A;
+		//Send Returned Sensor Output to PC!
+		_flgUartFin = 0;
+		uart_stop();
+		uart_startSend(SensorReturn, 150, _funcUartFin);
+		while(_flgUartFin != 1){
+			NOP1000();
+			main_clrWDT();
+		}
+		
+		//Start Recieve and wait for the return message
+		_flgUartFin = 0;
+		uart_stop();
+		uart_startReceive(RecWorld, 2, _funcUartFin);
+		while(_flgUartFin != 1){
+			main_clrWDT();
+		}
+	}	
 	i = 0;
 	//Obtain the Data! Loop to average (10 Times)
 	EPB3 = 1;					//Enable Accel/Gyro Interrupt Pin
@@ -1602,8 +1705,8 @@ int i;
 	Gyro_Xcal /= 10;
 	Gyro_Ycal /= 10;
 	Gyro_Zcal /= 10;
-	Accel_Xcal[0] /= 10;
-	Accel_Ycal[0] /= 10;
+	//Accel_Xcal[0] /= 10;
+	//Accel_Ycal[0] /= 10;
 	EPB3 = 0;					//Enable Accel/Gyro Interrupt Pin
 	
 	/*
@@ -1628,22 +1731,24 @@ int i;
 	Accel_Xcal[0] /= 10;
 	Accel_Ycal[0] /= 10;
 	*/
-	
-	//Return Calibration Complete Message
-	for(i = 0; i<150; i++)
+	if(!isDemoing)
 	{
-		SensorReturn[i] = 0x20;
-	}
-	sprintf(SensorReturn, "Gyro Calibration Complete!");
-	SensorReturn[148] = 0x0D;
-	SensorReturn[149] = 0x0A;
-	//Send Returned Sensor Output to PC!
-	_flgUartFin = 0;
-	uart_stop();
-	uart_startSend(SensorReturn, 150, _funcUartFin);
-	while(_flgUartFin != 1){
-		NOP1000();
-		main_clrWDT();
+		//Return Calibration Complete Message
+		for(i = 0; i<150; i++)
+		{
+			SensorReturn[i] = 0x20;
+		}
+		sprintf(SensorReturn, "Gyro Calibration Complete!");
+		SensorReturn[148] = 0x0D;
+		SensorReturn[149] = 0x0A;
+		//Send Returned Sensor Output to PC!
+		_flgUartFin = 0;
+		uart_stop();
+		uart_startSend(SensorReturn, 150, _funcUartFin);
+		while(_flgUartFin != 1){
+			NOP1000();
+			main_clrWDT();
+		}
 	}
 }
 
@@ -3577,9 +3682,9 @@ void PortC_Low(void){
 	PC0DIR = 0;		// PortC Bit0 set to Output Mode...
 	PC1DIR = 0;		// PortC Bit1 set to Output Mode...
 	PC2DIR = 0;		// PortC Bit2 set to Output Mode...
-	PC3DIR = 0;		// PortC Bit3 set to Output Mode...
+	PC3DIR = 1;		// PortC Bit3 set to Output Mode...
 	PC4DIR = 0;		// PortC Bit4 set to Output Mode...
-	PC5DIR = 0;		// PortC Bit5 set to Output Mode...
+	PC5DIR = 1;		// PortC Bit5 set to Output Mode...
 	PC6DIR = 0;		// PortC Bit6 set to Output Mode...
 	PC7DIR = 0;		// PortC Bit7 set to Output Mode...
 
@@ -3623,7 +3728,7 @@ void PortC_Low(void){
 	PC0D = 0;		// C.0 Output OFF....
 	PC1D = 0;		// C.1 Output OFF....
 	PC2D = 0;		// C.2 Output OFF....
-	PC3D = 0;		// C.3 Output OFF....
+	//PC3D = 0;		// C.3 Output OFF....
 	PC4D = 0;		// C.4 Output OFF....
 	PC5D = 0;		// C.5 Output OFF....
 	PC6D = 0;		// C.6 Output OFF....
