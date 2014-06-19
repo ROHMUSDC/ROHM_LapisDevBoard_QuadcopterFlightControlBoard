@@ -37,9 +37,9 @@
 //
 // ================================ ML610Q111 ================================= 
 //
-// Pin-01 => A.0 - GPIO			Pin-02 => A.1
-// Pin-03 => A.2				Pin-04 => B.0 - UART RX
-// Pin-05 => B.1 - UART TX		Pin-06 => B.2
+// Pin-01 => A.0				Pin-02 => A.1
+// Pin-03 => A.2				Pin-04 => B.0
+// Pin-05 => B.1				Pin-06 => B.2
 // Pin-07 => B.3				Pin-08 => B.4
 // Pin-09 => B.5				Pin-10 => B.6 
 // Pin-11 => B.7				Pin-12 => C.0
@@ -107,7 +107,7 @@
 #define FLG_SET	( 0x01u ) 
 
 // ===== SET DESIRED UART SETTINGS HERE! (Options in UART.h) =====
-#define UART_BAUDRATE		( UART_BR_57600BPS) 	// Data Bits Per Second - Tested at rates from 2400bps to 512000bps!
+#define UART_BAUDRATE		( UART_BR_9600BPS) 	// Data Bits Per Second - Tested at rates from 2400bps to 512000bps!
 #define UART_DATA_LENGTH	( UART_LG_8BIT )		// x-Bit Data
 #define UART_PARITY_BIT		( UART_PT_NON )		// Parity
 #define UART_STOP_BIT		( UART_STP_1BIT )		// x Stop-Bits
@@ -182,60 +182,49 @@ int i;
 
 Init:
 	Initialization();		//Ports, UART, Timers, Oscillator, Comparators, etc.
-	PA0D = 0;
+	PA0D = 1;
 	
 Loop:
-	main_clrWDT();
-	
-	//Reset RecWorld for UART Receive
-	for (i=0;i<8;i++)
-	{
-		RecWorld[i] = 0;	
-	}
-	
-	//Begin UART Receive
-	_flgUartFin = 0;
-	uart_stop();
-	uart_startReceive(RecWorld, 8, _funcUartFin);
-	while(_flgUartFin != 1){
-		NOP1000();
 		main_clrWDT();
-	}
-	
-	//Check UART Receive String for "ACK"
-	//if ACK Sent, Return "UART Connected"
-	//--This loop triggers when COM port is open3ed on PC
-	//if(RecWorld[0] == 0x53){			//if RECWORLD == "STOP"
-		//if(RecWorld[1] == 0x54){
-			//if(RecWorld[2] == 0x4F){
-				//if(RecWorld[3] == 0x50){
-					PA0D = 1;
-				//}
-			//}
-		//}
-	//}
-	
-	if(RecWorld[0] == 0x50){			//if RECWORLD == "PLAY"
-		if(RecWorld[1] == 0x4C){
-			if(RecWorld[2] == 0x41){
-				if(RecWorld[3] == 0x59){
-					PA0D = 0;
-				}
-				else{
-					PA0D = 1;
+		
+		//Reset RecWorld for UART Receive
+		for (i=0;i<8;i++)
+		{
+			RecWorld[i] = 0;	
+		}
+		
+		//Begin UART Receive
+		_flgUartFin = 0;
+		uart_stop();
+		uart_startReceive(RecWorld, 8, _funcUartFin);
+		while(_flgUartFin != 1){
+			NOP1000();
+			main_clrWDT();
+		}
+		
+		//Check UART Receive String for "ACK"
+		//if ACK Sent, Return "UART Connected"
+		//--This loop triggers when COM port is open3ed on PC
+		if(RecWorld[0] == 0x53){			//if RECWORLD == "STOP"
+			if(RecWorld[1] == 0x54){
+				if(RecWorld[2] == 0x4F){
+					if(RecWorld[3] == 0x50){
+						PA0D = 0;
+					}
 				}
 			}
-			else{
-				PA0D = 1;
+		}
+		
+		if(RecWorld[0] == 0x50){			//if RECWORLD == "PLAY"
+			if(RecWorld[1] == 0x4C){
+				if(RecWorld[2] == 0x41){
+					if(RecWorld[3] == 0x59){
+						PA0D = 1;
+					}
+				}
 			}
 		}
-		else{
-			PA0D = 1;
-		}
-	}
-	else{
-		PA0D = 1;
-	}
+		
 goto Loop;
 
 }//end main

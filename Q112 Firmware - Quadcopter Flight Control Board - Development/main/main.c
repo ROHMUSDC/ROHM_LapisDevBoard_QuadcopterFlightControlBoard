@@ -710,7 +710,7 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 		//MagSensorControl();		//First order control loop for working with the Mag sensor
 		
 		//Motor Run Time...
-		if((PC3D==1)||(PA2D == 0)){		//50 == 3secs = 250 = 15 seconds
+		if(PC3D==1){		//50 == 3secs = 250 = 15 seconds
 			//TestingEndTimer++;			//Comment this out to always loop (i.e.: no shut-down...)
 			goto Fast_Loop;
 		}
@@ -1760,7 +1760,7 @@ int i;
 	{
 		SensorReturn[i] = 0x20;
 	}
-6	sprintf(SensorReturn, "Accel Calibration: Keep Quad Flat! Return any 2 chars to Start");
+	sprintf(SensorReturn, "Accel Calibration: Keep Quad Flat! Return any 2 chars to Start");
 	SensorReturn[148] = 0x0D;
 	SensorReturn[149] = 0x0A;
 	//Send Returned Sensor Output to PC!
