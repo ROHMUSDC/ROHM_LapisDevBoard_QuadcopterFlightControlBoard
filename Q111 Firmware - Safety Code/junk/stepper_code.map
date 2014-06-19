@@ -1,0 +1,272 @@
+RLU8 Object Linker, Ver.1.51.2 Linkage Information
+[Mon Feb 04 16:31:00 2013]
+
+
+                         ------------------
+                          Control Synopsis
+                         ------------------
+
+I/O controls:    D  SD NS NA
+Other controls: CC STACK( 0100H(256) )
+                COMB( $$content_of_init $$end_of_init )
+                COMB( $$init_info $$init_info_end )
+
+
+
+                        ------------------------
+                         Object Module Synopsis
+                        ------------------------
+                                                                Creator
+Module Name           File Name                                 CCU8     RASU8
+-----------           ---------                                 -----    -----
+clock                 _output\_obj\clock.obj                    3.31     1.61
+irq                   _output\_obj\irq.obj                      3.31     1.61
+main                  _output\_obj\main.obj                     3.31     1.61
+ml610102              _output\_obj\ml610102.obj                 -.--     1.61
+notes                 _output\_obj\notes.obj                    3.31     1.61
+tbc                   _output\_obj\tbc.obj                      3.31     1.61
+timer                 _output\_obj\timer.obj                    3.31     1.61
+uart                  _output\_obj\uart.obj                     3.31     1.61
+
+
+Number of Modules: 8
+
+Number of Symbols:
+ +---------------------------------------------------------------------------+
+ |          | CODE | DATA | BIT  |NVDATA|NVBIT |TABLE |NUMBER| TBIT || total |
+ |----------+------+------+------+------+------+------+------+------++-------|
+ | SEGMENT  |    57|     3|     0|     0|     0|     4|      |      ||     64|
+ |----------+------+------+------+------+------+------+------+------++-------|
+ | COMMUNAL |     0|     0|     0|     0|     0|     0|      |      ||      0|
+ |----------+------+------+------+------+------+------+------+------++-------|
+ | PUBLIC   |    17|     0|     0|     0|     0|     0|     0|     0||     17|
+ +---------------------------------------------------------------------------+
+
+Target:  ML610102 
+Model:   SMALL
+
+
+Memory Map - Program memory space #0:
+      Type     Start      Stop
+     -----------------------------
+      ROM      00:0000    00:17FF
+
+Memory Map - Data memory space #0:
+      Type     Start      Stop
+     -----------------------------
+      RAM      00:E000    00:E0FF
+      RAM      00:F000    00:FFFF
+
+Memory Map - Memory space above #1:
+      Type     Start      Stop
+     -----------------------------
+      ROM      08:0000    08:17FF
+
+                         ------------------
+                          Segment Synopsis
+                         ------------------
+
+Link Map - Program memory space #0 ( ROMWINDOW: 0000 - 17FF )
+
+      Type     Start      Stop       Size              Name
+     -------------------------------------------------------
+      S CODE   00:0000    00:0001    0002(2)           (absolute)
+      S CODE   00:0002    00:0003    0002(2)           (absolute)
+      S CODE   00:0004    00:0005    0002(2)           (absolute)
+      S CODE   00:0006    00:0007    0002(2)           $$_intUndefHdr$irq
+      S CODE   00:0008    00:007F    0078(120)         (absolute)
+      S TABLE  00:0080    00:0087    0008(8)           $$init_info
+      S TABLE  00:0088    00:0089    0002(2)           $$init_info_end
+      S CODE   00:008A    00:00A5    001C(28)          $$_intT16HINT$irq
+      S CODE   00:00A6    00:0135    0090(144)         $$NCODml610102sw
+      S CODE   00:0136    00:0151    001C(28)          $$_intI2C0INT$irq
+      S CODE   00:0152    00:016D    001C(28)          $$_intTM0INT$irq
+      S CODE   00:016E    00:0189    001C(28)          $$_intTM1INT$irq
+      S CODE   00:018A    00:018A    0000(0)           $$content_of_init
+      S CODE   00:018A    00:018B    0002(2)           $$end_of_init
+      S CODE   00:018C    00:01A7    001C(28)          $$_intTM8INT$irq
+      S CODE   00:01A8    00:01C3    001C(28)          $$_intTM9INT$irq
+      S CODE   00:01C4    00:01DF    001C(28)          $$_intTM2INT$irq
+      S CODE   00:01E0    00:01FB    001C(28)          $$_intTM3INT$irq
+      S CODE   00:01FC    00:0217    001C(28)          $$_intUA0INT$irq
+      S CODE   00:0218    00:0233    001C(28)          $$_intP00INT$irq
+      S CODE   00:0234    00:024F    001C(28)          $$_intP01INT$irq
+      S CODE   00:0250    00:0267    0018(24)          $$main_clrWDT$main
+      S CODE   00:0268    00:0283    001C(28)          $$_intP02INT$irq
+      S CODE   00:0284    00:029F    001C(28)          $$_intP03INT$irq
+      S CODE   00:02A0    00:02B9    001A(26)          $$_intNMIINT$irq
+      S CODE   00:02BA    00:02D5    001C(28)          $$_intT2HINT$irq
+      S CODE   00:02D6    00:02F1    001C(28)          $$_intT1KINT$irq
+      S CODE   00:02F2    00:0315    0024(36)          $$Control_LEDs$main
+      S CODE   00:0316    00:0337    0022(34)          $$PinB0_PWM$main
+      S CODE   00:0338    00:03FB    00C4(196)         $$PortB_Low$main
+      S CODE   00:03FC    00:0417    001C(28)          $$_intMD0INT$irq
+      S CODE   00:0418    00:0421    000A(10)          $$_branchHdr$irq
+      S CODE   00:0422    00:043D    001C(28)          $$_intRTCINT$irq
+      S CODE   00:043E    00:0571    0134(308)         $$main$main
+      S CODE   00:0572    00:05B1    0040(64)          $$PortA_Digital_Inputs$main
+      S CODE   00:05B2    00:05CD    001C(28)          $$_intRADINT$irq
+      S CODE   00:05CE    00:05E9    001C(28)          $$_intAL0INT$irq
+      S CODE   00:05EA    00:067D    0094(148)         $$Initialization$main
+      S CODE   00:067E    00:0699    001C(28)          $$_intAL1INT$irq
+      S CODE   00:069A    00:06B5    001C(28)          $$_intPW0INT$irq
+      S CODE   00:06B6    00:06D1    001C(28)          $$_intT32HINT$irq
+      S CODE   00:06D2    00:06DF    000E(14)          $$SetOSC$main
+      S CODE   00:06E0    00:06FB    001C(28)          $$_intSADINT$irq
+      S CODE   00:06FC    00:0717    001C(28)          $$_intT128HINT$irq
+      S CODE   00:0718    00:0731    001A(26)          $$_intWDTINT$irq
+      S CODE   00:0732    00:074D    001C(28)          $$_intSIO0INT$irq
+>GAP<          00:074E    00:17DF    1092(4242)        (ROM)
+      S CODE   00:17E0    00:17FF    0020(32)          (absolute)
+
+
+Link Map - Data memory space #0
+
+      Type     Start      Stop       Size              Name
+     -------------------------------------------------------
+      Q ROMWIN 00:0000    00:17FF    1800(6144)        (ROMWIN)
+      S DATA   00:E000    00:E0C9    00CA(202)         $STACK
+      S DATA   00:E0CA    00:E0FF    0036(54)          $$NVARirq
+      Q SFR    00:F000    00:FFFF    1000(4096)        (SFR)
+
+
+Link Map - Memory space above #1
+
+      Type     Start      Stop       Size              Name
+     -------------------------------------------------------
+ ---
+      S TABLE  08:0000    08:17FF    1800(6144)        (absolute)
+
+Size 0 segments symbols:
+      S TABLE                                          $$NINITTAB
+      S DATA                                           $$NINITVAR
+
+
+Not Linked segments:
+
+      Module Name         Type       Size              Segment Name 
+     --------------------------------------------------------------
+      clock
+                          CODE       000A(10)          $$clk_setSysclk$clock
+     --------------------------------------------------------------
+      irq
+                          CODE       0032(50)          $$irq_setHdr$irq
+                          CODE       0004(4)           $$irq_di$irq
+                          CODE       0004(4)           $$irq_ei$irq
+                          CODE       0002(2)           $$_intNullHdr$irq
+                          CODE       005A(90)          $$irq_init$irq
+     --------------------------------------------------------------
+      main
+                          CODE       004C(76)          $$PortA_Low$main
+                          CODE       001A(26)          $$analog_comparator$main
+     --------------------------------------------------------------
+      timer
+                          CODE       0038(56)          $$tm_init$timer
+     --------------------------------------------------------------
+      uart
+                          CODE       0028(40)          $$uartSendStr$uart
+                          CODE       0018(24)          $$_send_byte$uart
+                          CODE       0054(84)          $$uartInit$uart
+     --------------------------------------------------------------
+
+
+Total size (CODE  ) = 00764   (1892)
+Total size (DATA  ) = 00100   (256)
+Total size (BIT   ) = 00000.0 (0.0)
+Total size (NVDATA) = 00000   (0)
+Total size (NVBIT ) = 00000.0 (0.0)
+Total size (TABLE ) = 0180A   (6154)
+
+          -----------------------
+           Symbol Table Synopsis
+          -----------------------
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+clock
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+irq
+               00:01C4   Loc CODE     __intTM2INT
+               00:06B6   Loc CODE     __intT32HINT
+               00:01E0   Loc CODE     __intTM3INT
+               00:069A   Loc CODE     __intPW0INT
+               00:018C   Loc CODE     __intTM8INT
+               00:01A8   Loc CODE     __intTM9INT
+               00:06FC   Loc CODE     __intT128HINT
+               00:05CE   Loc CODE     __intAL0INT
+               00:0218   Loc CODE     __intP00INT
+               00:02BA   Loc CODE     __intT2HINT
+               00:03FC   Loc CODE     __intMD0INT
+               00:067E   Loc CODE     __intAL1INT
+               00:0234   Loc CODE     __intP01INT
+               00:02D6   Loc CODE     __intT1KINT
+               00:0718   Loc CODE     __intWDTINT
+               00:0268   Loc CODE     __intP02INT
+               00:0136   Loc CODE     __intI2C0INT
+               00:0422   Loc CODE     __intRTCINT
+               00:0284   Loc CODE     __intP03INT
+               00:0732   Loc CODE     __intSIO0INT
+               00:06E0   Loc CODE     __intSADINT
+               00:0418   Loc CODE     __branchHdr
+               00:008A   Loc CODE     __intT16HINT
+               00:02A0   Loc CODE     __intNMIINT
+               00:0152   Loc CODE     __intTM0INT
+               00:01FC   Loc CODE     __intUA0INT
+               00:0006   Loc CODE     __intUndefHdr
+               00:016E   Loc CODE     __intTM1INT
+               00:05B2   Loc CODE     __intRADINT
+               00:E0CA   Loc DATA     __sIrqHdr
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+main
+               00:0250   Pub CODE     _main_clrWDT
+               00:0572   Pub CODE     _PortA_Digital_Inputs
+               00:043E   Pub CODE     _main
+               00:0338   Pub CODE     _PortB_Low
+               00:0316   Pub CODE     _PinB0_PWM
+               00:02F2   Pub CODE     _Control_LEDs
+               00:05EA   Loc CODE     _Initialization
+               00:06D2   Loc CODE     _SetOSC
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+ml610102
+              0000E0FF   Loc NUMBER   NEAR_RAM_END
+              0000E000   Loc NUMBER   NEAR_RAM_START
+               00:00C8   Loc CODE     __wdtcounter_clear
+              000000FF   Loc NUMBER   _$$WINVAL
+               00:17FF   Loc TABLE    _$$ROMWINEND
+               00:00AA   Loc CODE     $begin
+               00:0000   Loc TABLE    _$$ROMWINSTART
+               00:00DC   Loc CODE     __init_loop
+               00:0128   Loc CODE     __init_end
+               00:00A8   Loc CODE     $$brk_reset
+               00:00E8   Loc CODE     __skip
+               00:0104   Loc CODE     __init_loop2
+               00:0116   Loc CODE     __loop_by_byte
+               00:00B8   Loc CODE     __near_ram_loop
+               00:00A6   Pub CODE     $$start_up
+
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+notes
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+tbc
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+timer
+
+Module         Value     Type         Symbol
+------         -----     ----------   ------
+uart
+
+End of mapfile.
+
+Warning W018: Specified stack size is too big, so adjusting to 00CA(202) bytes

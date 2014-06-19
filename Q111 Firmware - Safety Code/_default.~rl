@@ -1,0 +1,1 @@
+ /STACK(256) /D /SD /NS /CC _output\_obj\clock.obj _output\_obj\i2c.obj _output\_obj\irq.obj _output\_obj\main.obj _output\_obj\ml610111.obj _output\_obj\notes.obj _output\_obj\tbc.obj _output\_obj\timer.obj _output\_obj\uart.obj ,q111-defaultfirmware.abs,,;

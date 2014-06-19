@@ -1,0 +1,1497 @@
+RASU8(ML610111)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1 
+ Source File: _output\_obj\i2c.asm
+ Object File: _output\_obj\i2c.obj
+ Date  : 2014/06/19 Thu.[15:59]
+ Title : 
+## Loc. Object                   Line   Source Statements
+
+                                    1   ;; Compile Options : /TML610111 /MS /near /Icommon /Imain /Iirq /Itimer /Iclock /Itbc /Ipwm /Iuart /Ivolume /Iled /Ii2c /SS 256 /SD /Oa /Ot /W 1 /Ff /Fa_output\_obj\ 
+                                    2   ;; Version Number  : Ver.3.41.8
+                                    3   ;; File Name       : i2c.c
+                                    4   
+                                    5   	type (ML610111) 
+                                    6   	fastfloat
+                                    7   	model small, near
+                                    8   	$$NINITVAR segment data 2h #0h
+                                    9   	$$NINITTAB segment table 2h any
+                                   10   	$$i2c_checkIRQ$i2c segment code 2h #0h
+                                   11   	$$i2c_clearIRQ$i2c segment code 2h #0h
+                                   12   	$$i2c_continue$i2c segment code 2h #0h
+                                   13   	$$i2c_getTransSize$i2c segment code 2h #0h
+                                   14   	$$i2c_init$i2c segment code 2h #0h
+                                   15   	$$i2c_startReceive$i2c segment code 2h #0h
+                                   16   	$$i2c_startSend$i2c segment code 2h #0h
+                                   17   	$$i2c_stop$i2c segment code 2h #0h
+                                   18   CVERSION 3.41.8
+                                   19   CGLOBAL 01H 02H 0000H "i2c_getTransSize" 08H 02H 08H 00H 80H 00H 00H 00H 01H
+                                   20   CGLOBAL 01H 03H 0000H "i2c_stop" 08H 02H 05H 00H 80H 00H 00H 00H 07H
+                                   21   CGLOBAL 01H 03H 0000H "i2c_startReceive" 08H 02H 03H 00H 82H 04H 00H 00H 01H
+                                   22   CGLOBAL 01H 03H 0000H "i2c_continue" 08H 02H 04H 00H 81H 06H 00H 00H 01H
+                                   23   CGLOBAL 01H 03H 0000H "i2c_startSend" 08H 02H 02H 00H 82H 04H 00H 00H 01H
+                                   24   CGLOBAL 01H 03H 0000H "i2c_init" 08H 02H 01H 00H 83H 0cH 00H 00H 01H
+                                   25   CGLOBAL 01H 03H 0000H "i2c_clearIRQ" 08H 02H 07H 00H 80H 00H 00H 00H 07H
+                                   26   CGLOBAL 01H 03H 0000H "i2c_checkIRQ" 08H 02H 06H 00H 80H 00H 00H 00H 01H
+                                   27   CSTRUCTTAG 0000H 0000H 0001H 0009H 00000010H "_Notag"
+                                   28   CSTRUCTMEM 42H 00000001H 00000000H "mode" 02H 00H 00H
+                                   29   CSTRUCTMEM 42H 00000002H 00000002H "addr" 04H 03H 00H 00H 00H
+                                   30   CSTRUCTMEM 42H 00000002H 00000004H "addr_size" 02H 00H 01H
+                                   31   CSTRUCTMEM 42H 00000002H 00000006H "data" 04H 03H 00H 00H 00H
+                                   32   CSTRUCTMEM 42H 00000002H 00000008H "data_size" 02H 00H 01H
+                                   33   CSTRUCTMEM 42H 00000002H 0000000AH "cnt" 02H 00H 01H
+                                   34   CSTRUCTMEM 43H 00000002H 0000000CH "callBack" 0AH 03H 00H 02H 00H 00H 00H 00H 00H 00H 07H
+                                   35   CSTRUCTMEM 42H 00000001H 0000000EH "errStat" 02H 00H 00H
+                                   36   CSTRUCTMEM 42H 00000001H 0000000FH "status" 02H 00H 00H
+                                   37   CSTRUCTTAG 0000H 0000H 0000H 0008H 00000001H "_Notag"
+                                   38   CSTRUCTMEM 52H 00000001H 00000000H "b0" 02H 00H 00H
+                                   39   CSTRUCTMEM 52H 00000001H 00000001H "b1" 02H 00H 00H
+                                   40   CSTRUCTMEM 52H 00000001H 00000002H "b2" 02H 00H 00H
+                                   41   CSTRUCTMEM 52H 00000001H 00000003H "b3" 02H 00H 00H
+                                   42   CSTRUCTMEM 52H 00000001H 00000004H "b4" 02H 00H 00H
+                                   43   CSTRUCTMEM 52H 00000001H 00000005H "b5" 02H 00H 00H
+                                   44   CSTRUCTMEM 52H 00000001H 00000006H "b6" 02H 00H 00H
+                                   45   CSTRUCTMEM 52H 00000001H 00000007H "b7" 02H 00H 00H
+                                   46   CTYPEDEF 0000H 0000H 43H "cbfI2c" 0AH 03H 00H 02H 00H 00H 00H 00H 00H 00H 07H
+                                   47   CTYPEDEF 0000H 0000H 43H "tI2cCtrlParam" 04H 00H 05H 01H 00H
+                                   48   CTYPEDEF 0000H 0000H 43H "_BYTE_FIELD" 04H 00H 05H 00H 00H
+                                   49   CSGLOBAL 43H 0010H "_gsCtrlParam" 04H 00H 05H 01H 00H
+                                   50   CFILE 0001H 00000028H "main\\mcu.h"
+                                   51   CFILE 0002H 000007EEH "main\\ML610111.H"
+                                   52   CFILE 0003H 00000045H "i2c\\i2c.h"
+                                   53   CFILE 0000H 0000022BH "i2c\\i2c.c"
+                                   54   
+  --------------------------       55   	rseg $$i2c_init$i2c
+                                   56   CFUNCTION 1
+                                   57   
+00:0000                            58   _i2c_init	:
+                                   59   CBLOCK 1 1 151
+                                   60   
+                                   61   ;;{
+                                   62   CLINEA 0000H 0001H 0097H 0001H 0001H
+00:0000 CE-F8                      63   	push	lr
+00:0002 5E-FE                      64   	push	fp
+00:0004 1A-AE                      65   	mov	fp,	sp
+00:0006 6E-F8                      66   	push	xr8
+00:0008 6E-F4                      67   	push	xr4
+00:000A 00-88                      68   	mov	r8,	r0
+00:000C 25-FA                      69   	mov	er10,	er2
+                                   70   CBLOCK 1 2 151
+                                   71   CRET 000AH
+                                   72   CARGUMENT 46H 0001H 001CH "mode" 02H 00H 00H
+                                   73   CARGUMENT 46H 0002H 0029H "kHz" 02H 00H 01H
+                                   74   CARGUMENT 42H 0001H 0004H "syn" 02H 00H 00H
+                                   75   CLOCAL 4AH 0001H 0000H 0002H "setbit" 02H 00H 00H
+                                   76   CLOCAL 46H 0001H 0016H 0002H "down" 02H 00H 00H
+                                   77   CLOCAL 46H 0002H 0026H 0002H "rate_cyc" 02H 00H 08H
+                                   78   CLOCAL 46H 0002H 0027H 0002H "rate_khz" 02H 00H 08H
+                                   79   
+                                   80   ;;	if( syn > (unsigned char)I2C_SYN_ON ){
+                                   81   CLINEA 0000H 0001H 009EH 0002H 0027H
+00:000E 44 D0                      82   	l	r0,	4[fp]
+00:0010 01 70                      83   	cmp	r0,	#01h
+00:0012 06 C3                      84   	ble	_$L1
+                                   85   CBLOCK 1 3 158
+                                   86   
+                                   87   ;;		return( I2C_R_ERR_SYN );
+                                   88   CLINEA 0000H 0001H 009FH 0003H 001AH
+00:0014 7F E0                      89   	mov	er0,	#-1
+                                   90   CBLOCKEND 1 3 160
+                                   91   CBLOCKEND 1 2 226
+                                   92   
+                                   93   ;;}
+                                   94   CLINEA 0000H 0001H 00E2H 0001H 0001H
+00:0016                            95   _$L0 :
+00:0016 2E-F4                      96   	pop	xr4
+00:0018 2E-F8                      97   	pop	xr8
+00:001A EA-A1                      98   	mov	sp,	fp
+00:001C 1E-FE                      99   	pop	fp
+00:001E 8E-F2                     100   	pop	pc
+                                  101   
+                                  102   ;;	}
+                                  103   CLINEA 0000H 0000H 00A0H 0002H 0002H
+00:0020                           104   _$L1 :
+                                  105   
+                                  106   ;;	if( mode == (unsigned char)I2C_MOD_STD ){
+                                  107   CLINEA 0000H 0001H 00A2H 0002H 002AH
+00:0020 00 78                     108   	cmp	r8,	#00h
+00:0022 05 C8                     109   	bne	_$L3
+                                  110   CBLOCK 1 4 162
+                                  111   
+                                  112   ;;		rate_cyc = (unsigned short)I2C_STD_CYC;
+                                  113   CLINEA 0000H 0001H 00A3H 0003H 0029H
+00:0024 50 04                     114   	mov	r4,	#050h
+00:0026 00 05                     115   	mov	r5,	#00h
+                                  116   
+                                  117   ;;		rate_khz = (unsigned short)I2C_STD_KHZ;
+                                  118   CLINEA 0000H 0001H 00A4H 0003H 0029H
+00:0028 64 06                     119   	mov	r6,	#064h
+00:002A 00 07                     120   	mov	r7,	#00h
+                                  121   CBLOCKEND 1 4 165
+                                  122   
+                                  123   ;;	else if( mode == (unsigned char)I2C_MOD_FST ){
+                                  124   CLINEA 0000H 0001H 00A6H 0002H 002FH
+00:002C 07 CE                     125   	bal	_$L5
+00:002E                           126   _$L3 :
+00:002E 01 78                     127   	cmp	r8,	#01h
+00:0030 02 C9                     128   	beq	_$M1
+00:0032 00-F0'00-00'              129   	b	_$L6
+00:0036                           130   _$M1 :
+                                  131   CBLOCK 1 5 166
+                                  132   
+                                  133   ;;		rate_cyc = (unsigned short)I2C_FST_CYC;
+                                  134   CLINEA 0000H 0001H 00A7H 0003H 0029H
+00:0036 14 E4                     135   	mov	er4,	#20
+                                  136   
+                                  137   ;;		rate_khz = (unsigned short)I2C_FST_KHZ;
+                                  138   CLINEA 0000H 0001H 00A8H 0003H 0029H
+00:0038 90 06                     139   	mov	r6,	#090h
+00:003A 01 07                     140   	mov	r7,	#01h
+                                  141   CBLOCKEND 1 5 169
+                                  142   
+                                  143   ;;	}
+                                  144   CLINEA 0000H 0000H 00ACH 0002H 0002H
+00:003C                           145   _$L5 :
+                                  146   
+                                  147   ;;	if( ( kHz / rate_cyc ) <= rate_khz ){
+                                  148   CLINEA 0000H 0001H 00AEH 0002H 0026H
+00:003C A5-F0                     149   	mov	er0,	er10
+00:003E 45-F2                     150   	mov	er2,	er4
+00:0040 01-F0'00-00'              151   	bl	__uidivu8sw
+00:0044 67-F0                     152   	cmp	er0,	er6
+00:0046 02 C2                     153   	bgt	_$L9
+                                  154   CBLOCK 1 7 174
+                                  155   
+                                  156   ;;		down = (unsigned char)I2C_DW_0;
+                                  157   CLINEA 0000H 0001H 00AFH 0003H 0021H
+00:0048 00 00                     158   	mov	r0,	#00h
+                                  159   
+                                  160   ;;	else if( ( kHz / (unsigned short)( ( rate_cyc * 11 ) / 10 ) ) <= rate_khz ){
+                                  161   CLINEA 0000H 0001H 00B1H 0002H 004DH
+00:004A 2E CE                     162   	bal	_$L17
+00:004C                           163   _$L9 :
+00:004C 45-F0                     164   	mov	er0,	er4
+00:004E 2B-91                     165   	sllc	r1,	#02h
+00:0050 2A-90                     166   	sll	r0,	#02h
+00:0052 46-F0                     167   	add	er0,	er4
+00:0054 06-F0                     168   	add	er0,	er0
+00:0056 46-F0                     169   	add	er0,	er4
+00:0058 0A 02                     170   	mov	r2,	#0ah
+00:005A 29-F0                     171   	div	er0,	r2
+00:005C 05-F2                     172   	mov	er2,	er0
+00:005E A5-F0                     173   	mov	er0,	er10
+00:0060 01-F0'00-00'              174   	bl	__uidivu8sw
+00:0064 67-F0                     175   	cmp	er0,	er6
+00:0066 02 C2                     176   	bgt	_$L12
+                                  177   CBLOCK 1 8 177
+                                  178   
+                                  179   ;;		down = (unsigned char)I2C_DW_10;
+                                  180   CLINEA 0000H 0001H 00B2H 0003H 0022H
+00:0068 01 00                     181   	mov	r0,	#01h
+                                  182   
+                                  183   ;;	else if( ( kHz / (unsigned short)( ( rate_cyc * 12 ) / 10 ) ) <= rate_khz ){
+                                  184   CLINEA 0000H 0001H 00B4H 0002H 004DH
+00:006A 1E CE                     185   	bal	_$L17
+00:006C                           186   _$L12 :
+00:006C 45-F0                     187   	mov	er0,	er4
+00:006E 46-F0                     188   	add	er0,	er4
+00:0070 46-F0                     189   	add	er0,	er4
+00:0072 2B-91                     190   	sllc	r1,	#02h
+00:0074 2A-90                     191   	sll	r0,	#02h
+00:0076 0A 02                     192   	mov	r2,	#0ah
+00:0078 29-F0                     193   	div	er0,	r2
+00:007A 05-F2                     194   	mov	er2,	er0
+00:007C A5-F0                     195   	mov	er0,	er10
+00:007E 01-F0'00-00'              196   	bl	__uidivu8sw
+00:0082 67-F0                     197   	cmp	er0,	er6
+00:0084 02 C2                     198   	bgt	_$L15
+                                  199   CBLOCK 1 9 180
+                                  200   
+                                  201   ;;		down = (unsigned char)I2C_DW_20;
+                                  202   CLINEA 0000H 0001H 00B5H 0003H 0022H
+00:0086 02 00                     203   	mov	r0,	#02h
+                                  204   CBLOCKEND 1 9 182
+                                  205   
+                                  206   ;;	else if( ( kHz / (unsigned short)( ( rate_cyc * 13 ) / 10 ) ) <= rate_khz ){
+                                  207   CLINEA 0000H 0001H 00B7H 0002H 004DH
+00:0088 0F CE                     208   	bal	_$L17
+00:008A                           209   _$L15 :
+00:008A 45-F0                     210   	mov	er0,	er4
+00:008C 46-F0                     211   	add	er0,	er4
+00:008E 46-F0                     212   	add	er0,	er4
+00:0090 2B-91                     213   	sllc	r1,	#02h
+00:0092 2A-90                     214   	sll	r0,	#02h
+00:0094 46-F0                     215   	add	er0,	er4
+00:0096 0A 02                     216   	mov	r2,	#0ah
+00:0098 29-F0                     217   	div	er0,	r2
+00:009A 05-F2                     218   	mov	er2,	er0
+00:009C A5-F0                     219   	mov	er0,	er10
+00:009E 01-F0'00-00'              220   	bl	__uidivu8sw
+00:00A2 67-F0                     221   	cmp	er0,	er6
+00:00A4 3D C2                     222   	bgt	_$L18
+                                  223   CBLOCK 1 10 183
+                                  224   
+                                  225   ;;		down = (unsigned char)I2C_DW_30;
+                                  226   CLINEA 0000H 0001H 00B8H 0003H 0022H
+00:00A6 03 00                     227   	mov	r0,	#03h
+                                  228   CBLOCKEND 1 10 185
+                                  229   
+                                  230   ;;	}
+                                  231   CLINEA 0000H 0000H 00BCH 0002H 0002H
+00:00A8                           232   _$L17 :
+00:00A8 00-82                     233   	mov	r2,	r0
+                                  234   CBLOCKEND 1 8 226
+                                  235   
+                                  236   ;;	_gsCtrlParam.mode		= 0;
+                                  237   CLINEA 0000H 0001H 00BFH 0002H 0018H
+00:00AA 00 00                     238   	mov	r0,	#00h
+00:00AC 11-90 00-00'              239   	st	r0,	NEAR __gsCtrlParam
+                                  240   
+                                  241   ;;	_gsCtrlParam.addr		= (void *)0;
+                                  242   CLINEA 0000H 0001H 00C0H 0002H 0020H
+00:00B0 00 E0                     243   	mov	er0,	#0 
+00:00B2 13-90 00-00'              244   	st	er0,	NEAR __gsCtrlParam+02h
+                                  245   
+                                  246   ;;	_gsCtrlParam.addr_size	= 0;
+                                  247   CLINEA 0000H 0001H 00C1H 0002H 001CH
+00:00B6 13-90 00-00'              248   	st	er0,	NEAR __gsCtrlParam+04h
+                                  249   
+                                  250   ;;	_gsCtrlParam.data		= (void *)0;
+                                  251   CLINEA 0000H 0001H 00C2H 0002H 0020H
+00:00BA 13-90 00-00'              252   	st	er0,	NEAR __gsCtrlParam+06h
+                                  253   
+                                  254   ;;	_gsCtrlParam.data_size	= 0;
+                                  255   CLINEA 0000H 0001H 00C3H 0002H 001CH
+00:00BE 13-90 00-00'              256   	st	er0,	NEAR __gsCtrlParam+08h
+                                  257   
+                                  258   ;;	_gsCtrlParam.cnt		= 0;
+                                  259   CLINEA 0000H 0001H 00C4H 0002H 0017H
+00:00C2 13-90 00-00'              260   	st	er0,	NEAR __gsCtrlParam+0ah
+                                  261   
+                                  262   ;;	_gsCtrlParam.callBack	= (void *)0;
+                                  263   CLINEA 0000H 0001H 00C5H 0002H 0023H
+00:00C6 13-90 00-00'              264   	st	er0,	NEAR __gsCtrlParam+0ch
+                                  265   
+                                  266   ;;	_gsCtrlParam.errStat	= 0;
+                                  267   CLINEA 0000H 0001H 00C6H 0002H 001AH
+00:00CA 11-90 00-00'              268   	st	r0,	NEAR __gsCtrlParam+0eh
+                                  269   
+                                  270   ;;	_gsCtrlParam.status		= 0;
+                                  271   CLINEA 0000H 0001H 00C7H 0002H 001AH
+00:00CE 11-90 00-00'              272   	st	r0,	NEAR __gsCtrlParam+0fh
+                                  273   
+                                  274   ;;	I20EN = 0;
+                                  275   CLINEA 0000H 0001H 00CBH 0002H 000BH
+00:00D2 82-A0 A4-F2               276   	rb	0f2a4h.0
+                                  277   
+                                  278   ;;	PB5DIR = 0;		/* Output */
+                                  279   CLINEA 0000H 0001H 00CEH 0002H 001AH
+00:00D6 D2-A0 59-F2               280   	rb	0f259h.5
+                                  281   
+                                  282   ;;	PB5C0 = 0;
+                                  283   CLINEA 0000H 0001H 00CFH 0002H 000BH
+00:00DA D2-A0 5A-F2               284   	rb	0f25ah.5
+                                  285   
+                                  286   ;;	PB5C1 = 1;		/* Nch */
+                                  287   CLINEA 0000H 0001H 00D0H 0002H 0016H
+00:00DE D0-A0 5B-F2               288   	sb	0f25bh.5
+                                  289   
+                                  290   ;;	PB5MD0 = 0;
+                                  291   CLINEA 0000H 0001H 00D1H 0002H 000CH
+00:00E2 D2-A0 5C-F2               292   	rb	0f25ch.5
+                                  293   
+                                  294   ;;	PB5MD1 = 1;		/* I2C SCL */
+                                  295   CLINEA 0000H 0001H 00D2H 0002H 001BH
+00:00E6 D0-A0 5D-F2               296   	sb	0f25dh.5
+                                  297   
+                                  298   ;;	PB6DIR = 0;		/* Output */
+                                  299   CLINEA 0000H 0001H 00D4H 0002H 001AH
+00:00EA E2-A0 59-F2               300   	rb	0f259h.6
+                                  301   
+                                  302   ;;	PB6C0 = 0;
+                                  303   CLINEA 0000H 0001H 00D5H 0002H 000BH
+00:00EE E2-A0 5A-F2               304   	rb	0f25ah.6
+                                  305   
+                                  306   ;;	PB6C1 = 1;		/* Nch */
+                                  307   CLINEA 0000H 0001H 00D6H 0002H 0016H
+00:00F2 E0-A0 5B-F2               308   	sb	0f25bh.6
+                                  309   
+                                  310   ;;	PB6MD0 = 0;
+                                  311   CLINEA 0000H 0001H 00D7H 0002H 000CH
+00:00F6 E2-A0 5C-F2               312   	rb	0f25ch.6
+                                  313   
+                                  314   ;;	PB6MD1 = 1;		/* I2C SD */
+                                  315   CLINEA 0000H 0001H 00D8H 0002H 001AH
+00:00FA E0-A0 5D-F2               316   	sb	0f25dh.6
+                                  317   
+                                  318   ;;	I2C0MOD = setbit;
+                                  319   CLINEA 0000H 0001H 00DFH 0002H 0012H
+00:00FE 80-80                     320   	mov	r0,	r8
+00:0100 1A-90                     321   	sll	r0,	#01h
+00:0102 20-81                     322   	mov	r1,	r2
+00:0104 2A-91                     323   	sll	r1,	#02h
+00:0106 03-81                     324   	or	r1,	r0
+00:0108 44 D0                     325   	l	r0,	4[fp]
+00:010A 4A-90                     326   	sll	r0,	#04h
+00:010C 13-80                     327   	or	r0,	r1
+00:010E 01 30                     328   	or	r0,	#01h
+00:0110 11-90 A4-F2               329   	st	r0,	0f2a4h
+                                  330   
+                                  331   ;;	return ( I2C_R_OK );
+                                  332   CLINEA 0000H 0001H 00E1H 0002H 0015H
+00:0114 00 E0                     333   	mov	er0,	#0 
+00:0116 00-F0'00-00'              334   	b	_$L0
+                                  335   CBLOCKEND 1 7 226
+                                  336   
+                                  337   ;;	else{
+                                  338   CLINEA 0000H 0000H 00AAH 0002H 0006H
+00:011A                           339   _$L6 :
+                                  340   CBLOCK 1 6 170
+                                  341   
+                                  342   ;;		return( I2C_R_ERR_MODE );
+                                  343   CLINEA 0000H 0001H 00ABH 0003H 001BH
+00:011A 7E E0                     344   	mov	er0,	#-2
+00:011C 00-F0'00-00'              345   	b	_$L0
+                                  346   CBLOCKEND 1 6 172
+                                  347   
+                                  348   ;;	else{
+                                  349   CLINEA 0000H 0000H 00BAH 0002H 0006H
+00:0120                           350   _$L18 :
+                                  351   CBLOCK 1 11 186
+                                  352   
+                                  353   ;;		return( I2C_R_ERR_FREQ );
+                                  354   CLINEA 0000H 0001H 00BBH 0003H 001BH
+00:0120 7D E0                     355   	mov	er0,	#-3
+00:0122 00-F0'00-00'              356   	b	_$L0
+                                  357   CBLOCKEND 1 11 188
+                                  358   CBLOCKEND 1 1 226
+                                  359   CFUNCTIONEND 1
+                                  360   
+                                  361   
+  --------------------------      362   	rseg $$i2c_startSend$i2c
+                                  363   CFUNCTION 2
+                                  364   
+00:0000                           365   _i2c_startSend	:
+                                  366   CBLOCK 2 1 243
+                                  367   
+                                  368   ;;{
+                                  369   CLINEA 0000H 0001H 00F3H 0001H 0001H
+00:0000 5E-FE                     370   	push	fp
+00:0002 1A-AE                     371   	mov	fp,	sp
+00:0004 5E-F8                     372   	push	er8
+00:0006 00-88                     373   	mov	r8,	r0
+                                  374   CBLOCK 2 2 243
+                                  375   CARGUMENT 46H 0001H 001CH "slave_adr" 02H 00H 00H
+                                  376   CARGUMENT 46H 0002H 0025H "addr" 04H 03H 00H 00H 00H
+                                  377   CARGUMENT 42H 0002H 0002H "addr_size" 02H 00H 01H
+                                  378   CARGUMENT 42H 0002H 0004H "data" 04H 03H 00H 00H 00H
+                                  379   CARGUMENT 42H 0002H 0006H "data_size" 02H 00H 01H
+                                  380   CARGUMENT 43H 0002H 0008H "func" 0AH 03H 00H 02H 00H 00H 00H 00H 00H 00H 07H
+                                  381   CLOCAL 46H 0001H 0014H 0002H "errStat" 02H 00H 00H
+                                  382   
+                                  383   ;;	_gsCtrlParam.mode		= 0;	/* send */
+                                  384   CLINEA 0000H 0001H 00F7H 0002H 0023H
+00:0008 00 00                     385   	mov	r0,	#00h
+00:000A 11-90 00-00'              386   	st	r0,	NEAR __gsCtrlParam
+                                  387   
+                                  388   ;;	_gsCtrlParam.addr		= addr;
+                                  389   CLINEA 0000H 0001H 00F8H 0002H 001BH
+00:000E 13-92 00-00'              390   	st	er2,	NEAR __gsCtrlParam+02h
+                                  391   
+                                  392   ;;	_gsCtrlParam.addr_size	= addr_size;
+                                  393   CLINEA 0000H 0001H 00F9H 0002H 0024H
+00:0012 42 B0                     394   	l	er0,	2[fp]
+00:0014 13-90 00-00'              395   	st	er0,	NEAR __gsCtrlParam+04h
+                                  396   
+                                  397   ;;	_gsCtrlParam.data		= data;
+                                  398   CLINEA 0000H 0001H 00FAH 0002H 001BH
+00:0018 44 B0                     399   	l	er0,	4[fp]
+00:001A 13-90 00-00'              400   	st	er0,	NEAR __gsCtrlParam+06h
+                                  401   
+                                  402   ;;	_gsCtrlParam.data_size	= data_size;
+                                  403   CLINEA 0000H 0001H 00FBH 0002H 0024H
+00:001E 46 B0                     404   	l	er0,	6[fp]
+00:0020 13-90 00-00'              405   	st	er0,	NEAR __gsCtrlParam+08h
+                                  406   
+                                  407   ;;	_gsCtrlParam.cnt		= 0;
+                                  408   CLINEA 0000H 0001H 00FCH 0002H 0017H
+00:0024 00 E0                     409   	mov	er0,	#0 
+00:0026 13-90 00-00'              410   	st	er0,	NEAR __gsCtrlParam+0ah
+                                  411   
+                                  412   ;;	_gsCtrlParam.callBack	= func;
+                                  413   CLINEA 0000H 0001H 00FDH 0002H 001EH
+00:002A 48 B0                     414   	l	er0,	8[fp]
+00:002C 13-90 00-00'              415   	st	er0,	NEAR __gsCtrlParam+0ch
+                                  416   
+                                  417   ;;	_gsCtrlParam.errStat	= 0;
+                                  418   CLINEA 0000H 0001H 00FEH 0002H 001AH
+00:0030 00 00                     419   	mov	r0,	#00h
+00:0032 11-90 00-00'              420   	st	r0,	NEAR __gsCtrlParam+0eh
+                                  421   
+                                  422   ;;	_gsCtrlParam.status		= 0;
+                                  423   CLINEA 0000H 0001H 00FFH 0002H 001AH
+00:0036 11-90 00-00'              424   	st	r0,	NEAR __gsCtrlParam+0fh
+                                  425   
+                                  426   ;;	if( (_gsCtrlParam.addr_size == 0) && (_gsCtrlParam.data_size == 0) ){
+                                  427   CLINEA 0000H 0001H 0101H 0002H 0046H
+00:003A 12-90 00-00'              428   	l	er0,	NEAR __gsCtrlParam+04h
+00:003E 08 C8                     429   	bne	_$L22
+00:0040 12-90 00-00'              430   	l	er0,	NEAR __gsCtrlParam+08h
+00:0044 05 C8                     431   	bne	_$L22
+                                  432   CBLOCK 2 3 257
+                                  433   
+                                  434   ;;		return(I2C_R_TRANS_FIN);
+                                  435   CLINEA 0000H 0001H 0102H 0003H 001AH
+00:0046 01 E0                     436   	mov	er0,	#1 
+                                  437   CBLOCKEND 2 3 259
+                                  438   CBLOCKEND 2 2 272
+                                  439   
+                                  440   ;;}
+                                  441   CLINEA 0000H 0001H 0110H 0001H 0001H
+00:0048                           442   _$L21 :
+00:0048 1E-F8                     443   	pop	er8
+00:004A EA-A1                     444   	mov	sp,	fp
+00:004C 1E-FE                     445   	pop	fp
+00:004E 1F-FE                     446   	rt
+                                  447   
+                                  448   ;;	}
+                                  449   CLINEA 0000H 0000H 0103H 0002H 0002H
+00:0050                           450   _$L22 :
+                                  451   
+                                  452   ;;	errStat = (unsigned char)( I2C0STAT & (unsigned char)I2C0STAT_I20BB  );
+                                  453   CLINEA 0000H 0001H 0105H 0002H 0048H
+00:0050 10-90 A5-F2               454   	l	r0,	0f2a5h
+00:0054 01 20                     455   	and	r0,	#01h
+                                  456   
+                                  457   ;;	if( errStat == (unsigned char)I2C0STAT_I20BB ){
+                                  458   CLINEA 0000H 0001H 0106H 0002H 0030H
+00:0056 01 70                     459   	cmp	r0,	#01h
+00:0058 02 C8                     460   	bne	_$L29
+                                  461   CBLOCK 2 4 262
+                                  462   
+                                  463   ;;		return ( I2C_R_BUS_BUSY );
+                                  464   CLINEA 0000H 0001H 0107H 0003H 001CH
+00:005A 7F E0                     465   	mov	er0,	#-1
+00:005C F5 CE                     466   	bal	_$L21
+                                  467   CBLOCKEND 2 4 264
+                                  468   
+                                  469   ;;	}
+                                  470   CLINEA 0000H 0000H 0108H 0002H 0002H
+00:005E                           471   _$L29 :
+                                  472   
+                                  473   ;;	_gsCtrlParam.status = I2C_SEND_SLAVE_ADDRESS;
+                                  474   CLINEA 0000H 0001H 010BH 0002H 002EH
+00:005E 01 00                     475   	mov	r0,	#01h
+00:0060 11-90 00-00'              476   	st	r0,	NEAR __gsCtrlParam+0fh
+                                  477   
+                                  478   ;;	I2C0SA = (unsigned char)( slave_adr << 1 );	/* send mode */
+                                  479   CLINEA 0000H 0001H 010DH 0002H 003CH
+00:0064 80-80                     480   	mov	r0,	r8
+00:0066 1A-90                     481   	sll	r0,	#01h
+00:0068 11-90 A1-F2               482   	st	r0,	0f2a1h
+                                  483   
+                                  484   ;;	I2C0CON = (unsigned char)I2C0CON_I20ST;		/* Start condition */
+                                  485   CLINEA 0000H 0001H 010EH 0002H 003FH
+00:006C 01 00                     486   	mov	r0,	#01h
+00:006E 11-90 A3-F2               487   	st	r0,	0f2a3h
+                                  488   
+                                  489   ;;	return ( I2C_R_TRANS_START_OK );
+                                  490   CLINEA 0000H 0001H 010FH 0002H 0021H
+00:0072 00 E0                     491   	mov	er0,	#0 
+00:0074 E9 CE                     492   	bal	_$L21
+                                  493   CBLOCKEND 2 1 272
+                                  494   CFUNCTIONEND 2
+                                  495   
+                                  496   
+  --------------------------      497   	rseg $$i2c_startReceive$i2c
+                                  498   CFUNCTION 3
+                                  499   
+00:0000                           500   _i2c_startReceive	:
+                                  501   CBLOCK 3 1 288
+                                  502   
+                                  503   ;;{
+                                  504   CLINEA 0000H 0001H 0120H 0001H 0001H
+00:0000 5E-FE                     505   	push	fp
+00:0002 1A-AE                     506   	mov	fp,	sp
+00:0004 5E-F8                     507   	push	er8
+00:0006 00-88                     508   	mov	r8,	r0
+                                  509   CBLOCK 3 2 288
+                                  510   CARGUMENT 46H 0001H 001CH "slave_adr" 02H 00H 00H
+                                  511   CARGUMENT 46H 0002H 0025H "addr" 04H 03H 00H 00H 00H
+                                  512   CARGUMENT 42H 0002H 0002H "addr_size" 02H 00H 01H
+                                  513   CARGUMENT 42H 0002H 0004H "data" 04H 03H 00H 00H 00H
+                                  514   CARGUMENT 42H 0002H 0006H "data_size" 02H 00H 01H
+                                  515   CARGUMENT 43H 0002H 0008H "func" 0AH 03H 00H 02H 00H 00H 00H 00H 00H 00H 07H
+                                  516   CLOCAL 46H 0001H 0014H 0002H "errStat" 02H 00H 00H
+                                  517   
+                                  518   ;;	_gsCtrlParam.mode		= 1;	/* receive */
+                                  519   CLINEA 0000H 0001H 0125H 0002H 0026H
+00:0008 01 00                     520   	mov	r0,	#01h
+00:000A 11-90 00-00'              521   	st	r0,	NEAR __gsCtrlParam
+                                  522   
+                                  523   ;;	_gsCtrlParam.addr		= addr;
+                                  524   CLINEA 0000H 0001H 0126H 0002H 001BH
+00:000E 13-92 00-00'              525   	st	er2,	NEAR __gsCtrlParam+02h
+                                  526   
+                                  527   ;;	_gsCtrlParam.addr_size	= addr_size;
+                                  528   CLINEA 0000H 0001H 0127H 0002H 0024H
+00:0012 42 B0                     529   	l	er0,	2[fp]
+00:0014 13-90 00-00'              530   	st	er0,	NEAR __gsCtrlParam+04h
+                                  531   
+                                  532   ;;	_gsCtrlParam.data		= data;
+                                  533   CLINEA 0000H 0001H 0128H 0002H 001BH
+00:0018 44 B0                     534   	l	er0,	4[fp]
+00:001A 13-90 00-00'              535   	st	er0,	NEAR __gsCtrlParam+06h
+                                  536   
+                                  537   ;;	_gsCtrlParam.data_size	= data_size;
+                                  538   CLINEA 0000H 0001H 0129H 0002H 0024H
+00:001E 46 B0                     539   	l	er0,	6[fp]
+00:0020 13-90 00-00'              540   	st	er0,	NEAR __gsCtrlParam+08h
+                                  541   
+                                  542   ;;	_gsCtrlParam.cnt		= 0;
+                                  543   CLINEA 0000H 0001H 012AH 0002H 0017H
+00:0024 00 E0                     544   	mov	er0,	#0 
+00:0026 13-90 00-00'              545   	st	er0,	NEAR __gsCtrlParam+0ah
+                                  546   
+                                  547   ;;	_gsCtrlParam.callBack	= func;
+                                  548   CLINEA 0000H 0001H 012BH 0002H 001EH
+00:002A 48 B0                     549   	l	er0,	8[fp]
+00:002C 13-90 00-00'              550   	st	er0,	NEAR __gsCtrlParam+0ch
+                                  551   
+                                  552   ;;	_gsCtrlParam.errStat	= 0;
+                                  553   CLINEA 0000H 0001H 012CH 0002H 001AH
+00:0030 00 00                     554   	mov	r0,	#00h
+00:0032 11-90 00-00'              555   	st	r0,	NEAR __gsCtrlParam+0eh
+                                  556   
+                                  557   ;;	_gsCtrlParam.status		= 0;
+                                  558   CLINEA 0000H 0001H 012DH 0002H 001AH
+00:0036 11-90 00-00'              559   	st	r0,	NEAR __gsCtrlParam+0fh
+                                  560   
+                                  561   ;;	if( (_gsCtrlParam.addr_size == 0) && (_gsCtrlParam.data_size == 0) ){
+                                  562   CLINEA 0000H 0001H 012FH 0002H 0046H
+00:003A 12-90 00-00'              563   	l	er0,	NEAR __gsCtrlParam+04h
+00:003E 08 C8                     564   	bne	_$L32
+00:0040 12-90 00-00'              565   	l	er0,	NEAR __gsCtrlParam+08h
+00:0044 05 C8                     566   	bne	_$L32
+                                  567   CBLOCK 3 3 303
+                                  568   
+                                  569   ;;		return(I2C_R_TRANS_FIN);
+                                  570   CLINEA 0000H 0001H 0130H 0003H 001AH
+00:0046 01 E0                     571   	mov	er0,	#1 
+                                  572   CBLOCKEND 3 3 305
+                                  573   CBLOCKEND 3 2 321
+                                  574   
+                                  575   ;;}
+                                  576   CLINEA 0000H 0001H 0141H 0001H 0001H
+00:0048                           577   _$L31 :
+00:0048 1E-F8                     578   	pop	er8
+00:004A EA-A1                     579   	mov	sp,	fp
+00:004C 1E-FE                     580   	pop	fp
+00:004E 1F-FE                     581   	rt
+                                  582   
+                                  583   ;;	}
+                                  584   CLINEA 0000H 0000H 0131H 0002H 0002H
+00:0050                           585   _$L32 :
+                                  586   
+                                  587   ;;	errStat = (unsigned char)( I2C0STAT & (unsigned char)I2C0STAT_I20BB  );
+                                  588   CLINEA 0000H 0001H 0133H 0002H 0048H
+00:0050 10-90 A5-F2               589   	l	r0,	0f2a5h
+00:0054 01 20                     590   	and	r0,	#01h
+                                  591   
+                                  592   ;;	if( errStat == (unsigned char)I2C0STAT_I20BB ){
+                                  593   CLINEA 0000H 0001H 0134H 0002H 0030H
+00:0056 01 70                     594   	cmp	r0,	#01h
+00:0058 02 C8                     595   	bne	_$L39
+                                  596   CBLOCK 3 4 308
+                                  597   
+                                  598   ;;		return ( I2C_R_BUS_BUSY );
+                                  599   CLINEA 0000H 0001H 0135H 0003H 001CH
+00:005A 7F E0                     600   	mov	er0,	#-1
+00:005C F5 CE                     601   	bal	_$L31
+                                  602   CBLOCKEND 3 4 310
+                                  603   
+                                  604   ;;	}
+                                  605   CLINEA 0000H 0000H 0136H 0002H 0002H
+00:005E                           606   _$L39 :
+                                  607   
+                                  608   ;;	_gsCtrlParam.status = I2C_SEND_SLAVE_ADDRESS;
+                                  609   CLINEA 0000H 0001H 0138H 0002H 002EH
+00:005E 01 00                     610   	mov	r0,	#01h
+00:0060 11-90 00-00'              611   	st	r0,	NEAR __gsCtrlParam+0fh
+                                  612   
+                                  613   ;;	if(_gsCtrlParam.addr_size == 0){
+                                  614   CLINEA 0000H 0001H 0139H 0002H 0021H
+00:0064 12-90 00-00'              615   	l	er0,	NEAR __gsCtrlParam+04h
+00:0068 04 C8                     616   	bne	_$L41
+                                  617   CBLOCK 3 5 313
+                                  618   
+                                  619   ;;		I2C0SA = (unsigned char)( ( slave_adr << 1 ) | I2C0SA_I20RW );		/* Receive mode */
+                                  620   CLINEA 0000H 0001H 013AH 0003H 0054H
+00:006A 80-80                     621   	mov	r0,	r8
+00:006C 1A-90                     622   	sll	r0,	#01h
+00:006E 01 30                     623   	or	r0,	#01h
+                                  624   CBLOCKEND 3 5 315
+                                  625   
+                                  626   ;;	else{
+                                  627   CLINEA 0000H 0001H 013CH 0002H 0006H
+00:0070 02 CE                     628   	bal	_$L43
+00:0072                           629   _$L41 :
+                                  630   CBLOCK 3 6 316
+                                  631   
+                                  632   ;;		I2C0SA = (unsigned char)( ( slave_adr << 1 )/* | I2C0SA_I20RW*/ );	/* Send mode */
+                                  633   CLINEA 0000H 0001H 013DH 0003H 0054H
+00:0072 80-80                     634   	mov	r0,	r8
+00:0074 1A-90                     635   	sll	r0,	#01h
+                                  636   CBLOCKEND 3 6 318
+                                  637   
+                                  638   ;;	}
+                                  639   CLINEA 0000H 0000H 013EH 0002H 0002H
+00:0076                           640   _$L43 :
+00:0076 11-90 A1-F2               641   	st	r0,	0f2a1h
+                                  642   
+                                  643   ;;		I2C0CON = (unsigned char)I2C0CON_I20ST;	/* Start condition */
+                                  644   CLINEA 0000H 0001H 013FH 0003H 003FH
+00:007A 01 00                     645   	mov	r0,	#01h
+00:007C 11-90 A3-F2               646   	st	r0,	0f2a3h
+                                  647   
+                                  648   ;;	return ( I2C_R_TRANS_START_OK );
+                                  649   CLINEA 0000H 0001H 0140H 0002H 0021H
+00:0080 00 E0                     650   	mov	er0,	#0 
+00:0082 E2 CE                     651   	bal	_$L31
+                                  652   CBLOCKEND 3 1 321
+                                  653   CFUNCTIONEND 3
+                                  654   
+                                  655   
+  --------------------------      656   	rseg $$i2c_continue$i2c
+                                  657   CFUNCTION 4
+                                  658   
+00:0000                           659   _i2c_continue	:
+                                  660   CBLOCK 4 1 335
+                                  661   
+                                  662   ;;{
+                                  663   CLINEA 0000H 0001H 014FH 0001H 0001H
+00:0000 CE-F8                     664   	push	lr
+00:0002 5E-FC                     665   	push	bp
+00:0004 5E-F4                     666   	push	er4
+                                  667   CBLOCK 4 2 335
+                                  668   CRET 0004H
+                                  669   CLOCAL 46H 0001H 0015H 0002H "i2c0stat" 02H 00H 00H
+                                  670   CLOCAL 46H 0001H 0018H 0002H "setbit" 02H 00H 00H
+                                  671   CLOCAL 47H 0002H 0026H 0002H "callbackFunc" 0AH 03H 00H 02H 00H 00H 00H 00H 00H 00H 07H
+                                  672   
+                                  673   ;;	i2c0stat = I2C0STAT;
+                                  674   CLINEA 0000H 0001H 0154H 0002H 0015H
+00:0006 10-90 A5-F2               675   	l	r0,	0f2a5h
+00:000A 00-81                     676   	mov	r1,	r0
+                                  677   
+                                  678   ;;	switch(_gsCtrlParam.status){
+                                  679   CLINEA 0000H 0001H 0155H 0002H 001DH
+00:000C 10-90 00-00'              680   	l	r0,	NEAR __gsCtrlParam+0fh
+                                  681   CBLOCK 4 3 341
+00:0010 0E C9                     682   	beq	_$L93
+                                  683   
+                                  684   ;;	switch(_gsCtrlParam.status){
+                                  685   CLINEA 0000H 0000H 0155H 0002H 001DH
+00:0012 01 70                     686   	cmp	r0,	#01h
+00:0014 1C C9                     687   	beq	_$L50
+                                  688   
+                                  689   ;;	switch(_gsCtrlParam.status){
+                                  690   CLINEA 0000H 0000H 0155H 0002H 001DH
+00:0016 02 70                     691   	cmp	r0,	#02h
+00:0018 02 C8                     692   	bne	_$M5
+00:001A 00-F0'00-00'              693   	b	_$L67
+00:001E                           694   _$M5 :
+                                  695   
+                                  696   ;;	switch(_gsCtrlParam.status){
+                                  697   CLINEA 0000H 0000H 0155H 0002H 001DH
+00:001E 03 70                     698   	cmp	r0,	#03h
+00:0020 02 C8                     699   	bne	_$M6
+00:0022 00-F0'00-00'              700   	b	_$L80
+00:0026                           701   _$M6 :
+                                  702   
+                                  703   ;;	switch(_gsCtrlParam.status){
+                                  704   CLINEA 0000H 0000H 0155H 0002H 001DH
+00:0026 04 70                     705   	cmp	r0,	#04h
+00:0028 02 C8                     706   	bne	_$M7
+00:002A 00-F0'00-00'              707   	b	_$L87
+00:002E                           708   _$M7 :
+                                  709   
+                                  710   ;;		case I2C_TRANS_END:
+                                  711   CLINEA 0000H 0001H 01CFH 0003H 0015H
+00:002E                           712   _$L93 :
+                                  713   
+                                  714   ;;			if( _gsCtrlParam.callBack != (void *)0 ){
+                                  715   CLINEA 0000H 0001H 01D1H 0004H 002CH
+00:002E 12-90 00-00'              716   	l	er0,	NEAR __gsCtrlParam+0ch
+00:0032 09 C9                     717   	beq	_$L94
+                                  718   CBLOCK 4 27 465
+                                  719   
+                                  720   ;;				callbackFunc = _gsCtrlParam.callBack;
+                                  721   CLINEA 0000H 0001H 01D2H 0005H 0029H
+00:0034 05-F4                     722   	mov	er4,	er0
+                                  723   
+                                  724   ;;				_gsCtrlParam.callBack = (void *)0;
+                                  725   CLINEA 0000H 0001H 01D3H 0005H 0026H
+00:0036 00 E0                     726   	mov	er0,	#0 
+00:0038 13-90 00-00'              727   	st	er0,	NEAR __gsCtrlParam+0ch
+                                  728   
+                                  729   ;;				callbackFunc( _gsCtrlParam.cnt, _gsCtrlParam.errStat );
+                                  730   CLINEA 0000H 0001H 01D4H 0005H 003BH
+00:003C 10-92 00-00'              731   	l	r2,	NEAR __gsCtrlParam+0eh
+00:0040 12-90 00-00'              732   	l	er0,	NEAR __gsCtrlParam+0ah
+00:0044 43-F0                     733   	bl	er4
+                                  734   CBLOCKEND 4 27 469
+                                  735   
+                                  736   ;;			}
+                                  737   CLINEA 0000H 0000H 01D5H 0004H 0004H
+00:0046                           738   _$L94 :
+                                  739   CBLOCKEND 4 3 471
+                                  740   
+                                  741   ;;	return ( I2C_R_TRANS_FIN );
+                                  742   CLINEA 0000H 0001H 01D8H 0002H 001CH
+00:0046 01 E0                     743   	mov	er0,	#1 
+                                  744   CBLOCKEND 4 2 473
+                                  745   
+                                  746   ;;}
+                                  747   CLINEA 0000H 0001H 01D9H 0001H 0001H
+00:0048                           748   _$L44 :
+00:0048 1E-F4                     749   	pop	er4
+00:004A 1E-FC                     750   	pop	bp
+00:004C 8E-F2                     751   	pop	pc
+                                  752   
+                                  753   ;;		case I2C_SEND_SLAVE_ADDRESS:
+                                  754   CLINEA 0000H 0001H 0156H 0003H 001EH
+00:004E                           755   _$L50 :
+                                  756   
+                                  757   ;;			if((i2c0stat&I2C0STAT_I20ER) == I2C0STAT_I20ER){
+                                  758   CLINEA 0000H 0001H 0158H 0004H 0033H
+00:004E 10-80                     759   	mov	r0,	r1
+00:0050 04 20                     760   	and	r0,	#04h
+00:0052 04 70                     761   	cmp	r0,	#04h
+00:0054 17 C8                     762   	bne	_$L51
+                                  763   CBLOCK 4 4 344
+                                  764   
+                                  765   ;;				_gsCtrlParam.status = I2C_TRANS_END;
+                                  766   CLINEA 0000H 0001H 0159H 0005H 0028H
+00:0056 00 00                     767   	mov	r0,	#00h
+00:0058 11-90 00-00'              768   	st	r0,	NEAR __gsCtrlParam+0fh
+                                  769   
+                                  770   ;;				_gsCtrlParam.errStat = I2C_ERR_SEND_ERR;
+                                  771   CLINEA 0000H 0001H 015AH 0005H 002CH
+00:005C 02 00                     772   	mov	r0,	#02h
+00:005E 11-90 00-00'              773   	st	r0,	NEAR __gsCtrlParam+0eh
+                                  774   
+                                  775   ;;				I2C0CON = (unsigned char)0x00;	/* stop i2c */
+                                  776   CLINEA 0000H 0001H 015BH 0005H 0031H
+00:0062 00 00                     777   	mov	r0,	#00h
+00:0064 11-90 A3-F2               778   	st	r0,	0f2a3h
+                                  779   
+                                  780   ;;				if( _gsCtrlParam.callBack != (void *)0 ){
+                                  781   CLINEA 0000H 0001H 015CH 0005H 002DH
+00:0068 12-90 00-00'              782   	l	er0,	NEAR __gsCtrlParam+0ch
+00:006C 09 C9                     783   	beq	_$L53
+                                  784   CBLOCK 4 5 348
+                                  785   
+                                  786   ;;					callbackFunc = _gsCtrlParam.callBack;
+                                  787   CLINEA 0000H 0001H 015DH 0006H 002AH
+00:006E 05-F4                     788   	mov	er4,	er0
+                                  789   
+                                  790   ;;					_gsCtrlParam.callBack = (void *)0;
+                                  791   CLINEA 0000H 0001H 015EH 0006H 0027H
+00:0070 00 E0                     792   	mov	er0,	#0 
+00:0072 13-90 00-00'              793   	st	er0,	NEAR __gsCtrlParam+0ch
+                                  794   
+                                  795   ;;					callbackFunc( _gsCtrlParam.cnt, _gsCtrlParam.errStat );
+                                  796   CLINEA 0000H 0001H 015FH 0006H 003CH
+00:0076 10-92 00-00'              797   	l	r2,	NEAR __gsCtrlParam+0eh
+00:007A 12-90 00-00'              798   	l	er0,	NEAR __gsCtrlParam+0ah
+00:007E 43-F0                     799   	bl	er4
+                                  800   CBLOCKEND 4 5 352
+                                  801   
+                                  802   ;;				}
+                                  803   CLINEA 0000H 0000H 0160H 0005H 0005H
+00:0080                           804   _$L53 :
+                                  805   
+                                  806   ;;				return ( I2C_R_TRANS_FIN );
+                                  807   CLINEA 0000H 0001H 0161H 0005H 001FH
+00:0080 01 E0                     808   	mov	er0,	#1 
+00:0082 E2 CE                     809   	bal	_$L44
+                                  810   CBLOCKEND 4 4 354
+                                  811   
+                                  812   ;;			else if((i2c0stat&I2C0STAT_I20ACR) == I2C0STAT_I20ACR){
+                                  813   CLINEA 0000H 0000H 0164H 0004H 003AH
+00:0084                           814   _$L51 :
+00:0084 10-80                     815   	mov	r0,	r1
+00:0086 02 20                     816   	and	r0,	#02h
+00:0088 02 70                     817   	cmp	r0,	#02h
+00:008A 0A C8                     818   	bne	_$L56
+                                  819   CBLOCK 4 6 356
+                                  820   
+                                  821   ;;				_gsCtrlParam.status = I2C_TRANS_END;
+                                  822   CLINEA 0000H 0001H 0165H 0005H 0028H
+00:008C 00 00                     823   	mov	r0,	#00h
+00:008E 11-90 00-00'              824   	st	r0,	NEAR __gsCtrlParam+0fh
+                                  825   
+                                  826   ;;				_gsCtrlParam.errStat = I2C_ERR_ACR;
+                                  827   CLINEA 0000H 0001H 0166H 0005H 0027H
+00:0092 01 00                     828   	mov	r0,	#01h
+00:0094 11-90 00-00'              829   	st	r0,	NEAR __gsCtrlParam+0eh
+                                  830   
+                                  831   ;;				I2C0CON = (unsigned char)I2C0CON_I20SP;	/* Stop condition */
+                                  832   CLINEA 0000H 0001H 0167H 0005H 0040H
+00:0098 02 00                     833   	mov	r0,	#02h
+00:009A 11-90 A3-F2               834   	st	r0,	0f2a3h
+                                  835   
+                                  836   ;;			else{
+                                  837   CLINEA 0000H 0001H 016AH 0004H 0008H
+00:009E 3E CE                     838   	bal	_$L66
+00:00A0                           839   _$L56 :
+                                  840   CBLOCK 4 7 362
+                                  841   
+                                  842   ;;				if(_gsCtrlParam.addr_size != 0){
+                                  843   CLINEA 0000H 0001H 016BH 0005H 0024H
+00:00A0 12-90 00-00'              844   	l	er0,	NEAR __gsCtrlParam+04h
+00:00A4 15 C9                     845   	beq	_$L59
+                                  846   CBLOCK 4 8 363
+                                  847   
+                                  848   ;;					_gsCtrlParam.status = I2C_SEND_ADDRESS;
+                                  849   CLINEA 0000H 0001H 016CH 0006H 002CH
+00:00A6 02 00                     850   	mov	r0,	#02h
+00:00A8 11-90 00-00'              851   	st	r0,	NEAR __gsCtrlParam+0fh
+                                  852   
+                                  853   ;;					I2C0TD = (unsigned char)*_gsCtrlParam.addr;
+                                  854   CLINEA 0000H 0001H 016DH 0006H 0030H
+00:00AC 12-9C 00-00'              855   	l	bp,	NEAR __gsCtrlParam+02h
+00:00B0 C0-90                     856   	l	r0,	[bp]
+00:00B2 11-90 A2-F2               857   	st	r0,	0f2a2h
+                                  858   
+                                  859   ;;					_gsCtrlParam.addr++;
+                                  860   CLINEA 0000H 0000H 016EH 0006H 0019H
+00:00B6 C5-F0                     861   	mov	er0,	bp
+00:00B8 81 E0                     862   	add	er0,	#1 
+00:00BA 13-90 00-00'              863   	st	er0,	NEAR __gsCtrlParam+02h
+                                  864   
+                                  865   ;;					_gsCtrlParam.addr_size--;
+                                  866   CLINEA 0000H 0000H 016FH 0006H 001EH
+00:00BE 12-90 00-00'              867   	l	er0,	NEAR __gsCtrlParam+04h
+00:00C2 FF E0                     868   	add	er0,	#-1
+00:00C4 13-90 00-00'              869   	st	er0,	NEAR __gsCtrlParam+04h
+                                  870   
+                                  871   ;;					I2C0CON = (unsigned char)I2C0CON_I20ST;	/* i2c start */
+                                  872   CLINEA 0000H 0001H 0170H 0006H 003CH
+00:00C8 01 00                     873   	mov	r0,	#01h
+00:00CA 11-90 A3-F2               874   	st	r0,	0f2a3h
+                                  875   
+                                  876   ;;				else{
+                                  877   CLINEA 0000H 0001H 0172H 0005H 0009H
+00:00CE 26 CE                     878   	bal	_$L66
+00:00D0                           879   _$L59 :
+                                  880   CBLOCK 4 9 370
+                                  881   
+                                  882   ;;					if(_gsCtrlParam.mode != 0 ){
+                                  883   CLINEA 0000H 0001H 0173H 0006H 0021H
+00:00D0 10-90 00-00'              884   	l	r0,	NEAR __gsCtrlParam
+00:00D4 0F C9                     885   	beq	_$L62
+                                  886   CBLOCK 4 10 371
+                                  887   
+                                  888   ;;						_gsCtrlParam.status = I2C_RECEIVE_DATA;
+                                  889   CLINEA 0000H 0001H 0174H 0007H 002DH
+00:00D6 04 00                     890   	mov	r0,	#04h
+00:00D8 11-90 00-00'              891   	st	r0,	NEAR __gsCtrlParam+0fh
+                                  892   
+                                  893   ;;						setbit = I2C0CON_I20ST;
+                                  894   CLINEA 0000H 0001H 0175H 0007H 001DH
+00:00DC 01 04                     895   	mov	r4,	#01h
+                                  896   
+                                  897   ;;						if( ( _gsCtrlParam.data_size - 1) == _gsCtrlParam.cnt ){
+                                  898   CLINEA 0000H 0001H 0176H 0007H 003EH
+00:00DE 12-90 00-00'              899   	l	er0,	NEAR __gsCtrlParam+08h
+00:00E2 FF E0                     900   	add	er0,	#-1
+00:00E4 12-92 00-00'              901   	l	er2,	NEAR __gsCtrlParam+0ah
+00:00E8 27-F0                     902   	cmp	er0,	er2
+00:00EA 01 C8                     903   	bne	_$L64
+                                  904   CBLOCK 4 11 374
+                                  905   
+                                  906   ;;							setbit |= (unsigned char)I2C0CON_I20ACT;
+                                  907   CLINEA 0000H 0001H 0177H 0008H 002FH
+00:00EC 81 04                     908   	mov	r4,	#081h
+                                  909   CBLOCKEND 4 11 376
+                                  910   
+                                  911   ;;						}
+                                  912   CLINEA 0000H 0000H 0178H 0007H 0007H
+00:00EE                           913   _$L64 :
+                                  914   
+                                  915   ;;						I2C0CON = setbit;
+                                  916   CLINEA 0000H 0001H 0179H 0007H 0017H
+00:00EE 11-94 A3-F2               917   	st	r4,	0f2a3h
+                                  918   CBLOCKEND 4 10 378
+                                  919   
+                                  920   ;;					else{
+                                  921   CLINEA 0000H 0001H 017BH 0006H 000AH
+00:00F2 14 CE                     922   	bal	_$L66
+00:00F4                           923   _$L62 :
+                                  924   CBLOCK 4 12 379
+                                  925   
+                                  926   ;;						_gsCtrlParam.status = I2C_SEND_DATA;
+                                  927   CLINEA 0000H 0001H 017CH 0007H 002AH
+00:00F4 03 00                     928   	mov	r0,	#03h
+00:00F6 11-90 00-00'              929   	st	r0,	NEAR __gsCtrlParam+0fh
+                                  930   
+                                  931   ;;						I2C0TD = (unsigned char)*_gsCtrlParam.data;
+                                  932   CLINEA 0000H 0001H 017DH 0007H 0031H
+00:00FA 12-9C 00-00'              933   	l	bp,	NEAR __gsCtrlParam+06h
+00:00FE C0-90                     934   	l	r0,	[bp]
+00:0100 11-90 A2-F2               935   	st	r0,	0f2a2h
+                                  936   
+                                  937   ;;						_gsCtrlParam.data++;
+                                  938   CLINEA 0000H 0000H 017EH 0007H 001AH
+00:0104 C5-F0                     939   	mov	er0,	bp
+00:0106 81 E0                     940   	add	er0,	#1 
+00:0108 13-90 00-00'              941   	st	er0,	NEAR __gsCtrlParam+06h
+                                  942   
+                                  943   ;;						_gsCtrlParam.cnt++;
+                                  944   CLINEA 0000H 0000H 017FH 0007H 0019H
+00:010C 12-90 00-00'              945   	l	er0,	NEAR __gsCtrlParam+0ah
+00:0110 81 E0                     946   	add	er0,	#1 
+00:0112 13-90 00-00'              947   	st	er0,	NEAR __gsCtrlParam+0ah
+                                  948   
+                                  949   ;;						I2C0CON = (unsigned char)I2C0CON_I20ST;
+                                  950   CLINEA 0000H 0001H 0180H 0007H 002DH
+00:0116 01 00                     951   	mov	r0,	#01h
+00:0118 11-90 A3-F2               952   	st	r0,	0f2a3h
+                                  953   CBLOCKEND 4 12 385
+                                  954   
+                                  955   ;;					}
+                                  956   CLINEA 0000H 0000H 0181H 0006H 0006H
+00:011C                           957   _$L66 :
+                                  958   CBLOCKEND 4 9 386
+                                  959   CBLOCKEND 4 7 387
+                                  960   CBLOCKEND 4 8 473
+                                  961   CBLOCKEND 4 6 473
+                                  962   
+                                  963   ;;			return(I2C_R_TRANS_CONT_OK);
+                                  964   CLINEA 0000H 0001H 0184H 0004H 001FH
+00:011C 00 E0                     965   	mov	er0,	#0 
+00:011E 00-F0'00-00'              966   	b	_$L44
+                                  967   
+                                  968   ;;		case I2C_SEND_ADDRESS:
+                                  969   CLINEA 0000H 0001H 0186H 0003H 0018H
+00:0122                           970   _$L67 :
+                                  971   
+                                  972   ;;			if((i2c0stat&I2C0STAT_I20ACR) == I2C0STAT_I20ACR){
+                                  973   CLINEA 0000H 0001H 0187H 0004H 0035H
+00:0122 10-80                     974   	mov	r0,	r1
+00:0124 02 20                     975   	and	r0,	#02h
+00:0126 02 70                     976   	cmp	r0,	#02h
+00:0128 0B C8                     977   	bne	_$L68
+                                  978   CBLOCK 4 13 391
+                                  979   
+                                  980   ;;				_gsCtrlParam.status = I2C_TRANS_END;
+                                  981   CLINEA 0000H 0001H 0188H 0005H 0028H
+00:012A 00 00                     982   	mov	r0,	#00h
+00:012C 11-90 00-00'              983   	st	r0,	NEAR __gsCtrlParam+0fh
+                                  984   
+                                  985   ;;				_gsCtrlParam.errStat = I2C_ERR_ACR;
+                                  986   CLINEA 0000H 0001H 0189H 0005H 0027H
+00:0130 01 00                     987   	mov	r0,	#01h
+00:0132 11-90 00-00'              988   	st	r0,	NEAR __gsCtrlParam+0eh
+                                  989   
+                                  990   ;;				I2C0CON = (unsigned char)I2C0CON_I20SP;	/* Stop condition */
+                                  991   CLINEA 0000H 0001H 018AH 0005H 0040H
+00:0136 02 00                     992   	mov	r0,	#02h
+00:0138 11-90 A3-F2               993   	st	r0,	0f2a3h
+                                  994   
+                                  995   ;;			else{
+                                  996   CLINEA 0000H 0001H 018CH 0004H 0008H
+00:013C 00-F0'00-00'              997   	b	_$L79
+00:0140                           998   _$L68 :
+                                  999   CBLOCK 4 14 396
+                                 1000   
+                                 1001   ;;				if( _gsCtrlParam.addr_size != 0 ){
+                                 1002   CLINEA 0000H 0001H 018DH 0005H 0026H
+00:0140 12-90 00-00'             1003   	l	er0,	NEAR __gsCtrlParam+04h
+00:0144 12 C9                    1004   	beq	_$L71
+                                 1005   CBLOCK 4 15 397
+                                 1006   
+                                 1007   ;;					I2C0TD = (unsigned char)*_gsCtrlParam.addr;
+                                 1008   CLINEA 0000H 0001H 018EH 0006H 0030H
+00:0146 12-9C 00-00'             1009   	l	bp,	NEAR __gsCtrlParam+02h
+00:014A C0-90                    1010   	l	r0,	[bp]
+00:014C 11-90 A2-F2              1011   	st	r0,	0f2a2h
+                                 1012   
+                                 1013   ;;					_gsCtrlParam.addr++;
+                                 1014   CLINEA 0000H 0000H 018FH 0006H 0019H
+00:0150 C5-F0                    1015   	mov	er0,	bp
+00:0152 81 E0                    1016   	add	er0,	#1 
+00:0154 13-90 00-00'             1017   	st	er0,	NEAR __gsCtrlParam+02h
+                                 1018   
+                                 1019   ;;					_gsCtrlParam.addr_size--;
+                                 1020   CLINEA 0000H 0000H 0190H 0006H 001EH
+00:0158 12-90 00-00'             1021   	l	er0,	NEAR __gsCtrlParam+04h
+00:015C FF E0                    1022   	add	er0,	#-1
+00:015E 13-90 00-00'             1023   	st	er0,	NEAR __gsCtrlParam+04h
+                                 1024   
+                                 1025   ;;					I2C0CON = (unsigned char)I2C0CON_I20ST;	/* i2c start */
+                                 1026   CLINEA 0000H 0001H 0191H 0006H 003CH
+00:0162 01 00                    1027   	mov	r0,	#01h
+00:0164 11-90 A3-F2              1028   	st	r0,	0f2a3h
+                                 1029   
+                                 1030   ;;				else{
+                                 1031   CLINEA 0000H 0001H 0194H 0005H 0009H
+00:0168 29 CE                    1032   	bal	_$L79
+00:016A                          1033   _$L71 :
+                                 1034   CBLOCK 4 16 404
+                                 1035   
+                                 1036   ;;					if(_gsCtrlParam.data_size == 0){
+                                 1037   CLINEA 0000H 0001H 0195H 0006H 0025H
+00:016A 12-90 00-00'             1038   	l	er0,	NEAR __gsCtrlParam+08h
+00:016E 07 C8                    1039   	bne	_$L74
+                                 1040   CBLOCK 4 17 405
+                                 1041   
+                                 1042   ;;						_gsCtrlParam.status = I2C_TRANS_END;
+                                 1043   CLINEA 0000H 0001H 0196H 0007H 002AH
+00:0170 00 00                    1044   	mov	r0,	#00h
+00:0172 11-90 00-00'             1045   	st	r0,	NEAR __gsCtrlParam+0fh
+                                 1046   
+                                 1047   ;;						I2C0CON = (unsigned char)I2C0CON_I20SP;	/* Stop condition */
+                                 1048   CLINEA 0000H 0001H 0197H 0007H 0042H
+00:0176 02 00                    1049   	mov	r0,	#02h
+00:0178 11-90 A3-F2              1050   	st	r0,	0f2a3h
+                                 1051   
+                                 1052   ;;					else{
+                                 1053   CLINEA 0000H 0001H 0199H 0006H 000AH
+00:017C 1F CE                    1054   	bal	_$L79
+00:017E                          1055   _$L74 :
+                                 1056   CBLOCK 4 18 409
+                                 1057   
+                                 1058   ;;						if(_gsCtrlParam.mode != 0 ){/* receive mode */
+                                 1059   CLINEA 0000H 0001H 019AH 0007H 0034H
+00:017E 10-90 00-00'             1060   	l	r0,	NEAR __gsCtrlParam
+00:0182 08 C9                    1061   	beq	_$L77
+                                 1062   CBLOCK 4 19 410
+                                 1063   
+                                 1064   ;;							_gsCtrlParam.status = I2C_SEND_SLAVE_ADDRESS;
+                                 1065   CLINEA 0000H 0001H 019BH 0008H 0034H
+00:0184 01 00                    1066   	mov	r0,	#01h
+00:0186 11-90 00-00'             1067   	st	r0,	NEAR __gsCtrlParam+0fh
+                                 1068   
+                                 1069   ;;							I20RW = 1;		/* Receive mode */
+                                 1070   CLINEA 0000H 0001H 019CH 0008H 0025H
+00:018A 80-A0 A1-F2              1071   	sb	0f2a1h.0
+                                 1072   
+                                 1073   ;;							I20RS = 1;		/* Restart condition */
+                                 1074   CLINEA 0000H 0001H 019DH 0008H 002AH
+00:018E A0-A0 A3-F2              1075   	sb	0f2a3h.2
+                                 1076   CBLOCKEND 4 19 414
+                                 1077   
+                                 1078   ;;						else{/* send mode */
+                                 1079   CLINEA 0000H 0001H 019FH 0007H 001AH
+00:0192 14 CE                    1080   	bal	_$L79
+00:0194                          1081   _$L77 :
+                                 1082   CBLOCK 4 20 415
+                                 1083   
+                                 1084   ;;							_gsCtrlParam.status = I2C_SEND_DATA;
+                                 1085   CLINEA 0000H 0001H 01A0H 0008H 002BH
+00:0194 03 00                    1086   	mov	r0,	#03h
+00:0196 11-90 00-00'             1087   	st	r0,	NEAR __gsCtrlParam+0fh
+                                 1088   
+                                 1089   ;;							I2C0TD = (unsigned char)*_gsCtrlParam.data;
+                                 1090   CLINEA 0000H 0001H 01A1H 0008H 0032H
+00:019A 12-9C 00-00'             1091   	l	bp,	NEAR __gsCtrlParam+06h
+00:019E C0-90                    1092   	l	r0,	[bp]
+00:01A0 11-90 A2-F2              1093   	st	r0,	0f2a2h
+                                 1094   
+                                 1095   ;;							_gsCtrlParam.data++;
+                                 1096   CLINEA 0000H 0000H 01A2H 0008H 001BH
+00:01A4 C5-F0                    1097   	mov	er0,	bp
+00:01A6 81 E0                    1098   	add	er0,	#1 
+00:01A8 13-90 00-00'             1099   	st	er0,	NEAR __gsCtrlParam+06h
+                                 1100   
+                                 1101   ;;							_gsCtrlParam.cnt++;
+                                 1102   CLINEA 0000H 0000H 01A3H 0008H 001AH
+00:01AC 12-90 00-00'             1103   	l	er0,	NEAR __gsCtrlParam+0ah
+00:01B0 81 E0                    1104   	add	er0,	#1 
+00:01B2 13-90 00-00'             1105   	st	er0,	NEAR __gsCtrlParam+0ah
+                                 1106   
+                                 1107   ;;							I2C0CON = (unsigned char)I2C0CON_I20ST;
+                                 1108   CLINEA 0000H 0001H 01A4H 0008H 002EH
+00:01B6 01 00                    1109   	mov	r0,	#01h
+00:01B8 11-90 A3-F2              1110   	st	r0,	0f2a3h
+                                 1111   CBLOCKEND 4 20 421
+                                 1112   
+                                 1113   ;;						}
+                                 1114   CLINEA 0000H 0000H 01A5H 0007H 0007H
+00:01BC                          1115   _$L79 :
+                                 1116   CBLOCKEND 4 18 422
+                                 1117   CBLOCKEND 4 16 423
+                                 1118   CBLOCKEND 4 17 473
+                                 1119   CBLOCKEND 4 14 424
+                                 1120   CBLOCKEND 4 15 473
+                                 1121   
+                                 1122   ;;			return ( I2C_R_TRANS_CONT_OK );
+                                 1123   CLINEA 0000H 0001H 01A9H 0004H 0022H
+00:01BC 00 E0                    1124   	mov	er0,	#0 
+00:01BE 00-F0'00-00'             1125   	b	_$L44
+                                 1126   CBLOCKEND 4 13 473
+                                 1127   
+                                 1128   ;;		case I2C_SEND_DATA:
+                                 1129   CLINEA 0000H 0001H 01ABH 0003H 0015H
+00:01C2                          1130   _$L80 :
+                                 1131   
+                                 1132   ;;			if((i2c0stat&I2C0STAT_I20ACR) == I2C0STAT_I20ACR){
+                                 1133   CLINEA 0000H 0001H 01ACH 0004H 0035H
+00:01C2 10-80                    1134   	mov	r0,	r1
+00:01C4 02 20                    1135   	and	r0,	#02h
+00:01C6 02 70                    1136   	cmp	r0,	#02h
+00:01C8 08 C8                    1137   	bne	_$L81
+                                 1138   CBLOCK 4 21 428
+                                 1139   
+                                 1140   ;;				_gsCtrlParam.status = I2C_TRANS_END;
+                                 1141   CLINEA 0000H 0001H 01ADH 0005H 0028H
+00:01CA 00 00                    1142   	mov	r0,	#00h
+00:01CC 11-90 00-00'             1143   	st	r0,	NEAR __gsCtrlParam+0fh
+                                 1144   
+                                 1145   ;;				_gsCtrlParam.errStat = I2C_ERR_ACR;
+                                 1146   CLINEA 0000H 0001H 01AEH 0005H 0027H
+00:01D0 01 00                    1147   	mov	r0,	#01h
+00:01D2 11-90 00-00'             1148   	st	r0,	NEAR __gsCtrlParam+0eh
+                                 1149   
+                                 1150   ;;				I2C0CON = (unsigned char)I2C0CON_I20SP;	/* Stop condition */
+                                 1151   CLINEA 0000H 0001H 01AFH 0005H 0040H
+00:01D6 02 00                    1152   	mov	r0,	#02h
+                                 1153   
+                                 1154   ;;			else if( _gsCtrlParam.data_size != _gsCtrlParam.cnt ){
+                                 1155   CLINEA 0000H 0001H 01B1H 0004H 0039H
+00:01D8 19 CE                    1156   	bal	_$L86
+00:01DA                          1157   _$L81 :
+00:01DA 12-90 00-00'             1158   	l	er0,	NEAR __gsCtrlParam+08h
+00:01DE 12-92 00-00'             1159   	l	er2,	NEAR __gsCtrlParam+0ah
+00:01E2 27-F0                    1160   	cmp	er0,	er2
+00:01E4 0F C9                    1161   	beq	_$L84
+                                 1162   CBLOCK 4 22 433
+                                 1163   
+                                 1164   ;;				I2C0TD = (unsigned char)*_gsCtrlParam.data;
+                                 1165   CLINEA 0000H 0001H 01B2H 0005H 002FH
+00:01E6 12-9C 00-00'             1166   	l	bp,	NEAR __gsCtrlParam+06h
+00:01EA C0-90                    1167   	l	r0,	[bp]
+00:01EC 11-90 A2-F2              1168   	st	r0,	0f2a2h
+                                 1169   
+                                 1170   ;;				_gsCtrlParam.data++;
+                                 1171   CLINEA 0000H 0000H 01B3H 0005H 0018H
+00:01F0 C5-F0                    1172   	mov	er0,	bp
+00:01F2 81 E0                    1173   	add	er0,	#1 
+00:01F4 13-90 00-00'             1174   	st	er0,	NEAR __gsCtrlParam+06h
+                                 1175   
+                                 1176   ;;				_gsCtrlParam.cnt++;
+                                 1177   CLINEA 0000H 0000H 01B4H 0005H 0017H
+00:01F8 25-F0                    1178   	mov	er0,	er2
+00:01FA 81 E0                    1179   	add	er0,	#1 
+00:01FC 13-90 00-00'             1180   	st	er0,	NEAR __gsCtrlParam+0ah
+                                 1181   
+                                 1182   ;;				I2C0CON = (unsigned char)I2C0CON_I20ST;
+                                 1183   CLINEA 0000H 0001H 01B5H 0005H 002BH
+00:0200 01 00                    1184   	mov	r0,	#01h
+                                 1185   CBLOCKEND 4 22 438
+                                 1186   
+                                 1187   ;;			else{
+                                 1188   CLINEA 0000H 0001H 01B7H 0004H 0008H
+00:0202 04 CE                    1189   	bal	_$L86
+00:0204                          1190   _$L84 :
+                                 1191   CBLOCK 4 23 439
+                                 1192   
+                                 1193   ;;				_gsCtrlParam.status = (unsigned char)I2C_TRANS_END;
+                                 1194   CLINEA 0000H 0001H 01B8H 0005H 0037H
+00:0204 00 00                    1195   	mov	r0,	#00h
+00:0206 11-90 00-00'             1196   	st	r0,	NEAR __gsCtrlParam+0fh
+                                 1197   
+                                 1198   ;;				I2C0CON = (unsigned char)I2C0CON_I20SP;	/* Stop condition */
+                                 1199   CLINEA 0000H 0001H 01BAH 0005H 0040H
+00:020A 02 00                    1200   	mov	r0,	#02h
+                                 1201   CBLOCKEND 4 23 443
+                                 1202   
+                                 1203   ;;			}
+                                 1204   CLINEA 0000H 0000H 01BBH 0004H 0004H
+00:020C                          1205   _$L86 :
+00:020C 11-90 A3-F2              1206   	st	r0,	0f2a3h
+                                 1207   
+                                 1208   ;;			return ( I2C_R_TRANS_CONT_OK );
+                                 1209   CLINEA 0000H 0001H 01BCH 0004H 0022H
+00:0210 00 E0                    1210   	mov	er0,	#0 
+00:0212 00-F0'00-00'             1211   	b	_$L44
+                                 1212   CBLOCKEND 4 21 473
+                                 1213   
+                                 1214   ;;		case I2C_RECEIVE_DATA:
+                                 1215   CLINEA 0000H 0001H 01BEH 0003H 0018H
+00:0216                          1216   _$L87 :
+                                 1217   
+                                 1218   ;;			*_gsCtrlParam.data = I2C0RD;
+                                 1219   CLINEA 0000H 0001H 01BFH 0004H 001FH
+00:0216 12-9C 00-00'             1220   	l	bp,	NEAR __gsCtrlParam+06h
+00:021A 10-90 A0-F2              1221   	l	r0,	0f2a0h
+00:021E C1-90                    1222   	st	r0,	[bp]
+                                 1223   
+                                 1224   ;;			_gsCtrlParam.data++;
+                                 1225   CLINEA 0000H 0000H 01C0H 0004H 0017H
+00:0220 12-90 00-00'             1226   	l	er0,	NEAR __gsCtrlParam+06h
+00:0224 81 E0                    1227   	add	er0,	#1 
+00:0226 13-90 00-00'             1228   	st	er0,	NEAR __gsCtrlParam+06h
+                                 1229   
+                                 1230   ;;			_gsCtrlParam.cnt++;
+                                 1231   CLINEA 0000H 0000H 01C1H 0004H 0016H
+00:022A 12-90 00-00'             1232   	l	er0,	NEAR __gsCtrlParam+0ah
+00:022E 81 E0                    1233   	add	er0,	#1 
+00:0230 13-90 00-00'             1234   	st	er0,	NEAR __gsCtrlParam+0ah
+                                 1235   
+                                 1236   ;;			if( _gsCtrlParam.data_size != _gsCtrlParam.cnt ){
+                                 1237   CLINEA 0000H 0001H 01C2H 0004H 0034H
+00:0234 12-90 00-00'             1238   	l	er0,	NEAR __gsCtrlParam+08h
+00:0238 12-92 00-00'             1239   	l	er2,	NEAR __gsCtrlParam+0ah
+00:023C 27-F0                    1240   	cmp	er0,	er2
+00:023E 08 C9                    1241   	beq	_$L88
+                                 1242   CBLOCK 4 24 450
+                                 1243   
+                                 1244   ;;				setbit = (unsigned char)I2C0CON_I20ST;
+                                 1245   CLINEA 0000H 0001H 01C3H 0005H 002AH
+00:0240 01 04                    1246   	mov	r4,	#01h
+                                 1247   
+                                 1248   ;;				if( ( _gsCtrlParam.data_size - 1) == _gsCtrlParam.cnt ){
+                                 1249   CLINEA 0000H 0001H 01C4H 0005H 003CH
+00:0242 FF E0                    1250   	add	er0,	#-1
+00:0244 27-F0                    1251   	cmp	er0,	er2
+00:0246 01 C8                    1252   	bne	_$L90
+                                 1253   CBLOCK 4 25 452
+                                 1254   
+                                 1255   ;;					setbit |= (unsigned char)I2C0CON_I20ACT;
+                                 1256   CLINEA 0000H 0001H 01C5H 0006H 002DH
+00:0248 81 04                    1257   	mov	r4,	#081h
+                                 1258   CBLOCKEND 4 25 454
+                                 1259   
+                                 1260   ;;				}
+                                 1261   CLINEA 0000H 0000H 01C6H 0005H 0005H
+00:024A                          1262   _$L90 :
+                                 1263   
+                                 1264   ;;				I2C0CON = setbit;
+                                 1265   CLINEA 0000H 0001H 01C7H 0005H 0015H
+00:024A 11-94 A3-F2              1266   	st	r4,	0f2a3h
+                                 1267   CBLOCKEND 4 24 456
+                                 1268   
+                                 1269   ;;			else{
+                                 1270   CLINEA 0000H 0001H 01C9H 0004H 0008H
+00:024E 06 CE                    1271   	bal	_$L92
+00:0250                          1272   _$L88 :
+                                 1273   CBLOCK 4 26 457
+                                 1274   
+                                 1275   ;;				_gsCtrlParam.status = (unsigned char)I2C_TRANS_END;
+                                 1276   CLINEA 0000H 0001H 01CAH 0005H 0037H
+00:0250 00 00                    1277   	mov	r0,	#00h
+00:0252 11-90 00-00'             1278   	st	r0,	NEAR __gsCtrlParam+0fh
+                                 1279   
+                                 1280   ;;				I2C0CON = (unsigned char)I2C0CON_I20SP;	/* Stop condition */
+                                 1281   CLINEA 0000H 0001H 01CBH 0005H 0040H
+00:0256 02 00                    1282   	mov	r0,	#02h
+00:0258 11-90 A3-F2              1283   	st	r0,	0f2a3h
+                                 1284   CBLOCKEND 4 26 460
+                                 1285   
+                                 1286   ;;			}
+                                 1287   CLINEA 0000H 0000H 01CCH 0004H 0004H
+00:025C                          1288   _$L92 :
+                                 1289   
+                                 1290   ;;			return(I2C_R_TRANS_CONT_OK);
+                                 1291   CLINEA 0000H 0001H 01CDH 0004H 001FH
+00:025C 00 E0                    1292   	mov	er0,	#0 
+00:025E 00-F0'00-00'             1293   	b	_$L44
+                                 1294   CBLOCKEND 4 1 473
+                                 1295   CFUNCTIONEND 4
+                                 1296   
+                                 1297   
+  --------------------------     1298   	rseg $$i2c_stop$i2c
+                                 1299   CFUNCTION 5
+                                 1300   
+00:0000                          1301   _i2c_stop	:
+                                 1302   CBLOCK 5 1 483
+                                 1303   
+                                 1304   ;;{
+                                 1305   CLINEA 0000H 0001H 01E3H 0001H 0001H
+                                 1306   CBLOCK 5 2 483
+                                 1307   
+                                 1308   ;;	I20ST = 0;
+                                 1309   CLINEA 0000H 0001H 01E4H 0002H 000BH
+00:0000 82-A0 A3-F2              1310   	rb	0f2a3h.0
+                                 1311   
+                                 1312   ;;	_gsCtrlParam.mode		= 0;
+                                 1313   CLINEA 0000H 0001H 01E5H 0002H 0018H
+00:0004 00 00                    1314   	mov	r0,	#00h
+00:0006 11-90 00-00'             1315   	st	r0,	NEAR __gsCtrlParam
+                                 1316   
+                                 1317   ;;	_gsCtrlParam.addr		= (void *)0;
+                                 1318   CLINEA 0000H 0001H 01E6H 0002H 0020H
+00:000A 00 E0                    1319   	mov	er0,	#0 
+00:000C 13-90 00-00'             1320   	st	er0,	NEAR __gsCtrlParam+02h
+                                 1321   
+                                 1322   ;;	_gsCtrlParam.addr_size	= 0;
+                                 1323   CLINEA 0000H 0001H 01E7H 0002H 001CH
+00:0010 13-90 00-00'             1324   	st	er0,	NEAR __gsCtrlParam+04h
+                                 1325   
+                                 1326   ;;	_gsCtrlParam.data		= (void *)0;
+                                 1327   CLINEA 0000H 0001H 01E8H 0002H 0020H
+00:0014 13-90 00-00'             1328   	st	er0,	NEAR __gsCtrlParam+06h
+                                 1329   
+                                 1330   ;;	_gsCtrlParam.data_size	= 0;
+                                 1331   CLINEA 0000H 0001H 01E9H 0002H 001CH
+00:0018 13-90 00-00'             1332   	st	er0,	NEAR __gsCtrlParam+08h
+                                 1333   
+                                 1334   ;;	_gsCtrlParam.cnt		= 0;
+                                 1335   CLINEA 0000H 0001H 01EAH 0002H 0017H
+00:001C 13-90 00-00'             1336   	st	er0,	NEAR __gsCtrlParam+0ah
+                                 1337   
+                                 1338   ;;	_gsCtrlParam.callBack	= (void *)0;
+                                 1339   CLINEA 0000H 0001H 01EBH 0002H 0023H
+00:0020 13-90 00-00'             1340   	st	er0,	NEAR __gsCtrlParam+0ch
+                                 1341   
+                                 1342   ;;	_gsCtrlParam.errStat	= 0;
+                                 1343   CLINEA 0000H 0001H 01ECH 0002H 001AH
+00:0024 11-90 00-00'             1344   	st	r0,	NEAR __gsCtrlParam+0eh
+                                 1345   
+                                 1346   ;;	_gsCtrlParam.status		= I2C_TRANS_END;
+                                 1347   CLINEA 0000H 0001H 01EDH 0002H 0026H
+00:0028 11-90 00-00'             1348   	st	r0,	NEAR __gsCtrlParam+0fh
+                                 1349   CBLOCKEND 5 2 494
+                                 1350   
+                                 1351   ;;}
+                                 1352   CLINEA 0000H 0001H 01EEH 0001H 0001H
+00:002C 1F-FE                    1353   	rt
+                                 1354   CBLOCKEND 5 1 494
+                                 1355   CFUNCTIONEND 5
+                                 1356   
+                                 1357   
+  --------------------------     1358   	rseg $$i2c_checkIRQ$i2c
+                                 1359   CFUNCTION 6
+                                 1360   
+00:0000                          1361   _i2c_checkIRQ	:
+                                 1362   CBLOCK 6 1 506
+                                 1363   
+                                 1364   ;;{
+                                 1365   CLINEA 0000H 0001H 01FAH 0001H 0001H
+                                 1366   CBLOCK 6 2 506
+                                 1367   CLOCAL 46H 0001H 0014H 0002H "qua0" 02H 00H 00H
+                                 1368   CLOCAL 47H 0002H 0024H 0002H "ret" 02H 00H 01H
+                                 1369   
+                                 1370   ;;	qua0 = (unsigned char)( IRQ2 & (unsigned char)IRQ2_QI2C0 );
+                                 1371   CLINEA 0000H 0001H 01FEH 0002H 003CH
+00:0000 10-90 1A-F0              1372   	l	r0,	0f01ah
+00:0004 80 20                    1373   	and	r0,	#080h
+                                 1374   
+                                 1375   ;;	if( qua0 == (unsigned char)IRQ2_QI2C0 ){
+                                 1376   CLINEA 0000H 0001H 01FFH 0002H 0029H
+00:0006 80 70                    1377   	cmp	r0,	#080h
+00:0008 02 C8                    1378   	bne	_$L98
+                                 1379   CBLOCK 6 3 511
+                                 1380   
+                                 1381   ;;		ret = ( I2C_R_IRQ );
+                                 1382   CLINEA 0000H 0001H 0200H 0003H 0016H
+00:000A 01 E0                    1383   	mov	er0,	#1 
+                                 1384   CBLOCKEND 6 3 513
+                                 1385   
+                                 1386   ;;	else{
+                                 1387   CLINEA 0000H 0001H 0202H 0002H 0006H
+00:000C 1F-FE                    1388   	rt
+00:000E                          1389   _$L98 :
+                                 1390   CBLOCK 6 4 514
+                                 1391   
+                                 1392   ;;		ret = ( I2C_R_NON_IRQ );
+                                 1393   CLINEA 0000H 0001H 0203H 0003H 001AH
+00:000E 00 E0                    1394   	mov	er0,	#0 
+                                 1395   CBLOCKEND 6 4 516
+                                 1396   
+                                 1397   ;;	return ret;
+                                 1398   CLINEA 0000H 0001H 0206H 0002H 000CH
+                                 1399   CBLOCKEND 6 2 519
+                                 1400   
+                                 1401   ;;}
+                                 1402   CLINEA 0000H 0000H 0207H 0001H 0001H
+00:0010 1F-FE                    1403   	rt
+                                 1404   CBLOCKEND 6 1 519
+                                 1405   CFUNCTIONEND 6
+                                 1406   
+                                 1407   
+  --------------------------     1408   	rseg $$i2c_clearIRQ$i2c
+                                 1409   CFUNCTION 7
+                                 1410   
+00:0000                          1411   _i2c_clearIRQ	:
+                                 1412   CBLOCK 7 1 529
+                                 1413   
+                                 1414   ;;{
+                                 1415   CLINEA 0000H 0001H 0211H 0001H 0001H
+                                 1416   CBLOCK 7 2 529
+                                 1417   
+                                 1418   ;;	QI2CM = 0;
+                                 1419   CLINEA 0000H 0001H 0215H 0002H 000BH
+00:0000 F2-A0 1A-F0              1420   	rb	0f01ah.7
+                                 1421   CBLOCKEND 7 2 535
+                                 1422   
+                                 1423   ;;}
+                                 1424   CLINEA 0000H 0001H 0217H 0001H 0001H
+00:0004 1F-FE                    1425   	rt
+                                 1426   CBLOCKEND 7 1 535
+                                 1427   CFUNCTIONEND 7
+                                 1428   
+                                 1429   
+  --------------------------     1430   	rseg $$i2c_getTransSize$i2c
+                                 1431   CFUNCTION 8
+                                 1432   
+00:0000                          1433   _i2c_getTransSize	:
+                                 1434   CBLOCK 8 1 546
+                                 1435   
+                                 1436   ;;{
+                                 1437   CLINEA 0000H 0001H 0222H 0001H 0001H
+                                 1438   CBLOCK 8 2 546
+                                 1439   
+                                 1440   ;;	return _gsCtrlParam.cnt;
+                                 1441   CLINEA 0000H 0001H 0223H 0002H 0019H
+00:0000 12-90 00-00'             1442   	l	er0,	NEAR __gsCtrlParam+0ah
+                                 1443   CBLOCKEND 8 2 548
+                                 1444   
+                                 1445   ;;}
+                                 1446   CLINEA 0000H 0000H 0224H 0001H 0001H
+00:0004 1F-FE                    1447   	rt
+                                 1448   CBLOCKEND 8 1 548
+                                 1449   CFUNCTIONEND 8
+                                 1450   
+                                 1451   	public _i2c_getTransSize
+                                 1452   	public _i2c_stop
+                                 1453   	public _i2c_startReceive
+                                 1454   	public _i2c_continue
+                                 1455   	public _i2c_startSend
+                                 1456   	public _i2c_init
+                                 1457   	public _i2c_clearIRQ
+                                 1458   	public _i2c_checkIRQ
+                                 1459   	extrn code near : _main
+                                 1460   
+  --------------------------     1461   	rseg $$NINITTAB
+??:0000 00                       1462   	db	00h
+??:0001 00                       1463   	align
+??:0002 00-00                    1464   	dw	00h
+??:0004 00-00                    1465   	dw	00h
+??:0006 00-00                    1466   	dw	00h
+??:0008 00-00                    1467   	dw	00h
+??:000A 00-00                    1468   	dw	00h
+??:000C 00-00                    1469   	dw	00h
+??:000E 00                       1470   	db	00h
+??:000F 00                       1471   	db	00h
+                                 1472   
+  --------------------------     1473   	rseg $$NINITVAR
+00:0000                          1474   __gsCtrlParam :
+00:0000                          1475   	ds	010h
+                                 1476   	extrn code : __uidivu8sw
+                                 1477   
+                                 1478   	end
+
+
+
+  Target       : ML610111 (nX-U8/100)
+  Memory Model : SMALL
+  Data   Model : NEAR
+  ROM WINDOW   : (not specified)
+  Internal RAM : E000H to E7FFH
+
+  Errors   : 0
+  Warnings : 0  (/Wrpeast)
+  Lines    : 1478
