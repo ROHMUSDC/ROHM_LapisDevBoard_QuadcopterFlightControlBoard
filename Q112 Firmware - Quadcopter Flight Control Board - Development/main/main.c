@@ -22,13 +22,13 @@
 #define PIDDBounds				(0)	//2
 
 // PID Gains
-#define Accel_x_SetKp				51	
-#define Accel_x_SetKi				11.5	
-#define Accel_x_SetKd				17	//25
+#define Accel_x_SetKp				95	
+#define Accel_x_SetKi				25	
+#define Accel_x_SetKd				19	//25
 
-#define Accel_y_SetKp				51	
-#define Accel_y_SetKi				11.5	
-#define Accel_y_SetKd				17	//25
+#define Accel_y_SetKp				95	
+#define Accel_y_SetKi				25	
+#define Accel_y_SetKd				19	//25
 
 // Sampling control
 #define IenterThres				1 // P_sample_rate / I_sample_rate = IenterThres
@@ -480,7 +480,8 @@ static unsigned int				Accel_PID_YPitchCounter_D = 0;
 static float					Accel_PID_YPitchErrSum = 0;		//Integral Error Portion of PID
 static float					Accel_PID_YPitchErrPrev = 0;	//Derivative Error Portion of PID from last measurement
 static float					Accel_PID_XRolldErr = 0;
-static float					Accel_PID_YPitchdErr = 0;	
+static float					Accel_PID_YPitchdErr = 0;
+	
 
 static float					Accel_PID_XRoll_kp = Accel_x_SetKp;		//			//Calibrated 3-30-2014	//0.8
 static float					Accel_PID_XRoll_ki = Accel_x_SetKi;		//On other Board, I is half of P						//0.001
@@ -488,6 +489,11 @@ static float					Accel_PID_XRoll_kd = Accel_x_SetKd;//5;							//0.5
 static float					Accel_PID_YPitch_kp = Accel_y_SetKp;
 static float					Accel_PID_YPitch_ki = Accel_y_SetKi;
 static float					Accel_PID_YPitch_kd = Accel_y_SetKd;
+static float					Temp_X_Ki;
+static float					Temp_X_Kd;
+static float					Temp_Y_Ki;
+static float					Temp_Y_Kd;
+
 
 static unsigned char			Accel_PID_IFlag = 0;
 static unsigned char			Accel_PID_DFlag = 0;
@@ -554,6 +560,8 @@ static unsigned int				PWMtoRPMOffset_Mot4 = 50;																			//10000 duty 
 																		//13000 duty	=	7780rpm
 static int testP, testI, testD; 
 static int isDemoing;
+//static unsigned char ShutdownTimer = 0;
+static unsigned char IDFlag = 0;
 /*############################################################################*/
 /*#                                  APIs                                    #*/
 /*############################################################################*/
@@ -715,11 +723,34 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 			goto Fast_Loop;
 		}
 		else{
-			EPB3 = 0;
-			//PB3E1 = 0;
-			//QPB3 = 0;					//Disable Accel/Gyro Interrupt Pin
+			if(IDFlag == 0){
+				Temp_X_Ki = Accel_PID_XRoll_ki;
+				Temp_X_Kd = Accel_PID_XRoll_kd;
+				Temp_Y_Ki = Accel_PID_YPitch_ki;
+				Temp_Y_Kd = Accel_PID_YPitch_kd;
+				IDFlag = 1;
+			}
+			if(PWMIdleDutyRun > 9000){
+				//if(ShutdownTimer > 1){
+					PWMIdleDutyRun--;
+					//ShutdownTimer = 0;
+					goto Fast_Loop;
+				//}
+				//else{
+					//ShutdownTimer++;
+					//goto Fast_Loop;
+				//}
+			}
+			
+			EPB3 = 0;					//Disable Accel/Gyro Interrupt Pin
 			Shutdown();
+			Accel_PID_XRoll_ki = Temp_X_Ki;
+			Accel_PID_XRoll_kd = Temp_X_Kd;
+			Accel_PID_YPitch_ki = Temp_Y_Ki;
+			Accel_PID_YPitch_kd = Temp_Y_Kd;
 			TestingEndTimer = 0;
+			IDFlag = 0;
+			//ShutdownTimer = 0;
 			//ArrayCounter = 0;
 			goto Main_Loop;
 		}
@@ -2200,7 +2231,6 @@ void SoftStart(void)
 	}
 	Accel_PID_XRollErrSum = 0;
 	Accel_PID_YPitchErrSum = 0;	
-
 }
 
 //PWM Increment-er... 
