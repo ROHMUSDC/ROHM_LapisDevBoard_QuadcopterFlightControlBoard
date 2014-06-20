@@ -422,6 +422,7 @@ static float					Mag_CCWThres = 359;
 static float					Mag_OpposingPole = 180;
 
 //Variables for PID Control Loops
+/*
 static float					Mag_PIDSetpoint = 0;		//Desired Heading
 static float					Mag_PIDCorrectionFactor = 0;
 static float					Mag_PIDAngleScaled = 0;
@@ -435,6 +436,7 @@ static float					Mag_PID_kp = .375;
 static float					Mag_PID_ki = 0;
 static float					Mag_PID_kd = .85;
 static float					Mag_PIDOutput = 0;
+*/
 
 //Accel-Gyro Complementary Filter
 static float					CF_Gyro_Counter = 0;
@@ -485,15 +487,14 @@ static float					Accel_PID_YPitchdErr = 0;
 
 static float					Accel_PID_XRoll_kp = Accel_x_SetKp;		//			//Calibrated 3-30-2014	//0.8
 static float					Accel_PID_XRoll_ki = Accel_x_SetKi;		//On other Board, I is half of P						//0.001
-static float					Accel_PID_XRoll_kd = Accel_x_SetKd;//5;							//0.5
+static float					Accel_PID_XRoll_kd = Accel_x_SetKd;		//5;							//0.5
 static float					Accel_PID_YPitch_kp = Accel_y_SetKp;
 static float					Accel_PID_YPitch_ki = Accel_y_SetKi;
 static float					Accel_PID_YPitch_kd = Accel_y_SetKd;
-static float					Temp_X_Ki;
-static float					Temp_X_Kd;
-static float					Temp_Y_Ki;
-static float					Temp_Y_Kd;
-
+//static float					Temp_X_Ki = 0;
+//static float					Temp_X_Kd = 0;
+//static float					Temp_Y_Ki = 0;
+//static float					Temp_Y_Kd = 0;
 
 static unsigned char			Accel_PID_IFlag = 0;
 static unsigned char			Accel_PID_DFlag = 0;
@@ -573,6 +574,7 @@ int main(void)
 {
 int i;  
 //unsigned char flag;
+
 
 //Init:
 		Initialization(); 			//Ports, UART, Timers, Oscillator, Comparators, etc.
@@ -723,11 +725,12 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 			goto Fast_Loop;
 		}
 		else{
+			/*
 			if(IDFlag == 0){
 				Temp_X_Ki = Accel_PID_XRoll_ki;
 				Temp_X_Kd = Accel_PID_XRoll_kd;
-				Temp_Y_Ki = Accel_PID_YPitch_ki;
 				Temp_Y_Kd = Accel_PID_YPitch_kd;
+				Temp_Y_Ki = Accel_PID_YPitch_ki;
 				IDFlag = 1;
 			}
 			if(PWMIdleDutyRun > 9000){
@@ -741,15 +744,15 @@ Fast_Loop:							//This loop takes 22.4ms for this loop as of 3/30/2014
 					//goto Fast_Loop;
 				//}
 			}
-			
+			*/
 			EPB3 = 0;					//Disable Accel/Gyro Interrupt Pin
 			Shutdown();
-			Accel_PID_XRoll_ki = Temp_X_Ki;
-			Accel_PID_XRoll_kd = Temp_X_Kd;
-			Accel_PID_YPitch_ki = Temp_Y_Ki;
-			Accel_PID_YPitch_kd = Temp_Y_Kd;
+			//Accel_PID_XRoll_ki = Temp_X_Ki;
+			//Accel_PID_XRoll_kd = Temp_X_Kd;
+			//Accel_PID_YPitch_ki = Temp_Y_Ki;
+			//Accel_PID_YPitch_kd = Temp_Y_Kd;
 			TestingEndTimer = 0;
-			IDFlag = 0;
+			//IDFlag = 0;
 			//ShutdownTimer = 0;
 			//ArrayCounter = 0;
 			goto Main_Loop;
@@ -1453,7 +1456,7 @@ void Run_AccGyroCF(void){
 	//LED_2 = 0;			//B7, Pin 11
 }
 
-
+/*
 void Get_MagData(void){
 	//----- Magnetic I2C RX Command -----
 	_flgI2CFin = 0;														//reset I2C completed flag
@@ -1492,6 +1495,7 @@ void Get_MagData(void){
 		Mag_Angle += 360;
 	}
 }
+*/
 
 void ClearVariables(void){
 	Temp_out = 0;
@@ -1648,7 +1652,7 @@ int i;
 	PDRUN = 1;
 	PCRUN = 1;
 	
-	Mag_PIDCounter = 0;
+	//Mag_PIDCounter = 0;
 	CF_Gyro_Counter = 0;
 	Accel_PID_XRollCounter_I = 0;
 	Accel_PID_XRollCounter_D = 0;
@@ -2427,6 +2431,7 @@ void AccelSensorControl(void){
 }
 */
 
+/*
 void MagSensorControl(void){
 	if((Mag_Angle > Mag_CWThres)&&(Mag_Angle < Mag_OpposingPole)){
 		PFRUN = 0;	//Turn OFF PWM
@@ -2457,7 +2462,8 @@ void MagSensorControl(void){
 		PCRUN = 1;
 	}
 }
-
+*/
+/*
 void MagSensorControlPID(void){
 	//-----Mag PID Loop -----
 	int i;
@@ -2545,6 +2551,7 @@ void MagSensorControlPID(void){
 		main_clrWDT();
 	}
 }
+*/
 
 void AccelSensorControlPID_P(void){
 	int i;
