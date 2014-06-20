@@ -107,7 +107,7 @@
 #define FLG_SET	( 0x01u ) 
 
 // ===== SET DESIRED UART SETTINGS HERE! (Options in UART.h) =====
-#define UART_BAUDRATE		( UART_BR_9600BPS) 	// Data Bits Per Second - Tested at rates from 2400bps to 512000bps!
+#define UART_BAUDRATE		( UART_BR_57600BPS) 	// Data Bits Per Second - Tested at rates from 2400bps to 512000bps!
 #define UART_DATA_LENGTH	( UART_LG_8BIT )		// x-Bit Data
 #define UART_PARITY_BIT		( UART_PT_NON )		// Parity
 #define UART_STOP_BIT		( UART_STP_1BIT )		// x Stop-Bits
@@ -166,7 +166,7 @@ unsigned char 	_flgI2CFin;
 unsigned char	_reqNotHalt;
 
 unsigned char	HelloWorld[15] = {"Safety Active "};
-unsigned char	RecWorld[8];									//Used for Testing the UART Terminal during initial
+unsigned char	RecWorld[4];									//Used for Testing the UART Terminal during initial
 
 
 /*############################################################################*/
@@ -182,13 +182,13 @@ int i;
 
 Init:
 	Initialization();		//Ports, UART, Timers, Oscillator, Comparators, etc.
-	PA0D = 1;
+	PA0D = 0;
 	
 Loop:
 		main_clrWDT();
 		
 		//Reset RecWorld for UART Receive
-		for (i=0;i<8;i++)
+		for (i=0;i<4;i++)
 		{
 			RecWorld[i] = 0;	
 		}
@@ -196,9 +196,8 @@ Loop:
 		//Begin UART Receive
 		_flgUartFin = 0;
 		uart_stop();
-		uart_startReceive(RecWorld, 8, _funcUartFin);
-		while(_flgUartFin != 1){
-			NOP1000();
+		uart_startReceive(RecWorld, 4, _funcUartFin);
+		while(_flgUartFin != 1){ 
 			main_clrWDT();
 		}
 		
@@ -209,7 +208,7 @@ Loop:
 			if(RecWorld[1] == 0x54){
 				if(RecWorld[2] == 0x4F){
 					if(RecWorld[3] == 0x50){
-						PA0D = 0;
+						PA0D = 1;
 					}
 				}
 			}
@@ -219,7 +218,7 @@ Loop:
 			if(RecWorld[1] == 0x4C){
 				if(RecWorld[2] == 0x41){
 					if(RecWorld[3] == 0x59){
-						PA0D = 1;
+						PA0D = 0;
 					}
 				}
 			}
