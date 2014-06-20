@@ -548,7 +548,7 @@ static unsigned char 			PWMCounter = 0;
 static unsigned char 			PWMSensorResPerInc = 0;
 //static unsigned int			PWM_AccelMinHoverRPM = 10500;			//Unused as of 3/30/2014...
 static unsigned int				PWMUpperLowerDiff = 0;
-static unsigned int 			PWMUpperDutyLimitRun = 13000;			//Value for Maximum Duty	//18min flight = 11500
+static unsigned int 			PWMUpperDutyLimitRun = 15000;			//Value for Maximum Duty	//18min flight = 11500
 static unsigned int				PWMIdleDutyRun = 10500;
 static unsigned int 			PWMLowerDutyLimitRun = 8500;			//Value for Minimum Duty	//18min flight = 9500
 																		//9000 duty 	=  	3040rpm

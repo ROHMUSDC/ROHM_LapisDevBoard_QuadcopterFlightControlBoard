@@ -1,7 +1,7 @@
 RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1 
  Source File: _output\_obj\main.asm
  Object File: _output\_obj\main.obj
- Date  : 2014/06/19 Thu.[14:11]
+ Date  : 2014/06/19 Thu.[20:17]
  Title : 
 ## Loc. Object                   Line   Source Statements
 
@@ -13445,7 +13445,7 @@ RASU8(ML610112)Relocatable Assembler, Ver.1.61.2    assemble list. page:   1
 ??:01AE 00                      13438   	db	00h
 ??:01AF 00                      13439   	db	00h
 ??:01B0 00-00                   13440   	dw	00h
-??:01B2 C8-32                   13441   	dw	032c8h
+??:01B2 98-3A                   13441   	dw	03a98h
 ??:01B4 04-29                   13442   	dw	02904h
 ??:01B6 34-21                   13443   	dw	02134h
 ??:01B8 88-FF                   13444   	dw	0ff88h

@@ -13438,7 +13438,7 @@ _$ST0 :
 	db	00h
 	db	00h
 	dw	00h
-	dw	032c8h
+	dw	03a98h
 	dw	02904h
 	dw	02134h
 	dw	0ff88h
